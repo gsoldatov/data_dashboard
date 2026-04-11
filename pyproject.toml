@@ -1,0 +1,15 @@
+[project]
+name = "data-dashboard"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic-settings>=2.13.1",
+]
+
+[tool.uv.workspace]
+members = [
+    "data_loading",
+    "python_common",
+]
