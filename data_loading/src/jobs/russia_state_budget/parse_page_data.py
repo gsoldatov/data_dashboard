@@ -18,6 +18,9 @@ from python_common.src import get_config
 
 
 class RussiaStateBudgetPagePageData(BaseJob):
+    """
+    Parses an HTML page with Russia's state budget into JSON
+    """
     async def _run(self) -> None:
         page_path = self.settings.data_directory / "russia_state_budget" / "budget.html"
         json_path = self.settings.data_directory / "russia_state_budget" / "budget.json"

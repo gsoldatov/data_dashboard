@@ -15,6 +15,9 @@ from python_common.src import get_config
 
 
 class RussiaStateBudgetFetchPage(BaseJob):
+    """
+    Fetches an HTML page with Russia's state budget
+    """
     async def _run(self) -> None:
         # state budget url
         url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
