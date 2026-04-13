@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 
 if __name__ == "__main__":
     from pathlib import Path
@@ -15,19 +16,25 @@ from python_common.src import get_config
 
 class RussiaStateBudgetFetchPage(BaseJob):
     async def _run(self) -> None:
+        # state budget url
+        url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
+        # state + regions budget url
+        # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
+
+        # Ensure save directory
         save_path = self.settings.data_directory / "russia_state_budget" / "budget.html"
         save_path.parent.mkdir(parents=True, exist_ok=True)
 
-        loader = HTTPLoader(
-            # state
-            url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub.",
+        loader = HTTPLoader(url=url, save_path=save_path)
 
-            # state + regions
-            # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
-            
-            save_path=save_path
-        )
-        await loader.load_file()
+        try:
+            await loader.load_file()
+            self.log(f"Saved {url} to {str(save_path)}")
+        except Exception as e:
+            self.log(
+                f"An exception occured during file fetch: {str(e)}"
+                f"\n{traceback.print_exc()}"
+            )
 
 
 if __name__ == "__main__":
