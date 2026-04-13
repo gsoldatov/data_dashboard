@@ -9,6 +9,12 @@ class BaseJob:
         settings: Settings
     ) -> None:
         self.settings = settings
+    
+    def log(
+        self,
+        msg: str
+    ):
+        print(msg)
 
     async def _run(self) -> None:
         raise NotImplementedError
