@@ -23,18 +23,18 @@ class RussiaStateBudgetJob(BaseJob):
     async def run(self) -> None:
         # Use sub-flows if run by Prefect
         if FlowRunContext.get() is not None:
-            fetch_job = RussiaStateBudgetFetchPage(self.settings)
+            fetch_job = RussiaStateBudgetFetchPage(self.config)
             await fetch_job.run(fetch_job)
 
-            parse_job = RussiaStateBudgetParsePageData(self.settings)
+            parse_job = RussiaStateBudgetParsePageData(self.config)
             await parse_job.run(parse_job)
         
         # Run jobs directly if not run by Prefect
         else:
-            fetch_job = RussiaStateBudgetFetchPage(self.settings)
+            fetch_job = RussiaStateBudgetFetchPage(self.config)
             await fetch_job.run.fn(fetch_job)
 
-            parse_job = RussiaStateBudgetParsePageData(self.settings)
+            parse_job = RussiaStateBudgetParsePageData(self.config)
             await parse_job.run.fn(parse_job)
 
 

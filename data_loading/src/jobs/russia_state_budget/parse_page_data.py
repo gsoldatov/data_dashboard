@@ -25,8 +25,8 @@ class RussiaStateBudgetParsePageData(BaseJob):
     """
     @flow(name="Russia state budget parse page data")
     async def run(self) -> None:
-        page_path = self.settings.data_directory / "russia_state_budget" / "budget.html"
-        json_path = self.settings.data_directory / "russia_state_budget" / "budget.json"
+        page_path = self.config.data_directory / "russia_state_budget" / "budget.html"
+        json_path = self.config.data_directory / "russia_state_budget" / "budget.json"
 
         try:
             # Load HTML file

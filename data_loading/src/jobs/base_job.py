@@ -7,9 +7,9 @@ from python_common.src import Config
 class BaseJob:
     def __init__(
         self,
-        settings: Config
+        config: Config
     ) -> None:
-        self.settings = settings
+        self.config = config
     
     def log(
         self,
