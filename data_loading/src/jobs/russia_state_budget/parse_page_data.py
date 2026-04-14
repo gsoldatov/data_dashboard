@@ -4,6 +4,8 @@ from pathlib import Path
 import traceback
 from typing import Dict, Any
 
+from prefect import flow
+
 if __name__ == "__main__":
     from pathlib import Path
     import sys
@@ -17,11 +19,12 @@ from data_loading.src.jobs.base_job import BaseJob
 from python_common.src import get_config
 
 
-class RussiaStateBudgetPagePageData(BaseJob):
+class RussiaStateBudgetParsePageData(BaseJob):
     """
     Parses an HTML page with Russia's state budget into JSON
     """
-    async def _run(self) -> None:
+    @flow(name="Russia state budget parse page data")
+    async def run(self) -> None:
         page_path = self.settings.data_directory / "russia_state_budget" / "budget.html"
         json_path = self.settings.data_directory / "russia_state_budget" / "budget.json"
 
@@ -151,5 +154,5 @@ class RussiaStateBudgetPagePageData(BaseJob):
 
 if __name__ == "__main__":
     settings = get_config()
-    job = RussiaStateBudgetPagePageData(settings)
+    job = RussiaStateBudgetParsePageData(settings)
     asyncio.run(job.run.fn(job))

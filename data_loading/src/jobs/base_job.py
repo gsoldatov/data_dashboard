@@ -1,4 +1,5 @@
 from prefect import flow
+from typing import Any
 
 from python_common.src import Config
 
@@ -16,9 +17,6 @@ class BaseJob:
     ):
         print(msg)
 
-    async def _run(self) -> None:
-        raise NotImplementedError
-
     @flow
-    async def run(self) -> None:
-        await self._run()
+    async def run(self: Any) -> None:
+        raise NotImplementedError
