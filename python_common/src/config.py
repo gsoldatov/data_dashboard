@@ -7,7 +7,7 @@ from typing import Literal, Any
 _PROJECT_ROOT = Path(__file__).parents[2]
 
 
-class Settings(BaseSettings):
+class Config(BaseSettings):
     data_directory: Path
     logs_directory: Path
     data_loading_log_mode: Literal["stderr", "file"]
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
         return _resolve_abs_path(v)
 
 
-def get_config(env_path: str | Path = "config.env") -> Settings:
+def get_config(env_path: str | Path = "config.env") -> Config:
     """
     Reads, validates and returns environment variables object from
     file `env_path` (relative to project root or absolute)
@@ -28,7 +28,7 @@ def get_config(env_path: str | Path = "config.env") -> Settings:
     env_path = _resolve_abs_path(env_path)
     if not env_path.is_file():
         raise ValueError(f"{str(env_path)} is not a file.")
-    return Settings(_env_file=str(env_path))    # type: ignore
+    return Config(_env_file=str(env_path))    # type: ignore
 
 
 def _resolve_abs_path(path: str | Path) -> Path:

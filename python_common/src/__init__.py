@@ -1,1 +1,1 @@
-from python_common.src.config import Settings, get_config
+from python_common.src.config import Config, get_config

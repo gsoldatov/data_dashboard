@@ -1,12 +1,12 @@
 from prefect import flow
 
-from python_common.src import Settings
+from python_common.src import Config
 
 
 class BaseJob:
     def __init__(
         self,
-        settings: Settings
+        settings: Config
     ) -> None:
         self.settings = settings
     
