@@ -5,7 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "beautifulsoup4>=4.14.3",
+    "beautifulsoup4==4.14.3",
+    "fakeredis==2.35.1",    # lock to a version, which does not cause bugs in prefect
     "httpx==0.28.1",
     "prefect==3.6.25",
 ]
