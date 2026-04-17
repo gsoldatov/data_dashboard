@@ -12,6 +12,11 @@ class Config(BaseSettings):
     logs_directory: Path
     data_loading_log_mode: Literal["stderr", "file"]
 
+    prefect_profile: str
+    prefect_server_api_host: str
+    prefect_server_api_port: int
+    prefect_api_url: str
+
     @field_validator("data_directory", "logs_directory", mode="plain")
     @classmethod
     def validate_paths(cls, v: Any) -> Path:
