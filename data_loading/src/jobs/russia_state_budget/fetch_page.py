@@ -1,4 +1,3 @@
-import asyncio
 import traceback
 
 from prefect import flow
@@ -10,40 +9,40 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.jobs.base_job import BaseJob
 from data_loading.src.helpers import HTTPLoader
 
-from python_common.src import get_config
+from python_common.src import Config, get_config
 
 
-class RussiaStateBudgetFetchPage(BaseJob):
+@flow(name="Russia state budget fetch page")
+def russia_state_budget_fetch_page(
+    config: Config | None = None
+) -> None:
     """
     Fetches an HTML page with Russia's state budget
     """
-    @flow(name="Russia state budget fetch page")
-    async def run(self) -> None:
-        # state budget url
-        url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
-        # state + regions budget url
-        # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
+    config = config or get_config()
 
-        # Ensure save directory
-        save_path = self.config.data_directory / "russia_state_budget" / "budget.html"
-        save_path.parent.mkdir(parents=True, exist_ok=True)
+    # state budget url
+    url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
+    # state + regions budget url
+    # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
 
-        loader = HTTPLoader(url=url, save_path=save_path)
+    # Ensure save directory
+    save_path = config.data_directory / "russia_state_budget" / "budget.html"
+    save_path.parent.mkdir(parents=True, exist_ok=True)
 
-        try:
-            await loader.load_file()
-            self.log(f"Saved {url} to {str(save_path)}")
-        except Exception as e:
-            self.log(
-                f"An exception occured during file fetch: {str(e)}"
-                f"\n{traceback.print_exc()}"
-            )
+    loader = HTTPLoader(url=url, save_path=save_path)
+
+    try:
+        loader.load_file()
+        print(f"Saved {url} to {str(save_path)}")
+    except Exception as e:
+        print(
+            f"An exception occured during file fetch: {str(e)}"
+            f"\n{traceback.print_exc()}"
+        )
 
 
 if __name__ == "__main__":
-    settings = get_config()
-    job = RussiaStateBudgetFetchPage(settings)
-    asyncio.run(job.run.fn(job))
+    russia_state_budget_fetch_page()

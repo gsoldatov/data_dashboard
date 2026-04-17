@@ -1,4 +1,3 @@
-import asyncio
 from pathlib import Path
 import sys
 
@@ -9,36 +8,30 @@ if __name__ == "__main__":
 from prefect import flow
 from prefect.context import FlowRunContext
 
-from data_loading.src.jobs.base_job import BaseJob
-from data_loading.src.jobs.russia_state_budget.fetch_page import RussiaStateBudgetFetchPage
-from data_loading.src.jobs.russia_state_budget.parse_page_data import RussiaStateBudgetParsePageData
-from python_common.src import get_config
+from data_loading.src.jobs.russia_state_budget.fetch_page import russia_state_budget_fetch_page
+from data_loading.src.jobs.russia_state_budget.parse_page_data import russia_state_budget_parse_page_data
+from python_common.src import Config, get_config
 
 
-class RussiaStateBudgetJob(BaseJob):
+@flow(name="Russia state budget")
+def russia_state_budget(
+    config: Config | None = None
+) -> None:
     """
     Runs all jobs related to Russia's state budget
     """
-    @flow(name="Russia state budget")
-    async def run(self) -> None:
-        # Use sub-flows if run by Prefect
-        if FlowRunContext.get() is not None:
-            fetch_job = RussiaStateBudgetFetchPage(self.config)
-            await fetch_job.run(fetch_job)
+    config = config or get_config()
 
-            parse_job = RussiaStateBudgetParsePageData(self.config)
-            await parse_job.run(parse_job)
-        
-        # Run jobs directly if not run by Prefect
-        else:
-            fetch_job = RussiaStateBudgetFetchPage(self.config)
-            await fetch_job.run.fn(fetch_job)
-
-            parse_job = RussiaStateBudgetParsePageData(self.config)
-            await parse_job.run.fn(parse_job)
+    # Use sub-flows if run by Prefect
+    if FlowRunContext.get() is not None:
+        russia_state_budget_fetch_page(config)
+        russia_state_budget_parse_page_data(config)
+    
+    # Run jobs directly if not run by Prefect
+    else:
+        russia_state_budget_fetch_page.fn(config)
+        russia_state_budget_parse_page_data.fn(config)
 
 
 if __name__ == "__main__":
-    settings = get_config()
-    job = RussiaStateBudgetJob(settings)
-    asyncio.run(job.run.fn(job))
+    russia_state_budget.fn()
