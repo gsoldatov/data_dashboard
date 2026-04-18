@@ -15,7 +15,11 @@ from data_loading.src.helpers import get_logger
 from python_common.src import Config, get_config
 
 
-@flow(name="Russia state budget")
+@flow(
+    name="Russia state budget",
+    retries=sys.maxsize,
+    retry_delay_seconds=3600
+)
 def russia_state_budget(
     config: Config | None = None,
     logger: LoggerAdapter | None = None
