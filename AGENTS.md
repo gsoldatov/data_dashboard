@@ -26,18 +26,15 @@ Common functionlaity for Python parts of the project.
 # Technical Overview
 ## data_loading, dashboard_backend & python_common
 - python 3.13;
-- uv for managine dependencies & env;
-- prefect for scheduling and executing jobs;
-- Pandas for storing data;
-- Pydantic & Pydantic Settings for validation;
+- uv for managine dependencies & environment;
+- Prefect v3 for scheduling and executing data loading jobs;
+- httpx for performing HTTP requests;
+- BeautifulSoup v4 for parsing HTML files;
+- Pydantic v2 & Pydantic Settings for validation;
 - FastAPI as dashboard backend's API Framework; 
 - SQLite as dashboard backend's database;
-- pytest for running tests;
+- Pytest for running tests;
 
-
-TODO
-- key etl libraries;
-- key backend libraries
 
 ## dashboard_frontend
 TODO
