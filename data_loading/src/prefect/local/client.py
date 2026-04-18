@@ -26,7 +26,7 @@ def main() -> None:
         deployments: list = [
             russia_state_budget.to_deployment(
                 "Russia state budget",
-                interval=timedelta(minutes=1)
+                interval=timedelta(weeks=1)
             )
         ]
 
