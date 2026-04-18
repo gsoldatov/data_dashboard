@@ -1,3 +1,4 @@
+from logging import LoggerAdapter
 import traceback
 
 from prefect import flow
@@ -10,18 +11,23 @@ if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from data_loading.src.helpers import HTTPLoader
+from data_loading.src.helpers import get_logger
 
 from python_common.src import Config, get_config
 
 
 @flow(name="Russia state budget fetch page")
 def russia_state_budget_fetch_page(
-    config: Config | None = None
+    config: Config | None = None,
+    logger: LoggerAdapter | None = None
 ) -> None:
     """
     Fetches an HTML page with Russia's state budget
     """
     config = config or get_config()
+    logger = logger or get_logger(config, "russia_state_budget_fetch_page")
+
+    logger.info("Started Russia state budget download")
 
     # state budget url
     url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
@@ -36,13 +42,13 @@ def russia_state_budget_fetch_page(
 
     try:
         loader.load_file()
-        print(f"Saved {url} to {str(save_path)}")
+        logger.info(f"Saved {url} to {str(save_path)}")
     except Exception as e:
-        print(
+        logger.error(
             f"An exception occured during file fetch: {str(e)}"
             f"\n{traceback.print_exc()}"
         )
 
 
 if __name__ == "__main__":
-    russia_state_budget_fetch_page()
+    russia_state_budget_fetch_page.fn()

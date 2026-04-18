@@ -1,8 +1,10 @@
 import json
+from logging import LoggerAdapter
 from pathlib import Path
 import traceback
 from typing import Dict, Any
 
+from bs4 import BeautifulSoup
 from prefect import flow
 
 if __name__ == "__main__":
@@ -12,24 +14,30 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from bs4 import BeautifulSoup
-
+from data_loading.src.helpers import get_logger
 from python_common.src import Config, get_config
 
 
 @flow(name="Russia state budget parse page data")
 def russia_state_budget_parse_page_data(
-    config: Config | None = None
+    config: Config | None = None,
+    logger: LoggerAdapter | None = None
 ) -> None:
     """
     Parses an HTML page with Russia's state budget into JSON
     """
     config = config or get_config()
+    logger = logger or get_logger(config, "russia_state_budget_parse_page_data")
     page_path = config.data_directory / "russia_state_budget" / "budget.html"
     json_path = config.data_directory / "russia_state_budget" / "budget.json"
 
+    logger.info("Started Russia state budget parsing")
+
     try:
         # Load HTML file
+        if not page_path.is_file():
+            raise RuntimeError("Russia state budget HTML file does not exist")
+        
         with open(page_path, "r", encoding="utf-8") as f:
             html_content = f.read()
 
@@ -39,12 +47,12 @@ def russia_state_budget_parse_page_data(
         # Find the table (only one table in the document)
         table = soup.find("table")
         if table is None:
-            raise ValueError("Table not found in HTML document")
+            raise ValueError("Russia state budget HTML does not contain a table")
 
         # Extract years from table headers
         headers = table.find("thead")
         if headers is None:
-            raise ValueError("Table header not found")
+            raise ValueError("Russia state budget HTML table does not contain a header")
         headers = headers.find_all("th")
         years = [header.get_text(strip=True).rstrip(" *") for header in headers[2:]]
 
@@ -57,7 +65,8 @@ def russia_state_budget_parse_page_data(
 
         tbody = table.find("tbody")
         if tbody is None:
-            raise ValueError("Table body not found")
+            raise ValueError("Russia state budget HTML table does not contain body")
+
         for row in tbody.find_all("tr"):
             cells = row.find_all(["td", "th"])
 
@@ -126,9 +135,9 @@ def russia_state_budget_parse_page_data(
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        print(f"Successfully saved budget data to {json_path}")
+        logger.info(f"Successfully saved budget data to {json_path}")
     except Exception as e:
-        print(
+        logger.error(
             f"An exception occured during file parsing: {str(e)}"
             f"\n{traceback.print_exc()}"
         )
@@ -157,4 +166,4 @@ def _add_to_hierarchy(
 
 
 if __name__ == "__main__":
-    russia_state_budget_parse_page_data()
+    russia_state_budget_parse_page_data.fn()
