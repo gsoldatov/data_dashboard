@@ -2,6 +2,7 @@
 config.env
 data/
 logs/
+*/tests/temp/
 
 # Python
 __pycache__/
