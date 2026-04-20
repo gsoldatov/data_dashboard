@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru-Ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Test Budget Data</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col"><nobr> </nobr></th>
+                    <th scope="col"><nobr> </nobr></th>
+                    <th scope="col"><nobr>2020</nobr></th>
+                    <th scope="col"><nobr>2021</nobr></th>
+                    <th scope="col"><nobr>2022</nobr></th>
+                    <!-- Trailing asterisks & spaces in year cell -->
+                    <th scope="col"><nobr>2023&nbsp;**</nobr></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td><strong>РАЗДЕЛ I</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <!-- Basic hierarchy check (1, 1.1, 1.1.1, 1.1.2, 1.2) -->
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td><strong><u>Section 1</u></strong></td>
+                    <td><strong><u>1000.0</u></strong></td>
+                    <td><strong><u>1100.0</u></strong></td>
+                    <td><strong><u>1200.0</u></strong></td>
+                    <td><strong><u>1300.0</u></strong></td>
+                </tr>
+                <tr>
+                    <td><strong><em>1.1.</em></strong></td>
+                    <td><strong>Section 1.1</strong></td>
+                    <td><strong>400.0</strong></td>
+                    <td><strong>500.0</strong></td>
+                    <td><strong>600.0</strong></td>
+                    <td><strong>700.0</strong></td>
+                </tr>
+                <tr>
+                    <td><strong><em>1.1.1.</em></strong></td>
+                    <td><strong>Section 1.1.1</strong></td>
+                    <td><strong>100.0</strong></td>
+                    <td><strong>200.0</strong></td>
+                    <td><strong>300.0</strong></td>
+                    <td><strong>400.0</strong></td>
+                </tr>
+                <tr>
+                    <td>1.1.2.</td>
+                    <td>Section 1.1.2</td>
+                    <td>300.0</td>
+                    <td>400.0</td>
+                    <td>500.0</td>
+                    <td>600.0</td>
+                </tr>
+                <tr>
+                    <td>1.2.</td>
+                    <td>Section 1.2</td>
+                    <td>600.0</td>
+                    <td>600.0</td>
+                    <td>600.0</td>
+                    <td>600.0</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><strong>РАЗДЕЛ II</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <!-- Trailing asterisks in section names -->
+                    <td><strong><u>Section 2*</u></strong></td>
+                    <!-- Separation spaces between digits -->
+                    <td><strong><u>1&nbsp;300.0</u></strong></td>
+                    <td><strong><u>1200.0</u></strong></td>
+                    <td><strong><u>1100.0</u></strong></td>
+                    <td><strong><u>1000.0</u></strong></td>
+                </tr>
+                <tr>
+                    <td><strong><em>2.1.</em></strong></td>
+                    <td>Section 2.1</td>
+                    <td>500.0</td>
+                    <td>400.0</td>
+                    <td>300.0</td>
+                    <td>200.0</td>
+                </tr>
+                <!-- Multiline section, which inherits section number from the first line -->
+                <tr>
+                    <td><strong><em>2.2.</em></strong></td>
+                    <td>Section 2.2 (first part)</td>
+                    <td>300.0</td>
+                    <td>400.0</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Section 2.2 (second part)</td>
+                    <td></td>
+                    <td></td>
+                    <td>500.0</td>
+                    <td>600.0</td>
+                </tr>
+                <tr>
+                    <td>2.3.</td>
+                    <td>Section 2.3</td>
+                    <td>500.0</td>
+                    <td>400.0</td>
+                    <td>300.0</td>
+                    <td>200.0</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
