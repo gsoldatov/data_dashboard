@@ -139,13 +139,8 @@ def _parse(html_content: str) -> dict[str, Any]:
                     "data": {years[i]: values[i] for i in range(len(years)) if values[i] is not None},
                     "children": {}
                 }
-                # Add to parent section's children
-                parent_num = section_num.split(".")[0]
-                if parent_num in data:
-                    data[parent_num]["children"][subsection_num] = subsection
-                else:
-                    # Find the correct parent in the hierarchy
-                    _add_to_hierarchy(data, subsection_num, subsection)
+                # Add to the correct parent in the hierarchy
+                _add_to_hierarchy(data, subsection_num, subsection)
         
         # Save the number of the previous section
         # (to reuse for sections without numbers)
@@ -167,14 +162,20 @@ def _add_to_hierarchy(
             data[parent_num]["children"][subsection_num] = subsection
     elif len(parts) > 2:
         # Find the correct parent by traversing the hierarchy
-        parent_num = ".".join(parts[:-1])
+        # Build parent keys progressively: for "1.1.1", check "1", then "1.1"
+        # and finally add to 1.1's children
         current = data
-        for part in parts[:-1]:
-            if part in current:
-                current = current[part]["children"]
+        parent_key = parts[0]
+        for i in range(1, len(parts)):
+            if parent_key in current:
+                current = current[parent_key]["children"]
+                if i < len(parts) - 1:
+                    parent_key = ".".join(parts[:i + 1])
             else:
                 break
-        current[subsection_num] = subsection
+        else:
+            # Successfully traversed to the parent, add the subsection
+            current[subsection_num] = subsection
 
 
 if __name__ == "__main__":
