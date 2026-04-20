@@ -54,7 +54,7 @@
     + boilerplate;
     + configuration;
 
-- implement Russia state budget fetch (plan / fact):
++ implement Russia state budget fetch (plan / fact):
     + etl:
         + https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub.
         x fact budgets 2022-2025;
@@ -62,7 +62,7 @@
         + load page
     + configure scheduling & execution via Prefect;
     + configure logging;
-    - add job & helper tests;
+    + add job & helper tests;
 
 - implement basic backend:
     - page routes;

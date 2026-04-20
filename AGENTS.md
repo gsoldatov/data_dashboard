@@ -6,9 +6,25 @@ Current project implements a set of packages for fetching and visualizing data f
 ## data_loading
 A set of ETL jobs, which load data.
 
-Architecture overview:
+### Architecture Overview
 - `data_loading/src/jobs`: class-based definitions of jobs, which are executed directly or via prefect;
-- `data_loading/src/helpers` common functionality, which is shared among multiple jobs;
+- `data_loading/src/helpers`: common functionality, which is shared among multiple jobs;
+- `data_loading/src/prefect`: collection of scripts for running & configuring Prefect;
+- `data_loading/tests`:
+    - test cases & test utilities for `data_loading` sub-project;
+    - test cases are located in `data_loading/tests/tests` and follow the structure of `src` directory;
+    - each test case file is executable (see `data_loading/tests/tests/helpers/test_http_loader.py` for an example on how make them);
+    - test cases are written as functions;
+
+### Key Commands
+```bash
+# Run all tests
+uv run pytest data_loading
+
+# Run specific test case file directly (paths are relative to project root dir
+# note that uv is not used, because it changes __name__ variable of the test case file)
+.venv/bin/python data_loading/tests/tests/helpers/test_http_loader.py
+```
 
 
 ## dashboard_backend
