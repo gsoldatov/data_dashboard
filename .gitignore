@@ -16,3 +16,4 @@ wheels/
 # Agent-specific files
 .cline/
 .roo/
+.qwen/
