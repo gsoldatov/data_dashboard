@@ -39,19 +39,9 @@ class Session(Base):
     user: Mapped["User"] = relationship("User", back_populates="sessions")
 
 
-class Page(Base):
-    __tablename__ = "pages"
+class PageSettings(Base):
+    __tablename__ = "page_settings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     slug: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
-    title: Mapped[str] = mapped_column(String(255), nullable=False)
-    description: Mapped[str | None] = mapped_column(String(1024))
-    feed_timestamp: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    tags: Mapped[str | None] = mapped_column(String(1024))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
-    updated_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
-    )
