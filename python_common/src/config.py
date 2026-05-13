@@ -1,5 +1,5 @@
 from pathlib import Path
-from pydantic import field_validator
+from pydantic import computed_field, field_validator
 from pydantic_settings import BaseSettings
 from typing import Literal, Any
 
@@ -17,7 +17,23 @@ class Config(BaseSettings):
     prefect_server_api_port: int
     prefect_api_url: str
 
-    @field_validator("data_directory", "logs_directory", mode="plain")
+    backend_database_path: Path
+    backend_host: str
+    backend_port: int
+    backend_default_user_name: str
+    backend_default_user_password: str
+    backend_session_ttl_seconds: int
+    backend_cors_origins: str
+
+    @computed_field
+    @property
+    def backend_database_url(self) -> str:
+        """SQLAlchemy async connection URL derived from backend_database_path."""
+        return f"sqlite+aiosqlite:///{self.backend_database_path}"
+
+    @field_validator(
+        "data_directory", "logs_directory", "backend_database_path", mode="plain"
+    )
     @classmethod
     def validate_paths(cls, v: Any) -> Path:
         if not isinstance(v, (str, Path)):

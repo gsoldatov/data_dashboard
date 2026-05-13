@@ -14,4 +14,10 @@ dependencies = [
 members = [
     "data_loading",
     "python_common",
+    "dashboard_backend",
+]
+
+[dependency-groups]
+dev = [
+    "ruff==0.15.12",
 ]
