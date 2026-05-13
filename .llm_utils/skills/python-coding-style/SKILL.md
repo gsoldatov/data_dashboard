@@ -15,4 +15,15 @@ The rules from the following list should apply to any Python code written, unles
     - comments should be added only:
         - to explain complex code parts;
         - to explain business rules and edge cases, which are not obvious from the scope of the function;
+- use absolute imports, when imports from other files of the project:
+    - import path must start from a direct child of the project's root directory;
+    - if a file is executable, ensure project root is in sys.path:
+        ```python
+        # somewhere at the top of the file
+        import sys
+        from pathlib import Path
+        PROJECT_ROOT = Path(__file__).parents[1]    # path of the project root directory
+        if __name__ == "__main__":
+            sys.path.insert(0, str(PROJECT_ROOT))
+        ```
 - use double quotes for for single or multiline strings by default (literals containing double quotes may be wrapped into single-quotted strings);
