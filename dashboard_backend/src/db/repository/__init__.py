@@ -13,7 +13,7 @@ class Repository:
     def __init__(self, session: AsyncSession) -> None:
         self.users = UsersRepository(session)
         self.sessions = SessionsRepository(session)
-        self.page_settings = PagesSettingsRepository(session)
+        self.pages_settings = PagesSettingsRepository(session)
 
 
 async def get_repo(request: Request) -> AsyncGenerator[Repository, None]:
