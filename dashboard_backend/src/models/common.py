@@ -1,16 +1,28 @@
 """Shared Pydantic validation mixins."""
+from typing import Iterable, Self, cast
+from pydantic import BaseModel, model_validator
 
-from pydantic import model_validator
 
+class AnyOf:
+    """
+    Mixin class with a model validator, which ensures
+    that at least one field is not null.
 
-class AtLeastOneFieldSetMixin:
-    """Model validator: requires at least one (non-None) field on update."""
+    `__any_of_fields__` can be overridden to apply the check
+    to a specific subset of attributes only.
+    """
+    __any_of_fields__: Iterable[str] | None = None
 
     @model_validator(mode="after")
-    def _check_at_least_one_field_set(self) -> "AtLeastOneFieldSetMixin":
-        if all(
-            getattr(self, field_name) is None
-            for field_name in self.model_fields # type: ignore
-        ):
-            raise ValueError("At least one field must be set")
-        return self
+    def validator(self) -> Self:
+        checked_fields = tuple(
+            self.__any_of_fields__
+            or cast(type[BaseModel], self.__class__).model_fields.keys()
+        )
+
+        for attr in checked_fields:
+            if getattr(self, attr, None) is not None:
+                return self
+        raise ValueError(
+            f"At least one non-null field from {checked_fields} is required."
+        )
