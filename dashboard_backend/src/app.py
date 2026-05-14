@@ -17,10 +17,11 @@ from dashboard_backend.src.routes import setup_routes
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize and tear down database connections."""
-    config: Config = app.state.config
-    init_db(config.backend_database_url)
-    yield
-    await close_db()
+    try:
+        init_db(app)
+        yield
+    finally:
+        await close_db(app)
 
 
 def create_app(config: Config | None = None) -> FastAPI:

@@ -1,29 +1,25 @@
 """Async SQLite engine and session management."""
 from typing import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from fastapi import FastAPI, Request
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 
 
-_engine: AsyncEngine | None = None
-_session_factory: async_sessionmaker[AsyncSession] | None = None
+def init_db(app: FastAPI) -> None:
+    """Create async engine and store it in app state."""
+    config = app.state.config
+    app.state.engine = create_async_engine(config.backend_database_url, echo=False)
 
 
-def init_db(database_url: str) -> None:
-    """Create async engine and session factory from a database URL."""
-    global _engine, _session_factory
-    _engine = create_async_engine(database_url, echo=False)
-    _session_factory = async_sessionmaker(_engine, expire_on_commit=False)
+async def close_db(app: FastAPI) -> None:
+    """Dispose the engine stored in app state."""
+    engine: AsyncEngine | None = getattr(app.state, "engine", None)
+    if engine is not None:
+        await engine.dispose()
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    """Yield an async session, closing it after use."""
-    if _session_factory is None:
-        raise RuntimeError("Database not initialized. Call init_db() first.")
-    async with _session_factory() as session:
+async def get_session(request: Request) -> AsyncGenerator[AsyncSession, None]:
+    """Yield an async session from the engine stored in app state."""
+    engine: AsyncEngine = request.app.state.engine
+    async with AsyncSession(engine) as session:
         yield session
-
-
-async def close_db() -> None:
-    """Dispose the engine and release all connections."""
-    if _engine is not None:
-        await _engine.dispose()
