@@ -13,3 +13,13 @@ class PageSettingsUpsert(BaseModel):
 
     slug: SlugField
     is_published: bool
+
+
+class PageSettings(BaseModel):
+    """Full SA model counterpart."""
+
+    model_config = {"from_attributes": True}
+
+    id: int
+    slug: str
+    is_published: bool

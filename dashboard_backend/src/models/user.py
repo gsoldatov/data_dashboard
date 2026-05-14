@@ -35,3 +35,14 @@ class UserResponse(BaseModel):
     username: str
     role: str
     created_at: datetime
+
+
+class User(BaseModel):
+    """Full SA model counterpart (password_hash excluded)."""
+
+    model_config = {"from_attributes": True}
+
+    id: int
+    username: str
+    role: str
+    created_at: datetime

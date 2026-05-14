@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
     pass
 
 
-class User(Base):
+class Users(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -20,12 +20,12 @@ class User(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    sessions: Mapped[list["Session"]] = relationship(
-        "Session", back_populates="user", cascade="all, delete-orphan"
+    sessions: Mapped[list["Sessions"]] = relationship(
+        "Sessions", back_populates="user", cascade="all, delete-orphan"
     )
 
 
-class Session(Base):
+class Sessions(Base):
     __tablename__ = "sessions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -36,10 +36,10 @@ class Session(Base):
         DateTime(timezone=True), server_default=func.now()
     )
 
-    user: Mapped["User"] = relationship("User", back_populates="sessions")
+    user: Mapped["Users"] = relationship("Users", back_populates="sessions")
 
 
-class PageSettings(Base):
+class PagesSettings(Base):
     __tablename__ = "page_settings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
