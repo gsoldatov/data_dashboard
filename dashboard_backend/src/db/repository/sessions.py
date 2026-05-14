@@ -8,6 +8,7 @@ from sqlalchemy import select, delete, and_
 
 from dashboard_backend.src.db.models import Sessions as SessionsModel
 from dashboard_backend.src.models.session import Session
+from dashboard_backend.src.util.exceptions import NotFoundException
 
 
 class SessionsRepository:
@@ -43,9 +44,10 @@ class SessionsRepository:
     async def prolong(self, session: Session, new_expires_at: datetime) -> None:
         """Update session's expiration time."""
         sa_session = await self._session.get(SessionsModel, session.id)
-        if sa_session is not None:
-            sa_session.expires_at = new_expires_at
-            await self._session.flush()
+        if sa_session is None:
+            raise NotFoundException
+        sa_session.expires_at = new_expires_at
+        await self._session.flush()
 
     async def delete(self, token: str) -> None:
         await self._session.execute(
