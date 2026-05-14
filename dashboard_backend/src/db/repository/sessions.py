@@ -1,43 +1,47 @@
 """Per-entity repository for Session operations."""
 
-from datetime import datetime, timezone
+import secrets
+from datetime import datetime, timezone, timedelta
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, and_
 
 from dashboard_backend.src.db.models import Sessions as SessionsModel
-from dashboard_backend.src.models.session import Session as PydanticSession
+from dashboard_backend.src.models.session import Session
 
 
 class SessionsRepository:
     """Async repository for Session entity."""
-    # TODO
-    # - session prolongation
-    # ? remove rowcount
-    # ? use corresponding Pydantic models when creating / inserting
 
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
-    async def by_token(self, token: str) -> SessionsModel | None:
+    async def by_token(self, token: str) -> Session | None:
         result = await self._session.execute(
             select(SessionsModel).where(and_(
                 SessionsModel.token == token,
                 SessionsModel.expires_at >= datetime.now(timezone.utc)
             ))
         )
-        return result.scalar_one_or_none()
+        sa_obj = result.scalar_one_or_none()
+        if sa_obj is None:
+            return None
+        return Session.model_validate(sa_obj)
 
-    async def create(self, session: SessionsModel) -> SessionsModel:
-        self._session.add(session)
+    async def create(self, user_id: int, ttl_seconds: int) -> Session:
+        """Create a new session for *user_id* and return it."""
+        token = secrets.token_hex(32)
+        sa_session = SessionsModel(
+            user_id=user_id,
+            token=token,
+            expires_at=datetime.now(timezone.utc) + timedelta(seconds=ttl_seconds),
+        )
+        self._session.add(sa_session)
         await self._session.flush()
-        return session
+        return Session.model_validate(sa_session)
 
-    async def prolong(self, session: PydanticSession, new_expires_at: datetime) -> None:
-        """Update a session's expiration time without re-fetching from the DB.
-
-        Uses the ORM identity map to retrieve the already-loaded SA object.
-        """
+    async def prolong(self, session: Session, new_expires_at: datetime) -> None:
+        """Update session's expiration time."""
         sa_session = await self._session.get(SessionsModel, session.id)
         if sa_session is not None:
             sa_session.expires_at = new_expires_at
@@ -49,12 +53,11 @@ class SessionsRepository:
         )
         await self._session.flush()
 
-    async def delete_expired(self) -> int:
-        """Delete all sessions past their expiry. Returns count of deleted rows."""
-        result = await self._session.execute(
+    async def delete_expired(self) -> None:
+        """Delete all sessions past their expiry."""
+        await self._session.execute(
             delete(SessionsModel).where(
                 SessionsModel.expires_at < datetime.now(timezone.utc)
             )
         )
         await self._session.flush()
-        return result.rowcount
