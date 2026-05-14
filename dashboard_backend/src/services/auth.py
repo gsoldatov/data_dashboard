@@ -27,11 +27,11 @@ async def current_user(
         datetime.now(timezone.utc) + timedelta(seconds=ttl),
     )
 
-    sa_user = await repo.users.by_id(session.user_id)
-    if sa_user is None:
+    user = await repo.users.by_id(session.user_id)
+    if user is None:
         return None
 
-    return User.model_validate(sa_user)
+    return user
 
 
 async def admin_user(
