@@ -8,15 +8,15 @@ from sqlalchemy import select, delete, and_
 
 from dashboard_backend.src.db.models import Sessions as SessionsModel
 from dashboard_backend.src.models.session import Session
-from dashboard_backend.src.util.exceptions import NotFoundException
+from dashboard_backend.src.util.exceptions import NotFoundException, internal_validation
 
 
 class SessionsRepository:
     """Async repository for Session entity."""
-
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
+    @internal_validation
     async def by_token(self, token: str) -> Session | None:
         result = await self._session.execute(
             select(SessionsModel).where(and_(
@@ -29,6 +29,7 @@ class SessionsRepository:
             return None
         return Session.model_validate(sa_obj)
 
+    @internal_validation
     async def create(self, user_id: int, ttl_seconds: int) -> Session:
         """Create a new session for *user_id* and return it."""
         token = secrets.token_hex(32)

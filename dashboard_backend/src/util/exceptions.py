@@ -1,2 +1,60 @@
+import inspect
+from functools import wraps
+from typing import Awaitable, Callable, ParamSpec, TypeVar, overload
+
+
+from pydantic import ValidationError
+
+
 class NotFoundException(Exception):
-    pass
+    """
+    Raised, when an object is not found during a repository operation.
+    """
+
+
+class InternalValidationException(Exception):
+    """
+    Raised instead of Pydantic `ValidationError` for internal validation failures.
+    """
+
+
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
+@overload
+def internal_validation(
+    func: Callable[P, Awaitable[R]]
+) -> Callable[P, Awaitable[R]]: ...
+
+
+@overload
+def internal_validation(func: Callable[P, R]) -> Callable[P, R]: ...
+
+
+def internal_validation(
+    func: Callable[P, R]
+) -> Callable[P, R] | Callable[P, Awaitable[R]]:
+    """
+    Decorator for raising `InternalValidationException` exceptions
+    instead of Pydantic's `ValidationError`.
+    """
+    # Coroutines
+    if inspect.iscoroutinefunction(func):
+        @wraps(func)
+        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            try:
+                return await func(*args, **kwargs)  # type: ignore[no-any-return]
+            except ValidationError as e:
+                raise InternalValidationException(str(e)) from e
+        return async_wrapper
+
+    # Sync functions
+    else:
+        @wraps(func)
+        def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            try:
+                return func(*args, **kwargs)
+            except ValidationError as e:
+                raise InternalValidationException(str(e)) from e
+        return sync_wrapper

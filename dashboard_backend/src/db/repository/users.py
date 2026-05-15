@@ -6,21 +6,22 @@ from sqlalchemy import select, delete
 from dashboard_backend.src.db.models import Users as UsersModel
 from dashboard_backend.src.models.user import User, UserCreate, UserUpdate
 from dashboard_backend.src.util.passwords import hash_password, verify_password
-from dashboard_backend.src.util.exceptions import NotFoundException
+from dashboard_backend.src.util.exceptions import NotFoundException, internal_validation
 
 
 class UsersRepository:
     """Async repository for User entity."""
-
     def __init__(self, session: AsyncSession) -> None:
         self._session = session
 
+    @internal_validation
     async def by_id(self, user_id: int) -> User | None:
         sa_obj = await self._session.get(UsersModel, user_id)
         if sa_obj is None:
             return None
         return User.model_validate(sa_obj)
 
+    @internal_validation
     async def by_credentials(self, username: str, password: str) -> User | None:
         """Return the user if *username* exists and *password* matches."""
         result = await self._session.execute(
@@ -33,6 +34,7 @@ class UsersRepository:
             return None
         return User.model_validate(sa_obj)
 
+    @internal_validation
     async def insert(self, data: UserCreate) -> User:
         """Create a new user from *data*. Password is hashed."""
         sa_obj = UsersModel(
@@ -44,6 +46,7 @@ class UsersRepository:
         await self._session.flush()
         return User.model_validate(sa_obj)
 
+    @internal_validation
     async def update(self, user_id: int, data: UserUpdate) -> User:
         """Update only the non-None fields of an existing user.
 
