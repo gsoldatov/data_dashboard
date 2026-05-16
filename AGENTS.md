@@ -111,15 +111,18 @@ TODO
 # Common CLI Commands
 ## Python
 ```bash
+# Add a Python dependency to the data_loading subproject
+uv add <dependency-name> --package data_loading
+
+# Add a Python dependency used by multiple subprojects
+uv add <dependency-name>
+
 # Run all tests for a subproject (data_loading in this case)
 uv run pytest data_loading
 
 # Run specific test case file directly (paths are relative to project root dir; note that uv is not used)
 .venv/bin/python data_loading/tests/tests/helpers/test_http_loader.py
 
-# Add a Python dependency to the data_loading subproject
-uv add <dependency-name> --package data_loading
-
-# Add a Python dependency used by multiple subprojects
-uv add <dependency-name>
+# Run pre-commit to verify the correctness of changes made (this includes Ruff & MyPy execution)
+uv run pre-commit run --all-files
 ```
