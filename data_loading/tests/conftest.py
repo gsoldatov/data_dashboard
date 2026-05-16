@@ -16,7 +16,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 
 @pytest.fixture
-def temp_directory(request) -> Path:
+def temp_directory(request: pytest.FixtureRequest) -> Path:
     """
     Create a temporary directory for tests.
     

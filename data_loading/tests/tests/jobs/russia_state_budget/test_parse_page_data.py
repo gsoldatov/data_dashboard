@@ -3,6 +3,7 @@ Test cases for Russia state budget parsing logic
 """
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -15,21 +16,21 @@ from data_loading.src.jobs.russia_state_budget.parse_page_data import _parse
 
 
 @pytest.fixture(scope="module")
-def mock_html_content():
+def mock_html_content() -> str:
     """Fixture that provides the mock HTML content for testing."""
     mock_file_path = PROJECT_ROOT / "data_loading/tests/mock/russia_state_budget.html"
     with open(mock_file_path, encoding="utf-8") as f:
         return f.read()
 
 
-def test_years_extraction_and_cleaning(mock_html_content: str):
+def test_years_extraction_and_cleaning(mock_html_content: str) -> None:
     """Test that years are correctly extracted and cleaned from table headers."""
     result = _parse(mock_html_content)
     years = list(result["1"]["data"].keys())
     assert years == ["2020", "2021", "2022", "2023"]
 
 
-def test_filtering_visual_indentation_rows(mock_html_content: str):
+def test_filtering_visual_indentation_rows(mock_html_content: str) -> None:
     """Test that visual indentation rows (РАЗДЕЛ) are filtered out."""
     result = _parse(mock_html_content)
     
@@ -38,7 +39,7 @@ def test_filtering_visual_indentation_rows(mock_html_content: str):
     assert "РАЗДЕЛ II" not in str(result)
     
     # More specifically, check that no section names start with РАЗДЕЛ
-    def check_section_names(obj):
+    def check_section_names(obj: Any) -> None:
         if isinstance(obj, dict):
             if "name" in obj and isinstance(obj["name"], str):
                 assert not obj["name"].startswith("РАЗДЕЛ"), \
@@ -54,7 +55,7 @@ def test_filtering_visual_indentation_rows(mock_html_content: str):
     check_section_names(result)
 
 
-def test_removing_trailing_asterisks_from_section_names(mock_html_content: str):
+def test_removing_trailing_asterisks_from_section_names(mock_html_content: str) -> None:
     """Test that trailing asterisks are removed from section names."""
     result = _parse(mock_html_content)
     
@@ -64,7 +65,7 @@ def test_removing_trailing_asterisks_from_section_names(mock_html_content: str):
     assert section_2_name != "Section 2*"
     
     # Verify no section names end with asterisk
-    def check_no_asterisk_in_names(obj):
+    def check_no_asterisk_in_names(obj: Any) -> None:
         if isinstance(obj, dict):
             if "name" in obj and isinstance(obj["name"], str):
                 assert not obj["name"].endswith("*"), \
@@ -80,7 +81,7 @@ def test_removing_trailing_asterisks_from_section_names(mock_html_content: str):
     check_no_asterisk_in_names(result)
 
 
-def test_parsing_numbers_with_spaces(mock_html_content: str):
+def test_parsing_numbers_with_spaces(mock_html_content: str) -> None:
     """Test that numbers with spaces are correctly parsed."""
     result = _parse(mock_html_content)
     
@@ -92,7 +93,7 @@ def test_parsing_numbers_with_spaces(mock_html_content: str):
     assert isinstance(section_2_2020_value, float)
 
 
-def test_hierarchical_structure_validation(mock_html_content: str):
+def test_hierarchical_structure_validation(mock_html_content: str) -> None:
     """Test that the hierarchical structure is built correctly."""
     result = _parse(mock_html_content)
     
@@ -142,7 +143,7 @@ def test_hierarchical_structure_validation(mock_html_content: str):
     assert result["1"]["children"]["1.2"]["data"]["2023"] == 600.0
 
 
-def test_multiline_section_handling(mock_html_content: str):
+def test_multiline_section_handling(mock_html_content: str) -> None:
     """Test that multiline sections are properly handled."""
     result = _parse(mock_html_content)
     
@@ -173,14 +174,14 @@ def test_multiline_section_handling(mock_html_content: str):
     assert isinstance(section_2_2_star["data"]["2022"], float)
 
 
-def test_all_expected_sections_present(mock_html_content: str):
+def test_all_expected_sections_present(mock_html_content: str) -> None:
     """Test that all expected sections are present in the hierarchy."""
     result = _parse(mock_html_content)
     
     # Collect all section names from the hierarchy
     section_names = []
     
-    def collect_section_names(obj, path):
+    def collect_section_names(obj: Any, path: str) -> None:
         if isinstance(obj, dict):
             # Check if this is a section (has "name" key) - use the provided path
             if "name" in obj:

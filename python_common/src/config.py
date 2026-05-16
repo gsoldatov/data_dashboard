@@ -25,7 +25,7 @@ class Config(BaseSettings):
     backend_session_ttl_seconds: int
     backend_cors_origins: str
 
-    @computed_field
+    @computed_field  # type: ignore[prop-decorator]
     @property
     def backend_database_url(self) -> str:
         """SQLAlchemy async connection URL derived from backend_database_path."""

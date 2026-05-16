@@ -1,5 +1,5 @@
+import logging
 import traceback
-from logging import LoggerAdapter
 
 from prefect import flow
 
@@ -17,7 +17,7 @@ from python_common.src import Config, get_config
 @flow(name="Russia state budget fetch page")
 def russia_state_budget_fetch_page(
     config: Config | None = None,
-    logger: LoggerAdapter | None = None
+    logger: logging.LoggerAdapter[logging.Logger] | None = None
 ) -> None:
     """
     Fetches an HTML page with Russia's state budget
@@ -42,9 +42,9 @@ def russia_state_budget_fetch_page(
         loader.load_file()
         logger.info(f"Saved {url} to {str(save_path)}")
     except Exception as e:
+        traceback.print_exc()
         logger.error(
             f"An exception occured during file fetch: {str(e)}"
-            f"\n{traceback.print_exc()}"
         )
 
 

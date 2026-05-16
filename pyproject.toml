@@ -10,6 +10,12 @@ dependencies = [
     "pytest-httpserver==1.1.5",
 ]
 
+[dependency-groups]
+dev = [
+    "mypy==2.1.0",
+    "ruff==0.15.12",
+]
+
 [tool.uv.workspace]
 members = [
     "data_loading",
@@ -41,7 +47,16 @@ ignore = [
     "F401"      # unused imports
 ]
 
-[dependency-groups]
-dev = [
-    "ruff==0.15.12",
+[tool.mypy]
+python_version = "3.13"
+strict = true
+# plugins = [
+#     "pydantic.mypy",
+#     "sqlalchemy.ext.mypy.plugin"
+# ]
+files = [
+    "data_loading/src/",
+    "data_loading/tests/",
+    "dashboard_backend/src/",
+    # "dashboard_backend/tests/",   # TODO enable
 ]

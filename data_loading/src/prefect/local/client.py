@@ -6,6 +6,7 @@ still requires a running Prefect server)
 """
 from datetime import timedelta
 from pathlib import Path
+from typing import Any
 
 from prefect import serve
 from prefect.context import use_profile
@@ -23,7 +24,7 @@ def main() -> None:
     config = get_config()
 
     with use_profile(config.prefect_profile):
-        deployments: list = [
+        deployments: list[Any] = [
             russia_state_budget.to_deployment(
                 "Russia state budget",
                 interval=timedelta(weeks=1)

@@ -2,6 +2,7 @@
 Creates or updates Prefect profile for the current server
 (environment variables in ~/.prefect/profiles.toml file)
 """
+# mypy: disable-error-code="dict-item"
 from pathlib import Path
 
 from prefect.settings import load_profiles, save_profiles
@@ -34,9 +35,9 @@ def main() -> None:
             # Set custom DB URI
             "PREFECT_API_DATABASE_CONNECTION_URL": prefect_db_uri,
 
-            # Increase time limit for writing to database to avoid lock errors        
+            # Increase time limit for writing to database to avoid lock errors
             "PREFECT_API_DATABASE_CONNECTION_TIMEOUT": "30"
-    }) # type: ignore keys can be strings despite type hints saying otherwise
+    })    # type: ignore[dict-item, unused-ignore]
 
     save_profiles(profiles)
     print(f"Updated Prefect profile '{config.prefect_profile}'.")

@@ -1,5 +1,5 @@
+import logging
 import sys
-from logging import LoggerAdapter
 from pathlib import Path
 
 if __name__ == "__main__":
@@ -26,7 +26,7 @@ from python_common.src import Config, get_config
 )
 def russia_state_budget(
     config: Config | None = None,
-    logger: LoggerAdapter | None = None
+    logger: logging.LoggerAdapter[logging.Logger] | None = None
 ) -> None:
     """
     Runs all jobs related to Russia's state budget

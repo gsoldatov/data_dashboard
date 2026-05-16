@@ -11,7 +11,7 @@ from python_common.src import Config
 def get_logger(
     config: Config,
     job_name: str
-) -> logging.LoggerAdapter:
+) -> logging.LoggerAdapter[logging.Logger]:
     """
     Configures & returns a job logger
     """
@@ -19,7 +19,7 @@ def get_logger(
     # in whether inside a flow run
     is_in_flow_run = FlowRunContext.get() is not None
     if is_in_flow_run:
-        adapter = cast(logging.LoggerAdapter, get_run_logger())
+        adapter = cast(logging.LoggerAdapter[logging.Logger], get_run_logger())
     else:
         logger = logging.getLogger(job_name)
         logger.setLevel(logging.INFO)   # enable writing INFO to stderr

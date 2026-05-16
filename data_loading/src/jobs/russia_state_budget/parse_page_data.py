@@ -1,6 +1,6 @@
 import json
+import logging
 import traceback
-from logging import LoggerAdapter
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +21,7 @@ from python_common.src import Config, get_config
 @flow(name="Russia state budget parse page data")
 def russia_state_budget_parse_page_data(
     config: Config | None = None,
-    logger: LoggerAdapter | None = None
+    logger: logging.LoggerAdapter[logging.Logger] | None = None
 ) -> None:
     """
     Parses an HTML page with Russia's state budget into JSON
@@ -50,9 +50,9 @@ def russia_state_budget_parse_page_data(
 
         logger.info(f"Successfully saved budget data to {json_path}")
     except Exception as e:
+        traceback.print_exc()
         logger.error(
             f"An exception occured during file parsing: {str(e)}"
-            f"\n{traceback.print_exc()}"
         )
 
 
@@ -70,11 +70,11 @@ def _parse(html_content: str) -> dict[str, Any]:
         raise ValueError("Russia state budget HTML does not contain a table")
 
     # Extract years from table headers
-    headers = table.find("thead")
-    if headers is None:
+    header_row = table.find("thead")
+    if header_row is None:
         raise ValueError("Russia state budget HTML table does not contain a header")
-    headers = headers.find_all("th")
-    years = [header.get_text(strip=True).rstrip(" *\xa0") for header in headers[2:]]
+    header_cells = header_row.find_all("th")
+    years = [cell.get_text(strip=True).rstrip(" *\xa0") for cell in header_cells[2:]]
 
     # Initialize hierarchical data structure
     data = {}

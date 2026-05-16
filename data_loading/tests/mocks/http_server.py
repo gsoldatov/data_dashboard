@@ -2,9 +2,10 @@
 Utilities for mock HTTP server
 """
 import time
+from collections.abc import Generator
 
 from pytest_httpserver import HTTPServer
-from werkzeug.wrappers import Response
+from werkzeug.wrappers import Request, Response
 
 
 def create_success_endpoint(server: HTTPServer, content: str = "test content", 
@@ -59,8 +60,8 @@ def create_streaming_endpoint(
     Returns:
         The URL for the endpoint
     """
-    def streaming_handler(request):
-        def generate_chunks():
+    def streaming_handler(request: Request) -> Response:
+        def generate_chunks() -> Generator[bytes]:
             for chunk in chunks:
                 if isinstance(chunk, str):
                     yield chunk.encode()
