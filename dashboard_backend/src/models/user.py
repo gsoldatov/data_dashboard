@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field
 
 from dashboard_backend.src.models.common import AnyOf
 
-
 UsernameField = Annotated[str, Field(min_length=1, max_length=255)]
 PasswordField = Annotated[str, Field(min_length=1, max_length=255)]
 

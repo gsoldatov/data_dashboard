@@ -2,12 +2,11 @@
 Test cases for HTTPLoader class
 """
 import sys
+from pathlib import Path
 
 import httpx
 import pytest
 from pytest_httpserver import HTTPServer
-
-from pathlib import Path
 
 # Add project root to path so we can import the module
 PROJECT_ROOT = Path(__file__).parents[4]
@@ -16,9 +15,9 @@ if __name__ == "__main__":
 
 from data_loading.src.helpers.http_loader import HTTPLoader
 from data_loading.tests.mocks.http_server import (
-    create_success_endpoint,
     create_error_endpoint,
-    create_streaming_endpoint
+    create_streaming_endpoint,
+    create_success_endpoint,
 )
 
 

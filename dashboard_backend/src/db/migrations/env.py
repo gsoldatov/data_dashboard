@@ -15,8 +15,8 @@ _project_root = Path(__file__).parents[4]
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-from python_common.src.config import get_config  # noqa: E402
-from dashboard_backend.src.db.models import Base  # noqa: E402
+from dashboard_backend.src.db.models import Base
+from python_common.src.config import get_config
 
 # Alembic Config object
 config = context.config

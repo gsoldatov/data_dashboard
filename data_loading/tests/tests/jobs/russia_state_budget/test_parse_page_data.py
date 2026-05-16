@@ -2,9 +2,9 @@
 Test cases for Russia state budget parsing logic
 """
 import sys
+from pathlib import Path
 
 import pytest
-from pathlib import Path
 
 # Add project root to path so we can import the module
 PROJECT_ROOT = Path(__file__).parents[5]
@@ -18,7 +18,7 @@ from data_loading.src.jobs.russia_state_budget.parse_page_data import _parse
 def mock_html_content():
     """Fixture that provides the mock HTML content for testing."""
     mock_file_path = PROJECT_ROOT / "data_loading/tests/mock/russia_state_budget.html"
-    with open(mock_file_path, "r", encoding="utf-8") as f:
+    with open(mock_file_path, encoding="utf-8") as f:
         return f.read()
 
 
@@ -41,7 +41,8 @@ def test_filtering_visual_indentation_rows(mock_html_content: str):
     def check_section_names(obj):
         if isinstance(obj, dict):
             if "name" in obj and isinstance(obj["name"], str):
-                assert not obj["name"].startswith("РАЗДЕЛ"), f"Found section starting with РАЗДЕЛ: {obj['name']}"
+                assert not obj["name"].startswith("РАЗДЕЛ"), \
+                    f"Found section starting with РАЗДЕЛ: {obj['name']}"
             # Recursively check children
             if "children" in obj:
                 for child in obj["children"].values():
@@ -66,7 +67,8 @@ def test_removing_trailing_asterisks_from_section_names(mock_html_content: str):
     def check_no_asterisk_in_names(obj):
         if isinstance(obj, dict):
             if "name" in obj and isinstance(obj["name"], str):
-                assert not obj["name"].endswith("*"), f"Found section name ending with asterisk: {obj['name']}"
+                assert not obj["name"].endswith("*"), \
+                    f"Found section name ending with asterisk: {obj['name']}"
             # Recursively check children
             if "children" in obj:
                 for child in obj["children"].values():
@@ -115,7 +117,8 @@ def test_hierarchical_structure_validation(mock_html_content: str):
     
     # Check subsection 1.1.1
     assert "1.1.1" in result["1"]["children"]["1.1"]["children"]
-    assert result["1"]["children"]["1.1"]["children"]["1.1.1"]["name"] == "Section 1.1.1"
+    assert result["1"]["children"]["1.1"]["children"]["1.1.1"]["name"] == \
+        "Section 1.1.1"
     assert result["1"]["children"]["1.1"]["children"]["1.1.1"]["data"]["2020"] == 100.0
     assert result["1"]["children"]["1.1"]["children"]["1.1.1"]["data"]["2021"] == 200.0
     assert result["1"]["children"]["1.1"]["children"]["1.1.1"]["data"]["2022"] == 300.0
@@ -123,7 +126,8 @@ def test_hierarchical_structure_validation(mock_html_content: str):
     
     # Check subsection 1.1.2
     assert "1.1.2" in result["1"]["children"]["1.1"]["children"]
-    assert result["1"]["children"]["1.1"]["children"]["1.1.2"]["name"] == "Section 1.1.2"
+    assert result["1"]["children"]["1.1"]["children"]["1.1.2"]["name"] == \
+        "Section 1.1.2"
     assert result["1"]["children"]["1.1"]["children"]["1.1.2"]["data"]["2020"] == 300.0
     assert result["1"]["children"]["1.1"]["children"]["1.1.2"]["data"]["2021"] == 400.0
     assert result["1"]["children"]["1.1"]["children"]["1.1.2"]["data"]["2022"] == 500.0
@@ -208,8 +212,10 @@ def test_all_expected_sections_present(mock_html_content: str):
     
     for section_path, expected_name in expected_sections.items():
         assert section_path in section_dict, f"Missing section: {section_path}"
-        assert section_dict[section_path] == expected_name, \
-            f"Section {section_path} has name '{section_dict[section_path]}', expected '{expected_name}'"
+        assert section_dict[section_path] == expected_name, (
+            f"Section {section_path} has name '{section_dict[section_path]}', "
+            f"expected '{expected_name}'"
+        )
 
 
 # Make the file executable if run directly

@@ -1,7 +1,7 @@
 import inspect
+from collections.abc import Awaitable, Callable
 from functools import wraps
-from typing import Awaitable, Callable, ParamSpec, TypeVar, overload
-
+from typing import overload
 
 from pydantic import ValidationError
 
@@ -18,21 +18,17 @@ class InternalValidationException(Exception):
     """
 
 
-P = ParamSpec("P")
-R = TypeVar("R")
-
-
 @overload
-def internal_validation(
+def internal_validation[**P, R](
     func: Callable[P, Awaitable[R]]
 ) -> Callable[P, Awaitable[R]]: ...
 
 
 @overload
-def internal_validation(func: Callable[P, R]) -> Callable[P, R]: ...
+def internal_validation[**P, R](func: Callable[P, R]) -> Callable[P, R]: ...
 
 
-def internal_validation(
+def internal_validation[**P, R](
     func: Callable[P, R]
 ) -> Callable[P, R] | Callable[P, Awaitable[R]]:
     """

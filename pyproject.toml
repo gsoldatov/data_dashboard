@@ -17,6 +17,30 @@ members = [
     "dashboard_backend",
 ]
 
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+# fix = true    # enable autocorrections
+
+include = [
+    "data_loading/src/**/*.py",
+    "data_loading/tests/**/*.py",
+    "dashboard_backend/src/**/*.py",
+    "dashboard_backend/tests/**/*.py",
+]
+
+[tool.ruff.lint]
+select = [  # rules used
+    "E",    # style errors
+    "F",    # Pyflake errors
+    "I",    # isort
+    "UP"    # syntax upgrade
+]
+ignore = [
+    "E402",     # Module level import not at top of file
+    "F401"      # unused imports
+]
+
 [dependency-groups]
 dev = [
     "ruff==0.15.12",

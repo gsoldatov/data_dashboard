@@ -1,5 +1,5 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from typing import cast
 
 from prefect.context import FlowRunContext
@@ -47,9 +47,17 @@ def get_logger(
 
         # Add default flow run format (or similar when running without Prefect)
         if is_in_flow_run:
-            fmt = "%(asctime)s.%(msecs)03d | %(levelname)-7s | Flow run %(flow_run_name)r - %(message)s"
+            fmt = (
+                "%(asctime)s.%(msecs)03d"
+                " | %(levelname)-7s"
+                " | Flow run %(flow_run_name)r - %(message)s"
+            )
         else:
-            fmt = "%(asctime)s.%(msecs)03d | %(levelname)-7s | %(job_name)s - %(message)s"
+            fmt = (
+                "%(asctime)s.%(msecs)03d"
+                " | %(levelname)-7s"
+                " | %(job_name)s - %(message)s"
+            )
         
         handler.setFormatter(logging.Formatter(fmt))
 

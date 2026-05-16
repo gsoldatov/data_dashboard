@@ -1,14 +1,14 @@
 """
 Test configuration and fixtures for data_loading tests
 """
-import pytest
 import shutil
 import sys
 import uuid
-
+from collections.abc import Generator
 from pathlib import Path
+
+import pytest
 from pytest_httpserver import HTTPServer
-from typing import Generator
 
 # Add project root to sys.path to allow absolute imports in test files
 PROJECT_ROOT = Path(__file__).parents[2]
@@ -20,7 +20,8 @@ def temp_directory(request) -> Path:
     """
     Create a temporary directory for tests.
     
-    The directory follows the pattern: data_loading/tests/temp/<test_case_name>_<random_uuid>
+    The directory follows the pattern:
+        data_loading/tests/temp/<test_case_name>_<random_uuid>
     Existing directories for the same test case are cleaned before creating new ones.
     The directory is not deleted after the test so its contents can be inspected.
     
@@ -55,7 +56,7 @@ def temp_directory(request) -> Path:
 
 
 @pytest.fixture
-def mock_http_server() -> Generator[HTTPServer, None, None]:
+def mock_http_server() -> Generator[HTTPServer]:
     """
     Fixture that provides a pytest-httpserver instance.
     The server is automatically started and stopped.

@@ -1,5 +1,5 @@
 """Auth service — session validation and user dependencies."""
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
 from fastapi import Depends, HTTPException, Request
 
@@ -24,7 +24,7 @@ async def current_user(
     ttl = request.app.state.config.backend_session_ttl_seconds
     await repo.sessions.prolong(
         session,
-        datetime.now(timezone.utc) + timedelta(seconds=ttl),
+        datetime.now(UTC) + timedelta(seconds=ttl),
     )
 
     user = await repo.users.by_id(session.user_id)

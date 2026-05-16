@@ -1,12 +1,12 @@
 """Per-entity repository for User operations."""
 
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete
 
 from dashboard_backend.src.db.models import Users as UsersModel
 from dashboard_backend.src.models.user import User, UserCreate, UserUpdate
-from dashboard_backend.src.util.passwords import hash_password, verify_password
 from dashboard_backend.src.util.exceptions import NotFoundException, internal_validation
+from dashboard_backend.src.util.passwords import hash_password, verify_password
 
 
 class UsersRepository:

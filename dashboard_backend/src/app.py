@@ -5,10 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from python_common.src.config import Config, get_config
-
-from dashboard_backend.src.db.connection import init_db, close_db
+from dashboard_backend.src.db.connection import close_db, init_db
 from dashboard_backend.src.routes import setup_routes
+from python_common.src.config import Config, get_config
 
 
 @asynccontextmanager

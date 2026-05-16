@@ -1,3 +1,13 @@
-from dashboard_backend.src.models.user import UserCreate as UserCreate, UserUpdate as UserUpdate, UserResponse as UserResponse, User as User  # noqa: F401
-from dashboard_backend.src.models.session import LoginRequest as LoginRequest, SessionResponse as SessionResponse, Session as Session  # noqa: F401
-from dashboard_backend.src.models.page_settings import PageSettingsUpsert as PageSettingsUpsert, PageSettings as PageSettings  # noqa: F401
+from dashboard_backend.src.models.page_settings import PageSettings as PageSettings
+from dashboard_backend.src.models.page_settings import (
+    PageSettingsUpsert as PageSettingsUpsert,
+)
+from dashboard_backend.src.models.session import (
+    LoginRequest as LoginRequest,
+)
+from dashboard_backend.src.models.session import Session as Session
+from dashboard_backend.src.models.session import SessionResponse as SessionResponse
+from dashboard_backend.src.models.user import User as User
+from dashboard_backend.src.models.user import UserCreate as UserCreate
+from dashboard_backend.src.models.user import UserResponse as UserResponse
+from dashboard_backend.src.models.user import UserUpdate as UserUpdate

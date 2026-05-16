@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from dashboard_backend.src.routes import page_settings, page_data, auth, users
+from dashboard_backend.src.routes import auth, page_data, page_settings, users
 
 
 def setup_routes(app: FastAPI) -> None:

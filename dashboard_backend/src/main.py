@@ -1,4 +1,6 @@
-"""Dashboard backend entry point. Run with `uv run uvicorn main:app` or `python main.py`."""
+"""
+Dashboard backend entry point. Run with `uv run uvicorn main:app` or `python main.py`.
+"""
 
 import sys
 from pathlib import Path
@@ -15,6 +17,10 @@ app = create_app()
 
 if __name__ == "__main__":
     import uvicorn
+
     from python_common.src.config import get_config
+    
     config = get_config()
-    uvicorn.run("main:app", host=config.backend_host, port=config.backend_port, reload=True)
+    uvicorn.run(
+        "main:app", host=config.backend_host, port=config.backend_port, reload=True
+    )

@@ -5,19 +5,18 @@ Revises:
 Create Date: 2026-05-11 19:13:01.465858
 
 """
-from typing import Sequence, Union
+from collections.abc import Sequence
 
-from alembic import op, context
 import sqlalchemy as sa
+from alembic import context, op
 
 from dashboard_backend.src.util.passwords import hash_password
 
-
 # revision identifiers, used by Alembic.
 revision: str = 'ac8db2ee5d14'
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -29,13 +28,18 @@ def upgrade() -> None:
     sa.Column('is_published', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_page_settings_slug'), 'page_settings', ['slug'], unique=True)
+    op.create_index(
+        op.f('ix_page_settings_slug'), 'page_settings', ['slug'], unique=True
+    )
     op.create_table('users',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('username', sa.String(length=255), nullable=False),
     sa.Column('password_hash', sa.String(length=255), nullable=False),
     sa.Column('role', sa.String(length=50), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column(
+        'created_at', sa.DateTime(timezone=True),
+        server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False
+    ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
@@ -44,7 +48,10 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('token', sa.String(length=255), nullable=False),
     sa.Column('expires_at', sa.DateTime(timezone=True), nullable=False),
-    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column(
+        'created_at', sa.DateTime(timezone=True),
+        server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False
+    ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

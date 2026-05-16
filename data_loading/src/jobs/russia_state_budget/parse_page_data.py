@@ -1,15 +1,15 @@
 import json
+import traceback
 from logging import LoggerAdapter
 from pathlib import Path
-import traceback
-from typing import Dict, Any
+from typing import Any
 
 from bs4 import BeautifulSoup
 from prefect import flow
 
 if __name__ == "__main__":
-    from pathlib import Path
     import sys
+    from pathlib import Path
 
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -38,7 +38,7 @@ def russia_state_budget_parse_page_data(
         if not page_path.is_file():
             raise RuntimeError("Russia state budget HTML file does not exist")
         
-        with open(page_path, "r", encoding="utf-8") as f:
+        with open(page_path, encoding="utf-8") as f:
             html_content = f.read()
 
         # Parse HTML data
@@ -101,7 +101,8 @@ def _parse(html_content: str) -> dict[str, Any]:
         section_num = section_num_cell.get_text(strip=True).rstrip(". *")
         section_name = section_name_cell.get_text(strip=True).rstrip(" *")
 
-        # Handle sections without section numbers that should inherit previous section number with asterisk
+        # Handle sections without section numbers that should inherit
+        # previous section number with asterisk
         if not section_num and section_name and prev_section_num:
             section_num = f"{prev_section_num}*"
 
@@ -126,7 +127,10 @@ def _parse(html_content: str) -> dict[str, Any]:
             # Main section
             current_section = {
                 "name": section_name,
-                "data": {years[i]: values[i] for i in range(len(years)) if values[i] is not None},
+                "data": {
+                    years[i]: values[i] for i in range(len(years))
+                    if values[i] is not None
+                },
                 "children": {}
             }
             data[section_num] = current_section
@@ -136,7 +140,10 @@ def _parse(html_content: str) -> dict[str, Any]:
                 subsection_num = section_num
                 subsection = {
                     "name": section_name,
-                    "data": {years[i]: values[i] for i in range(len(years)) if values[i] is not None},
+                    "data": {
+                        years[i]: values[i] for i in range(len(years))
+                        if values[i] is not None
+                    },
                     "children": {}
                 }
                 # Add to the correct parent in the hierarchy
@@ -150,9 +157,9 @@ def _parse(html_content: str) -> dict[str, Any]:
 
 
 def _add_to_hierarchy(
-    data: Dict[str, Any],
+    data: dict[str, Any],
     subsection_num: str,
-    subsection: Dict[str, Any]
+    subsection: dict[str, Any]
 ) -> None:
     """Helper method to add subsection to the correct parent in hierarchy."""
     parts = subsection_num.split(".")

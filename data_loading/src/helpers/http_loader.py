@@ -1,6 +1,7 @@
+from pathlib import Path
+
 import httpx
 from httpx import Timeout
-from pathlib import Path
 
 
 class HTTPLoader:

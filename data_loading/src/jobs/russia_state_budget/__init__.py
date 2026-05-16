@@ -1,6 +1,6 @@
+import sys
 from logging import LoggerAdapter
 from pathlib import Path
-import sys
 
 if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
@@ -9,9 +9,13 @@ if __name__ == "__main__":
 from prefect import flow
 from prefect.context import FlowRunContext
 
-from data_loading.src.jobs.russia_state_budget.fetch_page import russia_state_budget_fetch_page
-from data_loading.src.jobs.russia_state_budget.parse_page_data import russia_state_budget_parse_page_data
 from data_loading.src.helpers import get_logger
+from data_loading.src.jobs.russia_state_budget.fetch_page import (
+    russia_state_budget_fetch_page,
+)
+from data_loading.src.jobs.russia_state_budget.parse_page_data import (
+    russia_state_budget_parse_page_data,
+)
 from python_common.src import Config, get_config
 
 

@@ -1,18 +1,16 @@
-from logging import LoggerAdapter
 import traceback
+from logging import LoggerAdapter
 
 from prefect import flow
 
 if __name__ == "__main__":
-    from pathlib import Path
     import sys
+    from pathlib import Path
 
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.helpers import HTTPLoader
-from data_loading.src.helpers import get_logger
-
+from data_loading.src.helpers import HTTPLoader, get_logger
 from python_common.src import Config, get_config
 
 

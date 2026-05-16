@@ -1,10 +1,10 @@
 """Per-entity repository for Session operations."""
 
 import secrets
-from datetime import datetime, timezone, timedelta
+from datetime import UTC, datetime, timedelta
 
+from sqlalchemy import and_, delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete, and_
 
 from dashboard_backend.src.db.models import Sessions as SessionsModel
 from dashboard_backend.src.models.session import Session
@@ -21,7 +21,7 @@ class SessionsRepository:
         result = await self._session.execute(
             select(SessionsModel).where(and_(
                 SessionsModel.token == token,
-                SessionsModel.expires_at >= datetime.now(timezone.utc)
+                SessionsModel.expires_at >= datetime.now(UTC)
             ))
         )
         sa_obj = result.scalar_one_or_none()
@@ -36,7 +36,7 @@ class SessionsRepository:
         sa_session = SessionsModel(
             user_id=user_id,
             token=token,
-            expires_at=datetime.now(timezone.utc) + timedelta(seconds=ttl_seconds),
+            expires_at=datetime.now(UTC) + timedelta(seconds=ttl_seconds),
         )
         self._session.add(sa_session)
         await self._session.flush()
@@ -60,7 +60,7 @@ class SessionsRepository:
         """Delete all sessions past their expiry."""
         await self._session.execute(
             delete(SessionsModel).where(
-                SessionsModel.expires_at < datetime.now(timezone.utc)
+                SessionsModel.expires_at < datetime.now(UTC)
             )
         )
         await self._session.flush()

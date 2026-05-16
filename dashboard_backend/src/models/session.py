@@ -1,9 +1,10 @@
 """Pydantic API schemas for Session entity."""
 
 from datetime import datetime
+
 from pydantic import BaseModel
 
-from dashboard_backend.src.models.user import UsernameField, PasswordField
+from dashboard_backend.src.models.user import PasswordField, UsernameField
 
 
 class LoginRequest(BaseModel):

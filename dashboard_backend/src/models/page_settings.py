@@ -4,7 +4,6 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field
 
-
 SlugField = Annotated[str, Field(min_length=1, max_length=255)]
 
 

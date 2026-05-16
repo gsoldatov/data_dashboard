@@ -2,6 +2,7 @@
 Utilities for mock HTTP server
 """
 import time
+
 from pytest_httpserver import HTTPServer
 from werkzeug.wrappers import Response
 
@@ -68,7 +69,11 @@ def create_streaming_endpoint(
                 if delay > 0:
                     time.sleep(delay)
         
-        return Response(generate_chunks(), mimetype='application/octet-stream', direct_passthrough=True)
+        return Response(
+            generate_chunks(),
+            mimetype='application/octet-stream',
+            direct_passthrough=True
+        )
     
     server.expect_request("/stream").respond_with_handler(streaming_handler)
     return server.url_for("/stream")

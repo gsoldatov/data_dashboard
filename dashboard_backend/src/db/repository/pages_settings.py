@@ -1,7 +1,7 @@
 """Per-entity repository for page settings operations."""
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from dashboard_backend.src.db.models import PagesSettings
 from dashboard_backend.src.models.page_settings import PageSettings, PageSettingsUpsert

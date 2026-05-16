@@ -34,7 +34,10 @@
 #         await asyncio.gather(
 #             *(d.aapply() for d in deployments)
 #         )
-#     print(f"Registered {len(deployments)} deployments in profile '{config.prefect_profile}'.")
+#     print(
+#       f"Registered {len(deployments)} deployments "
+#       "in profile '{config.prefect_profile}'."
+#     )
 
 
 # if __name__ == "__main__":

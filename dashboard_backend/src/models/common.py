@@ -1,5 +1,7 @@
 """Shared Pydantic validation mixins."""
-from typing import Iterable, Self, cast
+from collections.abc import Iterable
+from typing import Self, cast
+
 from pydantic import BaseModel, model_validator
 
 
