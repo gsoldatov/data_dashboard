@@ -1,8 +1,8 @@
 from pathlib import Path
+from typing import Any, Literal
+
 from pydantic import computed_field, field_validator
 from pydantic_settings import BaseSettings
-from typing import Literal, Any
-
 
 _PROJECT_ROOT = Path(__file__).parents[2]
 

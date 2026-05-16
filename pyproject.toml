@@ -30,10 +30,9 @@ line-length = 88
 # fix = true    # enable autocorrections
 
 include = [
-    "data_loading/src/**/*.py",
-    "data_loading/tests/**/*.py",
-    "dashboard_backend/src/**/*.py",
-    "dashboard_backend/tests/**/*.py",
+    "data_loading/**/*.py",
+    "dashboard_backend/**/*.py",
+    "python_common/**/*.py",
 ]
 
 [tool.ruff.lint]
@@ -56,8 +55,7 @@ strict = true
 #     "sqlalchemy.ext.mypy.plugin"
 # ]
 files = [
-    "data_loading/src/",
-    "data_loading/tests/",
-    "dashboard_backend/src/",
-    # "dashboard_backend/tests/",   # TODO enable
+    "data_loading/",
+    "dashboard_backend/",
+    "python_common/"
 ]
