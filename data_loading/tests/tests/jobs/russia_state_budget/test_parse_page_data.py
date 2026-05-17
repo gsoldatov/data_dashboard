@@ -18,7 +18,9 @@ from data_loading.src.jobs.russia_state_budget.parse_page_data import _parse
 @pytest.fixture(scope="module")
 def mock_html_content() -> str:
     """Fixture that provides the mock HTML content for testing."""
-    mock_file_path = PROJECT_ROOT / "data_loading/tests/mock/russia_state_budget.html"
+    mock_file_path = (
+        PROJECT_ROOT / "data_loading/tests/mocks/mock_data/russia_state_budget.html"
+    )
     with open(mock_file_path, encoding="utf-8") as f:
         return f.read()
 
