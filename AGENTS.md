@@ -11,11 +11,7 @@ A set of ETL jobs, which load data.
 - `data_loading/src/jobs`: ETL jobs definitions;
 - `data_loading/src/helpers`: common functionality, which is shared among multiple jobs;
 - `data_loading/src/prefect`: collection of scripts for running & configuring Prefect;
-- `data_loading/tests`:
-    - test cases & test utilities for `data_loading` subproject;
-    - test cases are located in `data_loading/tests/tests` and follow the structure of `src` directory;
-    - each test case file is executable (see `data_loading/tests/tests/helpers/test_http_loader.py` for an example on how make them);
-    - test cases are written as functions.
+- `data_loading/tests`: test cases & test utilities for `data_loading` subproject.
 
 ### Architecture Decisions
 - Prefect uses a server & local process worker running on a single machine;
@@ -23,6 +19,12 @@ A set of ETL jobs, which load data.
 - jobs can be executed by Prefect or as standalone scripts (without invoking Prefect worker);
 - jobs are synchronous;
 - data is stored in JSON and other formats;
+- tests:
+    - test cases are located in `data_loading/tests/tests` and follow the structure of `src` directory;
+    - mocks reside in `data_loading/tests/mocks`;
+    - each test case file is executable (see `data_loading/tests/tests/helpers/test_http_loader.py` for an example on how make them);
+    - test cases are written as functions.
+
 
 ### CLI Commands
 ```bash
@@ -66,11 +68,17 @@ REST API service, which:
 - `dashboard_backend/src/services`:
     - API authentication & session checks (`auth.py`);
     - page data retrieval (`page_data`);
-- `dashboard_backend/src/util`: miscellaneous utility functions & objects (password hashing, exceptions, etc.).
+- `dashboard_backend/src/util`: miscellaneous utility functions & objects (password hashing, exceptions, etc.);
+- ``dashboard_backend/tests`: test cases & test utilities for `dashboard_backend` subproject.
 
 ### Architecture Decisions
 - asynchronous;
 - all db interactions are performed by repository objects;
+- tests:
+    - test cases are located in `dashboard_backend/tests/tests` and follow the structure of `src` directory;
+    - mocks (test data generators, test DB operations classes, etc.) reside in `dashboard_backend/tests/mocks`;
+    - each test case file is executable;
+    - test cases are written as functions.
 
 ### CLI Commands
 ```bash

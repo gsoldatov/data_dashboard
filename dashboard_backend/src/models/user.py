@@ -9,20 +9,21 @@ from dashboard_backend.src.models.common import AnyOf
 
 UsernameField = Annotated[str, Field(min_length=1, max_length=255)]
 PasswordField = Annotated[str, Field(min_length=1, max_length=255)]
+UserRole = Literal["admin", "viewer"]
 
 
 class UserCreate(BaseModel):
     """Payload for creating a new user."""
     username: UsernameField
     password: PasswordField
-    role: Literal["admin", "viewer"]
+    role: UserRole
 
 
 class UserUpdate(AnyOf, BaseModel):
     """Payload for updating an existing user."""
     username: UsernameField | None = None
     password: PasswordField | None = None
-    role: Literal["admin", "viewer"] | None = None
+    role: UserRole | None = None
 
 
 class UserResponse(BaseModel):

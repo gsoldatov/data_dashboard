@@ -28,8 +28,10 @@ if config.config_file_name is not None:
 # Use our declarative base metadata for autogenerate support
 target_metadata = Base.metadata
 
-# Resolve database URL from our own config, overriding alembic.ini
-_app_config = get_config()
+# Allow callers to inject a custom Config via config.attributes
+# (e.g. for tests that use a temporary database).
+# When not present, fall back to the normal get_config() resolution.
+_app_config = config.attributes.get("custom_config") or get_config()
 config.set_main_option("sqlalchemy.url", _app_config.backend_database_url)
 config.attributes["app_config"] = _app_config
 

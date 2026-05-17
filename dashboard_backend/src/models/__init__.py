@@ -10,4 +10,5 @@ from dashboard_backend.src.models.session import SessionResponse as SessionRespo
 from dashboard_backend.src.models.user import User as User
 from dashboard_backend.src.models.user import UserCreate as UserCreate
 from dashboard_backend.src.models.user import UserResponse as UserResponse
+from dashboard_backend.src.models.user import UserRole as UserRole
 from dashboard_backend.src.models.user import UserUpdate as UserUpdate
