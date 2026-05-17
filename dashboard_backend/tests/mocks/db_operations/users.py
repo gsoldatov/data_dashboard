@@ -54,3 +54,18 @@ class UsersDBOperations:
         if row is None:
             return None
         return User.model_validate(row)
+
+    async def by_username_with_hash(
+        self, username: str
+    ) -> tuple[User, str] | None:
+        """Return (User, password_hash) by username, or None."""
+        result = await self._conn.execute(
+            text(
+                "SELECT id, username, password_hash, role, created_at "
+                "FROM users WHERE username = :username"
+            ).bindparams(username=username)
+        )
+        row = result.mappings().one_or_none()
+        if row is None:
+            return None
+        return User.model_validate(row), row["password_hash"]
