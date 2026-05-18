@@ -55,3 +55,11 @@ async def self_or_admin(
     if current.role != "admin" and current.id != user_id:
         raise HTTPException(status_code=403, detail="Not authorized")
     return current
+
+
+async def anonymous_user(
+    current: User | None = Depends(current_user),
+) -> None:
+    """Require that the request has no valid session; raises 403 otherwise."""
+    if current is not None:
+        raise HTTPException(status_code=403, detail="Already authenticated")
