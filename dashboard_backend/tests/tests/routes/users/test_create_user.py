@@ -11,70 +11,30 @@ PROJECT_ROOT = Path(__file__).parents[6]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from dashboard_backend.tests.mocks.data_generator import DataGenerator  # noqa: E402
-from dashboard_backend.tests.mocks.db_operations import DBOperations  # noqa: E402
+from dashboard_backend.tests.mocks.data_generator import DataGenerator
+from dashboard_backend.tests.mocks.db_operations import DBOperations
 
 # ── validation ────────────────────────────────────────────────────────────
 
 
-async def test_create_user_missing_username(
+async def test_create_user_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
-    response = await test_client.post(
-        "/api/users",
-        json={"password": "pass123", "role": "viewer"},
-        cookies=admin_session,
-    )
-    assert response.status_code == 422
-
-
-async def test_create_user_missing_password(
-    test_client: AsyncClient,
-    admin_session: dict[str, str],
-) -> None:
-    response = await test_client.post(
-        "/api/users",
-        json={"username": "new_user", "role": "viewer"},
-        cookies=admin_session,
-    )
-    assert response.status_code == 422
-
-
-async def test_create_user_empty_username(
-    test_client: AsyncClient,
-    admin_session: dict[str, str],
-) -> None:
-    response = await test_client.post(
-        "/api/users",
-        json={"username": "", "password": "pass123", "role": "viewer"},
-        cookies=admin_session,
-    )
-    assert response.status_code == 422
-
-
-async def test_create_user_empty_password(
-    test_client: AsyncClient,
-    admin_session: dict[str, str],
-) -> None:
-    response = await test_client.post(
-        "/api/users",
-        json={"username": "new_user", "password": "", "role": "viewer"},
-        cookies=admin_session,
-    )
-    assert response.status_code == 422
-
-
-async def test_create_user_invalid_role(
-    test_client: AsyncClient,
-    admin_session: dict[str, str],
-) -> None:
-    response = await test_client.post(
-        "/api/users",
-        json={"username": "new_user", "password": "pass123", "role": "superadmin"},
-        cookies=admin_session,
-    )
-    assert response.status_code == 422
+    invalid_cases = [
+        ({"password": "pass123", "role": "viewer"}, 422),
+        ({"username": "new_user", "role": "viewer"}, 422),
+        ({"username": "", "password": "pass123", "role": "viewer"}, 422),
+        ({"username": "new_user", "password": "", "role": "viewer"}, 422),
+        ({"username": "new_user", "password": "pass123", "role": "superadmin"}, 422),
+    ]
+    for payload, expected_status in invalid_cases:
+        response = await test_client.post(
+            "/api/users",
+            json=payload,
+            cookies=admin_session,
+        )
+        assert response.status_code == expected_status
 
 
 # ── auth failures ─────────────────────────────────────────────────────────

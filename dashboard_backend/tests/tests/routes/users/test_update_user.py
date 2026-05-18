@@ -11,61 +11,30 @@ PROJECT_ROOT = Path(__file__).parents[6]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from dashboard_backend.tests.mocks.data_generator import DataGenerator  # noqa: E402
-from dashboard_backend.tests.mocks.db_operations import DBOperations  # noqa: E402
+from dashboard_backend.tests.mocks.data_generator import DataGenerator
+from dashboard_backend.tests.mocks.db_operations import DBOperations
 
 # ── validation ────────────────────────────────────────────────────────────
 
 
-async def test_update_user_all_fields_null(
+async def test_update_user_validation(
     test_client: AsyncClient,
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
     user_id, cookies = viewer_session
-    response = await test_client.patch(
-        f"/api/users/{user_id}",
-        json={},
-        cookies=cookies,
-    )
-    assert response.status_code == 422
-
-
-async def test_update_user_empty_username(
-    test_client: AsyncClient,
-    viewer_session: tuple[int, dict[str, str]],
-) -> None:
-    user_id, cookies = viewer_session
-    response = await test_client.patch(
-        f"/api/users/{user_id}",
-        json={"username": ""},
-        cookies=cookies,
-    )
-    assert response.status_code == 422
-
-
-async def test_update_user_empty_password(
-    test_client: AsyncClient,
-    viewer_session: tuple[int, dict[str, str]],
-) -> None:
-    user_id, cookies = viewer_session
-    response = await test_client.patch(
-        f"/api/users/{user_id}",
-        json={"password": ""},
-        cookies=cookies,
-    )
-    assert response.status_code == 422
-
-async def test_update_user_invalid_role(
-    test_client: AsyncClient,
-    viewer_session: tuple[int, dict[str, str]],
-) -> None:
-    user_id, cookies = viewer_session
-    response = await test_client.patch(
-        f"/api/users/{user_id}",
-        json={"role": "superadmin"},
-        cookies=cookies,
-    )
-    assert response.status_code == 422
+    invalid_cases = [
+        ({}, 422),
+        ({"username": ""}, 422),
+        ({"password": ""}, 422),
+        ({"role": "superadmin"}, 422),
+    ]
+    for payload, expected_status in invalid_cases:
+        response = await test_client.patch(
+            f"/api/users/{user_id}",
+            json=payload,
+            cookies=cookies,
+        )
+        assert response.status_code == expected_status
 
 
 # ── auth failures ─────────────────────────────────────────────────────────

@@ -11,20 +11,20 @@ import pytest
 from alembic import command
 from alembic.config import Config as AlembicConfig
 from httpx import ASGITransport, AsyncClient
-from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine, create_async_engine
+from sqlalchemy.ext.asyncio import AsyncConnection, create_async_engine
 
 # Ensure project root is on sys.path so sibling-package imports work.
 _PROJECT_ROOT = Path(__file__).parents[2]
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from fastapi import FastAPI  # noqa: E402
+from fastapi import FastAPI
 
-from dashboard_backend.src.app import create_app  # noqa: E402
-from dashboard_backend.tests.mocks.data_generator import DataGenerator  # noqa: E402
-from dashboard_backend.tests.mocks.db_operations import DBOperations  # noqa: E402
-from python_common.src.config import Config, get_config  # noqa: E402
-from python_common.tests.shared_fixtures import create_temp_directory  # noqa: E402
+from dashboard_backend.src.app import create_app
+from dashboard_backend.tests.mocks.data_generator import DataGenerator
+from dashboard_backend.tests.mocks.db_operations import DBOperations
+from python_common.src.config import Config, get_config
+from python_common.tests.shared_fixtures import create_temp_directory
 
 _TESTS_DIR = Path(__file__).parent
 _ALEMBIC_INI = (

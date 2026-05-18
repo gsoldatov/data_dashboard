@@ -17,10 +17,10 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from dashboard_backend.src.db.models import Base  # noqa: E402
-from dashboard_backend.src.util.passwords import verify_password  # noqa: E402
-from dashboard_backend.tests.mocks.db_operations import DBOperations  # noqa: E402
-from python_common.src.config import Config  # noqa: E402
+from dashboard_backend.src.db.models import Base
+from dashboard_backend.src.util.passwords import verify_password
+from dashboard_backend.tests.mocks.db_operations import DBOperations
+from python_common.src.config import Config
 
 _ALEMBIC_INI = (
     PROJECT_ROOT / "dashboard_backend" / "src" / "db" / "migrations" / "alembic.ini"

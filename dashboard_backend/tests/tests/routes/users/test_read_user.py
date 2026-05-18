@@ -11,8 +11,8 @@ PROJECT_ROOT = Path(__file__).parents[6]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from dashboard_backend.tests.mocks.db_operations import DBOperations  # noqa: E402
-from python_common.src.config import Config  # noqa: E402
+from dashboard_backend.tests.mocks.db_operations import DBOperations
+from python_common.src.config import Config
 
 # ── not found ─────────────────────────────────────────────────────────────
 

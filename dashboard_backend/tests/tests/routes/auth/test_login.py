@@ -18,36 +18,19 @@ from python_common.src.config import Config
 # ── validation ────────────────────────────────────────────────────────────
 
 
-async def test_login_missing_username(test_client: AsyncClient) -> None:
-    response = await test_client.post(
-        "/api/auth/login",
-        json={"password": "pass"},
-    )
-    assert response.status_code == 422
-
-
-async def test_login_missing_password(test_client: AsyncClient) -> None:
-    response = await test_client.post(
-        "/api/auth/login",
-        json={"username": "user"},
-    )
-    assert response.status_code == 422
-
-
-async def test_login_empty_username(test_client: AsyncClient) -> None:
-    response = await test_client.post(
-        "/api/auth/login",
-        json={"username": "", "password": "pass"},
-    )
-    assert response.status_code == 422
-
-
-async def test_login_empty_password(test_client: AsyncClient) -> None:
-    response = await test_client.post(
-        "/api/auth/login",
-        json={"username": "user", "password": ""},
-    )
-    assert response.status_code == 422
+async def test_login_validation(test_client: AsyncClient) -> None:
+    invalid_cases = [
+        ({"password": "pass"}, 422),
+        ({"username": "user"}, 422),
+        ({"username": "", "password": "pass"}, 422),
+        ({"username": "user", "password": ""}, 422),
+    ]
+    for payload, expected_status in invalid_cases:
+        response = await test_client.post(
+            "/api/auth/login",
+            json=payload,
+        )
+        assert response.status_code == expected_status
 
 
 # ── already authenticated ─────────────────────────────────────────────────

@@ -12,7 +12,7 @@ from pytest_httpserver import HTTPServer
 PROJECT_ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from python_common.tests.shared_fixtures import create_temp_directory  # noqa: E402
+from python_common.tests.shared_fixtures import create_temp_directory
 
 _TESTS_DIR = Path(__file__).parent
 

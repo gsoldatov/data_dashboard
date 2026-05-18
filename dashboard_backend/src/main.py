@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from dashboard_backend.src.app import create_app  # noqa: E402
+from dashboard_backend.src.app import create_app
 
 app = create_app()
 
