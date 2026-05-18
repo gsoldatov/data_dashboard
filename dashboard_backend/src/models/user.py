@@ -28,6 +28,8 @@ class UserUpdate(AnyOf, BaseModel):
 
 class UserResponse(BaseModel):
     """Public-facing user representation (password excluded)."""
+    model_config = {"from_attributes": True}
+
     id: int
     username: str
     role: str

@@ -72,7 +72,9 @@ async def test_db(test_config: Config) -> AsyncGenerator[AsyncConnection]:
     in a thread so that ``asyncio.run()`` inside env.py does not clash with
     pytest-asyncio's event loop.
     """
-    engine = create_async_engine(test_config.backend_database_url, echo=False)
+    engine = create_async_engine(
+        test_config.backend_database_url, echo=False, isolation_level="AUTOCOMMIT"
+    )
 
     try:
         # Run migrations against the test database
@@ -130,3 +132,38 @@ def data_generator() -> DataGenerator:
 def db_operations(test_db: AsyncConnection) -> DBOperations:
     """DBOperations facade wired to the migrated test connection."""
     return DBOperations(test_db)
+
+
+# ── session fixtures ──────────────────────────────────────────────────────
+
+
+@pytest.fixture
+async def admin_session(
+    test_config: Config,
+    data_generator: DataGenerator,
+    db_operations: DBOperations,
+) -> dict[str, str]:
+    """Session cookie for the default admin user (seeded by migration)."""
+    user = await db_operations.users.by_username(
+        test_config.backend_default_user_name
+    )
+    assert user is not None, "Default admin user not found"
+    session = data_generator.sessions.session(user_id=user.id)
+    await db_operations.sessions.insert(session)
+    return {"session_token": session.token}
+
+
+@pytest.fixture
+async def viewer_session(
+    data_generator: DataGenerator,
+    db_operations: DBOperations,
+) -> tuple[int, dict[str, str]]:
+    """Create a viewer user + session, return (user_id, cookie_dict)."""
+    user = await db_operations.users.insert(
+        data_generator.users.user_create(
+            username="viewer", password="pass", role="viewer"
+        )
+    )
+    session = data_generator.sessions.session(user_id=user.id)
+    await db_operations.sessions.insert(session)
+    return user.id, {"session_token": session.token}

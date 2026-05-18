@@ -12,6 +12,15 @@ class NotFoundException(Exception):
     """
 
 
+class DuplicateException(Exception):
+    """Raised when a uniqueness constraint would be violated."""
+
+    def __init__(self, entity: str, field: str, value: str) -> None:
+        self.entity = entity
+        self.field = field
+        self.value = value
+
+
 class InternalValidationException(Exception):
     """
     Raised instead of Pydantic `ValidationError` for internal validation failures.

@@ -21,3 +21,4 @@ async def get_repo(request: Request) -> AsyncGenerator[Repository]:
     engine: AsyncEngine = request.app.state.engine
     async with AsyncSession(engine) as session:
         yield Repository(session)
+        await session.commit()

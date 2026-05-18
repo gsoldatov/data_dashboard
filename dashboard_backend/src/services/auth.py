@@ -43,3 +43,15 @@ async def admin_user(
     if current.role != "admin":
         raise HTTPException(status_code=403, detail="Admin access required")
     return current
+
+
+async def self_or_admin(
+    user_id: int,
+    current: User | None = Depends(current_user),
+) -> User:
+    """Return the authenticated User if admin or the target user; 401/403 otherwise."""
+    if current is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    if current.role != "admin" and current.id != user_id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    return current

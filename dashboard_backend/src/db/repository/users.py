@@ -5,7 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from dashboard_backend.src.db.models import Users as UsersModel
 from dashboard_backend.src.models.user import User, UserCreate, UserUpdate
-from dashboard_backend.src.util.exceptions import NotFoundException, internal_validation
+from dashboard_backend.src.util.exceptions import (
+    DuplicateException,
+    NotFoundException,
+    internal_validation,
+)
 from dashboard_backend.src.util.passwords import hash_password, verify_password
 
 
@@ -35,8 +39,25 @@ class UsersRepository:
         return User.model_validate(sa_obj)
 
     @internal_validation
+    async def by_username(self, username: str) -> User | None:
+        """Return the user by *username*, or None."""
+        result = await self._session.execute(
+            select(UsersModel).where(UsersModel.username == username)
+        )
+        sa_obj = result.scalar_one_or_none()
+        if sa_obj is None:
+            return None
+        return User.model_validate(sa_obj)
+
+    @internal_validation
     async def insert(self, data: UserCreate) -> User:
-        """Create a new user from *data*. Password is hashed."""
+        """Create a new user from *data*. Password is hashed.
+
+        Raises DuplicateException if *username* already exists.
+        """
+        if await self.by_username(data.username):
+            raise DuplicateException("User", "username", data.username)
+
         sa_obj = UsersModel(
             username=data.username,
             password_hash=hash_password(data.password),
@@ -51,12 +72,16 @@ class UsersRepository:
         """Update only the non-None fields of an existing user.
 
         Raises NotFoundException if no user with *user_id* exists.
+        Raises DuplicateException if *username* is already taken.
         """
         sa_obj = await self._session.get(UsersModel, user_id)
         if sa_obj is None:
             raise NotFoundException(f"User {user_id} not found")
 
         if data.username is not None:
+            existing = await self.by_username(data.username)
+            if existing and existing.id != user_id:
+                raise DuplicateException("User", "username", data.username)
             sa_obj.username = data.username
         if data.password is not None:
             sa_obj.password_hash = hash_password(data.password)
@@ -67,7 +92,14 @@ class UsersRepository:
         return User.model_validate(sa_obj)
 
     async def delete(self, user_id: int) -> None:
-        """Delete a user by ID in a single query."""
+        """Delete a user by ID.
+
+        Raises NotFoundException if no user with *user_id* exists.
+        """
+        sa_obj = await self._session.get(UsersModel, user_id)
+        if sa_obj is None:
+            raise NotFoundException(f"User {user_id} not found")
+
         await self._session.execute(
             delete(UsersModel).where(UsersModel.id == user_id)
         )
