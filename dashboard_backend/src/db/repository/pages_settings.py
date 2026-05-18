@@ -37,15 +37,15 @@ class PagesSettingsRepository:
         return [PageSettings.model_validate(obj) for obj in result.scalars().all()]
 
     @internal_validation
-    async def upsert(self, data: PageSettingsUpsert) -> PageSettings:
+    async def upsert(self, slug: str, data: PageSettingsUpsert) -> PageSettings:
         """Insert or update page settings by slug."""
         existing = await self._session.execute(
-            select(PagesSettings).where(PagesSettings.slug == data.slug)
+            select(PagesSettings).where(PagesSettings.slug == slug)
         )
         sa_obj = existing.scalar_one_or_none()
 
         if sa_obj is None:
-            sa_obj = PagesSettings(slug=data.slug, is_published=data.is_published)
+            sa_obj = PagesSettings(slug=slug, is_published=data.is_published)
             self._session.add(sa_obj)
         else:
             sa_obj.is_published = data.is_published

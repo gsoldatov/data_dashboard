@@ -7,7 +7,7 @@ import pytest
 from httpx import AsyncClient
 
 # Support direct file execution
-PROJECT_ROOT = Path(__file__).parents[6]
+PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 

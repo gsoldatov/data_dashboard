@@ -8,10 +8,9 @@ class PagesSettingsDataGenerator:
 
     def page_settings_upsert(
         self,
-        slug: str = "test-page",
         is_published: bool = True,
     ) -> PageSettingsUpsert:
-        return PageSettingsUpsert(slug=slug, is_published=is_published)
+        return PageSettingsUpsert(is_published=is_published)
 
     def page_settings(
         self,

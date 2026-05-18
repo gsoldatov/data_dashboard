@@ -10,7 +10,13 @@ SlugField = Annotated[str, Field(min_length=1, max_length=255)]
 class PageSettingsUpsert(BaseModel):
     """Payload for creating or updating page settings."""
 
-    slug: SlugField
+    is_published: bool
+
+
+class PageSettingsResponse(BaseModel):
+    """Public page settings (merged defaults + overrides)."""
+
+    slug: str
     is_published: bool
 
 
