@@ -22,6 +22,7 @@ async def test_update_user_validation(
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
     user_id, cookies = viewer_session
+    test_client.cookies = cookies
     invalid_cases = [
         ({}, 422),
         ({"username": ""}, 422),
@@ -32,7 +33,6 @@ async def test_update_user_validation(
         response = await test_client.patch(
             f"/api/users/{user_id}",
             json=payload,
-            cookies=cookies,
         )
         assert response.status_code == expected_status
 
@@ -41,10 +41,10 @@ async def test_update_user_validation(
 
 
 async def test_update_user_no_token(test_client: AsyncClient) -> None:
+    test_client.cookies.clear()
     response = await test_client.patch(
         "/api/users/1",
         json={"username": "renamed"},
-        cookies={},
     )
     assert response.status_code == 401
 
@@ -62,10 +62,10 @@ async def test_update_user_viewer_updating_other(
         )
     )
 
+    test_client.cookies = cookies
     response = await test_client.patch(
         f"/api/users/{other.id}",
         json={"username": "hacked"},
-        cookies=cookies,
     )
 
     assert response.status_code == 403
@@ -78,10 +78,10 @@ async def test_update_user_not_found(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     response = await test_client.patch(
         "/api/users/99999",
         json={"username": "ghost"},
-        cookies=admin_session,
     )
 
     assert response.status_code == 404
@@ -104,10 +104,10 @@ async def test_update_user_duplicate_username(
         )
     )
 
+    test_client.cookies = admin_session
     response = await test_client.patch(
         f"/api/users/{target.id}",
         json={"username": "taken"},
-        cookies=admin_session,
     )
 
     assert response.status_code == 409
@@ -128,10 +128,10 @@ async def test_update_user_admin_success(
         )
     )
 
+    test_client.cookies = admin_session
     response = await test_client.patch(
         f"/api/users/{target.id}",
         json={"username": "renamed", "role": "viewer"},
-        cookies=admin_session,
     )
 
     assert response.status_code == 200
@@ -147,10 +147,10 @@ async def test_update_user_self_success(
 ) -> None:
     user_id, cookies = viewer_session
 
+    test_client.cookies = cookies
     response = await test_client.patch(
         f"/api/users/{user_id}",
         json={"password": "newpass"},
-        cookies=cookies,
     )
 
     assert response.status_code == 200

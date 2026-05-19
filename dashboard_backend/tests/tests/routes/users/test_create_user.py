@@ -21,6 +21,7 @@ async def test_create_user_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     invalid_cases = [
         ({"password": "pass123", "role": "viewer"}, 422),
         ({"username": "new_user", "role": "viewer"}, 422),
@@ -32,7 +33,6 @@ async def test_create_user_validation(
         response = await test_client.post(
             "/api/users",
             json=payload,
-            cookies=admin_session,
         )
         assert response.status_code == expected_status
 
@@ -41,10 +41,10 @@ async def test_create_user_validation(
 
 
 async def test_create_user_no_token(test_client: AsyncClient) -> None:
+    test_client.cookies.clear()
     response = await test_client.post(
         "/api/users",
         json={"username": "new_user", "password": "pass123", "role": "viewer"},
-        cookies={},
     )
     assert response.status_code == 401
 
@@ -54,11 +54,11 @@ async def test_create_user_viewer_token(
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
     _user_id, cookies = viewer_session
+    test_client.cookies = cookies
 
     response = await test_client.post(
         "/api/users",
         json={"username": "new_user", "password": "pass123", "role": "viewer"},
-        cookies=cookies,
     )
 
     assert response.status_code == 403
@@ -79,10 +79,10 @@ async def test_create_user_duplicate_username(
         )
     )
 
+    test_client.cookies = admin_session
     response = await test_client.post(
         "/api/users",
         json={"username": "existing", "password": "pass123", "role": "viewer"},
-        cookies=admin_session,
     )
 
     assert response.status_code == 409
@@ -95,10 +95,10 @@ async def test_create_user_success(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     response = await test_client.post(
         "/api/users",
         json={"username": "new_user", "password": "pass123", "role": "viewer"},
-        cookies=admin_session,
     )
 
     assert response.status_code == 201

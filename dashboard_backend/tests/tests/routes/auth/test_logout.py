@@ -17,17 +17,17 @@ from python_common.src.config import Config
 
 
 async def test_logout_no_cookie(test_client: AsyncClient) -> None:
+    test_client.cookies.clear()
     response = await test_client.post(
         "/api/auth/logout",
-        cookies={},
     )
     assert response.status_code == 204
 
 
 async def test_logout_invalid_token(test_client: AsyncClient) -> None:
+    test_client.cookies = {"session_token": "nonexistent_token"}
     response = await test_client.post(
         "/api/auth/logout",
-        cookies={"session_token": "nonexistent_token"},
     )
     assert response.status_code == 204
 
@@ -47,9 +47,9 @@ async def test_logout_valid_token(
     )
     await db_operations.sessions.insert(session)
 
+    test_client.cookies = {"session_token": session.token}
     response = await test_client.post(
         "/api/auth/logout",
-        cookies={"session_token": session.token},
     )
 
     assert response.status_code == 204

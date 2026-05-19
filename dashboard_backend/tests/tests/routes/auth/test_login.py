@@ -40,10 +40,10 @@ async def test_login_already_authenticated(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     response = await test_client.post(
         "/api/auth/login",
         json={"username": "anyone", "password": "any"},
-        cookies=admin_session,
     )
     assert response.status_code == 403
 

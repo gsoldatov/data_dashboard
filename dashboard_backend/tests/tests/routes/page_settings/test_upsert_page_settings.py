@@ -21,6 +21,7 @@ async def test_upsert_page_settings_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     invalid_cases = [
         ({}, 422),
         ({"is_published": "notabool"}, 422),
@@ -30,7 +31,6 @@ async def test_upsert_page_settings_validation(
         response = await test_client.put(
             "/api/page-settings/test-page",
             json=payload,
-            cookies=admin_session,
         )
         assert response.status_code == expected_status
 
@@ -39,10 +39,10 @@ async def test_upsert_page_settings_validation(
 
 
 async def test_upsert_page_settings_no_token(test_client: AsyncClient) -> None:
+    test_client.cookies.clear()
     response = await test_client.put(
         "/api/page-settings/test-page",
         json={"is_published": True},
-        cookies={},
     )
     assert response.status_code == 401
 
@@ -52,11 +52,11 @@ async def test_upsert_page_settings_viewer_token(
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
     _user_id, cookies = viewer_session
+    test_client.cookies = cookies
 
     response = await test_client.put(
         "/api/page-settings/test-page",
         json={"is_published": True},
-        cookies=cookies,
     )
 
     assert response.status_code == 403
@@ -69,10 +69,10 @@ async def test_upsert_page_settings_insert(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
+    test_client.cookies = admin_session
     response = await test_client.put(
         "/api/page-settings/new-page",
         json={"is_published": False},
-        cookies=admin_session,
     )
 
     assert response.status_code == 200
@@ -95,10 +95,10 @@ async def test_upsert_page_settings_update(
         )
     )
 
+    test_client.cookies = admin_session
     response = await test_client.put(
         "/api/page-settings/existing-page",
         json={"is_published": False},
-        cookies=admin_session,
     )
 
     assert response.status_code == 200
