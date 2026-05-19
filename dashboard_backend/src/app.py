@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from dashboard_backend.src.db.connection import close_db, init_db
+from dashboard_backend.src.db.engine import close_engine, init_engine
 from dashboard_backend.src.routes import setup_routes
 from dashboard_backend.src.util.exceptions import DuplicateException, NotFoundException
 from python_common.src.config import Config, get_config
@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     try:
         yield
     finally:
-        await close_db(app)
+        await close_engine(app)
 
 
 def create_app(config: Config | None = None) -> FastAPI:
@@ -33,7 +33,7 @@ def create_app(config: Config | None = None) -> FastAPI:
     app.state.config = config
 
     # Database engine (with WAL + busy timeout for concurrent access)
-    init_db(app)
+    init_engine(app)
 
     # Routes
     setup_routes(app)

@@ -5,7 +5,7 @@ from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
 
 
-def init_db(app: FastAPI) -> None:
+def init_engine(app: FastAPI) -> None:
     """Create async engine and store it in app state.
 
     Configures the engine for concurrent access via WAL journal mode
@@ -24,7 +24,7 @@ def init_db(app: FastAPI) -> None:
     app.state.engine = engine
 
 
-async def close_db(app: FastAPI) -> None:
+async def close_engine(app: FastAPI) -> None:
     """Dispose the engine stored in app state."""
     engine: AsyncEngine | None = getattr(app.state, "engine", None)
     if engine is not None:
