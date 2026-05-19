@@ -10,10 +10,9 @@ from dashboard_backend.src.models.page_settings import (
 )
 from dashboard_backend.src.models.user import User
 from dashboard_backend.src.services.auth import admin_user
+from dashboard_backend.src.services.page_settings import resolve_page_settings
 
 router = APIRouter(tags=["page-settings"])
-
-_DEFAULTS: dict[str, object] = {"is_published": True}
 
 
 @router.get("/{slug}", response_model=PageSettingsResponse)
@@ -23,13 +22,7 @@ async def read_page_settings(
     repo: Repository = Depends(get_repo),
 ) -> PageSettingsResponse:
     """Return current page settings, merging defaults with stored overrides."""
-    stored = await repo.pages_settings.by_slug(slug)
-
-    settings: dict[str, object] = dict(_DEFAULTS, slug=slug)
-    if stored is not None:
-        settings["is_published"] = stored.is_published
-
-    return PageSettingsResponse.model_validate(settings)
+    return await resolve_page_settings(slug, repo)
 
 
 @router.put("/{slug}", response_model=PageSettings)

@@ -13,6 +13,7 @@ if __name__ == "__main__":
 
 from dashboard_backend.tests.mocks.data_generator import DataGenerator
 from dashboard_backend.tests.mocks.db_operations import DBOperations
+from python_common.src.config import Config
 
 
 async def test_logout_no_cookie(test_client: AsyncClient) -> None:
@@ -32,13 +33,14 @@ async def test_logout_invalid_token(test_client: AsyncClient) -> None:
 
 
 async def test_logout_valid_token(
+    test_config: Config,
     test_client: AsyncClient,
     admin_session: dict[str, str],
     data_generator: DataGenerator,
     db_operations: DBOperations,
 ) -> None:
     # Create a separate session so we can verify it's deleted
-    user = await db_operations.users.by_username("test_admin")
+    user = await db_operations.users.by_username(test_config.backend_default_user_name)
     assert user is not None
     session = data_generator.sessions.session(
         user_id=user.id, token="logout_test_token"
