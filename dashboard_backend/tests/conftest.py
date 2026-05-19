@@ -97,18 +97,15 @@ async def test_app(
 ) -> AsyncGenerator[FastAPI]:
     """FastAPI app wired to the test config and migrated database.
 
-    Uses ``create_app()`` for route/CORS setup but manages the engine
-    manually so the production lifespan (which calls ``asyncio.run()``)
-    does not clash with pytest-asyncio's event loop.
+    ``create_app()`` creates the engine (with WAL + busy timeout), sets
+    up routes, CORS, and exception handlers.
     *test_db* ensures migrations have already been applied.
     """
     app = create_app(test_config)
-    engine = create_async_engine(test_config.backend_database_url, echo=False)
-    app.state.engine = engine
 
     yield app
 
-    await engine.dispose()
+    await app.state.engine.dispose()
 
 
 @pytest.fixture

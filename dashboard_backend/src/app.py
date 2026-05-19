@@ -15,9 +15,8 @@ from python_common.src.config import Config, get_config
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    """Initialize and tear down database connections."""
+    """Tear down database connections on shutdown."""
     try:
-        init_db(app)
         yield
     finally:
         await close_db(app)
@@ -32,6 +31,9 @@ def create_app(config: Config | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     app.state.config = config
+
+    # Database engine (with WAL + busy timeout for concurrent access)
+    init_db(app)
 
     # Routes
     setup_routes(app)
