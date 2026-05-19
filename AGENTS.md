@@ -77,8 +77,9 @@ REST API service, which:
 - tests:
     - test cases are located in `dashboard_backend/tests/tests` and follow the structure of `src` directory;
     - mocks (test data generators, test DB operations classes, etc.) reside in `dashboard_backend/tests/mocks`;
-    - each test case file is executable;
-    - test cases are written as functions.
+    - each test case file is executable (when adding a new test case file, check if it can be executed directly);
+    - test cases are written as functions;
+    - test case order (where applicable): validation errors, other errors (auth, incorrect data of valid format, etc.), correct execution.
 
 ### CLI Commands
 ```bash
