@@ -5,7 +5,8 @@ description: Provides general instructions on how to write Python code. Use when
 
 The rules from the following list should apply to any Python code written, unless user instructs to do otherwise:
 - stick to PEP8;
-- use type hints for code you add or update;
+- use type hints for code you add or update:
+    - if current project has a type checking tool, check its configuration for ignored errors;
 - use the newer features of Python when appropriate, if Python version is specified (e.g. use `list[str] | list[int]` instead of `Union[List[str], List[int]]`)
 - add docstrings and comments to functions & methods, but keep them short:
     - docstrings should contain:
@@ -18,7 +19,7 @@ The rules from the following list should apply to any Python code written, unles
 - do not update or remove existing comments, unless the related code is changed;
 - use absolute imports, when imports from other files of the project:
     - import path must start from a direct child of the project's root directory;
-    - if a file is executable, ensure project root is in sys.path:
+    - if a file is executable, ensure project root is in sys.path (check if file runs correctly after this line is added):
         ```python
         # somewhere at the top of the file
         import sys
