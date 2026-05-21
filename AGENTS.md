@@ -96,6 +96,35 @@ Shared functionlaity for Python subprojects:
 ## dashboard_frontend
 A single page app containing a set of data visualizations and related pages.
 
+### Subproject Structure
+- source code is located in `dashboard_frontend/src`, with `components/` containing:
+    - `routes/`: top-level page components (Feed, Login, UserProfile) and `admin/` subdirectory (Users, PageSettings, ETL placeholder);
+    - `pages/`: MDX visualization pages, each with a wrapper component (data fetching via RTK Query) and a `.mdx` file (presentation);
+    - `layout/`: shared layout components (Navbar);
+    - `ui/`: shadcn/ui components (generated on demand);
+    - `charts/`: Recharts wrapper components;
+- `dashboard_frontend/src/store`: Redux Toolkit store with `api/` (RTK Query endpoints) and `slices/` (client-side auth state);
+- `dashboard_frontend/src/types`: shared TypeScript types mirroring backend Pydantic schemas;
+- `dashboard_frontend/src/lib`: utility functions (e.g., `cn()` for Tailwind class merging);
+- `dashboard_frontend/tests`: test cases mirroring `src/` structure;
+- build & tooling configuration (`package.json`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`) is at the repository root.
+
+### Architecture Decisions
+- Vite as build tool (SPA, no SSR);
+- React 18 with TypeScript strict mode;
+- React Router v7 for client-side routing;
+- RTK Query for server-state caching (auto-caches fetched data, avoids re-fetching);
+- RTK slices for client-only state (auth: current user, role);
+- Tailwind CSS v4 with shadcn/ui design tokens (CSS variables for theming, dark mode support);
+- MDX pages are compiled at build time via @mdx-js/rollup, code-split per page;
+- each MDX page has a thin wrapper component that fetches data via RTK Query and passes it as props to the MDX component;
+- auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
+- tests:
+    - test cases are located in `dashboard_frontend/tests` and follow the structure of `src` directory;
+    - a `renderWithProviders` utility wraps components with Router + Redux store for testing;
+    - test cases are written as functions (one test file per component/slice);
+    - Vitest + React Testing Library as test runner.
+
 
 
 # Technical Stack
@@ -113,7 +142,15 @@ A single page app containing a set of data visualizations and related pages.
 
 
 ## Typescript Subprojects
-TODO
+- TypeScript 5.7 with strict mode;
+- Vite v6 for building & dev server;
+- React 18 for UI rendering;
+- React Router v7 for routing;
+- Redux Toolkit + RTK Query for state management & data fetching;
+- Tailwind CSS v4 + shadcn/ui for styling;
+- @mdx-js/rollup for MDX compilation;
+- Recharts for data visualizations;
+- Vitest + React Testing Library for tests.
 
 
 
@@ -134,4 +171,19 @@ uv run pytest data_loading
 
 # Run pre-commit to verify the correctness of changes made (this includes Ruff & MyPy execution)
 uv run pre-commit run --all-files
+```
+
+## Typescript / Node
+```bash
+# Install frontend dependencies
+npm install
+
+# Start Vite dev server (frontend at http://localhost:5173)
+npm run dev
+
+# Run frontend tests
+npm test
+
+# Build frontend for production
+npm run build
 ```

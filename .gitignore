@@ -17,6 +17,9 @@ wheels/
 *.egg-info
 .venv
 
+# Typescript
+node_modules/
+
 # Agent-specific files
 .cline/
 .roo/
