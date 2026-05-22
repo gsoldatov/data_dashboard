@@ -98,14 +98,13 @@ A single page app containing a set of data visualizations and related pages.
 
 ### Subproject Structure
 - source code is located in `dashboard_frontend/src`, with `components/` containing:
-    - `routes/`: top-level page components (Feed, Login, UserProfile) and `admin/` subdirectory (Users, PageSettings, ETL placeholder);
-    - `pages/`: MDX visualization pages, each with a wrapper component (data fetching via RTK Query) and a `.mdx` file (presentation);
+    - `routes/`: top-level page components (Feed, Login, UserProfile), `visualizations/` subdirectory (MDX pages), and `admin/` subdirectory (Users, PageSettings, ETL placeholder);
     - `layout/`: shared layout components (Navbar);
-    - `ui/`: shadcn/ui components (generated on demand);
+    - `shadcn-ui/`: shadcn/ui components (generated on demand);
     - `charts/`: Recharts wrapper components;
 - `dashboard_frontend/src/store`: Redux Toolkit store with `api/` (RTK Query endpoints) and `slices/` (client-side auth state);
+- `dashboard_frontend/src/styles`: global CSS and style utilities (e.g., `cn()` for Tailwind class merging);
 - `dashboard_frontend/src/types`: shared TypeScript types mirroring backend Pydantic schemas;
-- `dashboard_frontend/src/lib`: utility functions (e.g., `cn()` for Tailwind class merging);
 - `dashboard_frontend/tests`: test cases mirroring `src/` structure;
 - build & tooling configuration (`package.json`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`) is at the repository root.
 
