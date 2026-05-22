@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "@/components/page-parts/Navbar";
+import { Navbar } from "@/components/stateful/Navbar";
 
 /**
  * App shell: renders the top navbar and a centered content area.
  * Child routes are rendered via React Router's <Outlet /> below the nav.
  */
-export const Layout = () => {
+export const PageLayout = () => {
     return (
         <div className="min-h-screen bg-background">
             <Navbar />

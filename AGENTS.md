@@ -97,10 +97,11 @@ Shared functionlaity for Python subprojects:
 A single page app containing a set of data visualizations and related pages.
 
 ### Subproject Structure
-- source code is located in `dashboard_frontend/src`, with `components/` containing:
-    - `pages/`: top-level page components (Feed, Login, UserProfile) and subdirectories for admin pages and MDX visualizations;
-    - `page-parts/`: shared layout components (Navbar, Layout shell);
-    - `common/`: reusable components (shadcn/ui primitives, chart wrappers);
+- source code is located in `dashboard_frontend/src`, with `components/` organized by dependency rules (top-level directories may depend on lower-level directories — `pages` → `page-parts` → `stateful` → `common` — but not vice-versa; same-level components may import from each other):
+    - `pages/`: page-level components (Feed, Login, UserProfile) and subdirectories for admin pages and MDX visualizations;
+    - `page-parts/`: parts belonging to a single page-level component, not shared across pages;
+    - `stateful/`: reusable components that access Redux store state (e.g., Navbar, PageLayout shell);
+    - `common/`: reusable components with no Redux dependency (shadcn/ui primitives, chart wrappers);
 - `dashboard_frontend/src/store`: Redux Toolkit store with `api/` (RTK Query endpoints) and `slices/` (client-side auth state);
 - `dashboard_frontend/src/styles`: global CSS and style utilities (e.g., `cn()` for Tailwind class merging);
 - `dashboard_frontend/src/types`: shared TypeScript types mirroring backend Pydantic schemas;
@@ -117,6 +118,7 @@ A single page app containing a set of data visualizations and related pages.
 - MDX pages are compiled at build time via @mdx-js/rollup, code-split per page;
 - each MDX page has a thin wrapper component that fetches data via RTK Query and passes it as props to the MDX component;
 - auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
+- component dependency rules: top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`); same-level components may import from each other; no directory may depend on a higher-level directory;
 - tests:
     - test cases are located in `dashboard_frontend/tests` and follow the structure of `src` directory;
     - a `renderWithProviders` utility wraps components with Router + Redux store for testing;

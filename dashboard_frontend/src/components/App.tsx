@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Layout } from "@/components/page-parts/Layout";
+import { PageLayout } from "@/components/stateful/PageLayout";
 import { Feed } from "@/components/pages/Feed";
 import { Login } from "@/components/pages/Login";
 import { Page } from "@/components/pages/Page";
@@ -11,7 +11,7 @@ import { AdminEtl } from "@/components/pages/admin/EtlJobs";
 export const App = () => {
     return (
         <Routes>
-            <Route element={<Layout />}>
+            <Route element={<PageLayout />}>
                 <Route index element={<Feed />} />
                 <Route path="login" element={<Login />} />
                 <Route path="page/:slug" element={<Page />} />
