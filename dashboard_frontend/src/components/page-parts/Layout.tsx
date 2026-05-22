@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "@/components/layout/Navbar";
+import { Navbar } from "@/components/page-parts/Navbar";
 
 /**
  * App shell: renders the top navbar and a centered content area.

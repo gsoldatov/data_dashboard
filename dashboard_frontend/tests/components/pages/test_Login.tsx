@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../test-utils";
 import type { RootState } from "@/store";
-import Login from "@/components/routes/Login";
+import { Login } from "@/components/pages/Login";
 
 const authenticatedState: Partial<RootState> = {
   auth: {
