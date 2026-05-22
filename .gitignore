@@ -19,6 +19,8 @@ wheels/
 
 # Typescript
 node_modules/
+# dist/
+tsconfig.tsbuildinfo
 
 # Agent-specific files
 .cline/
