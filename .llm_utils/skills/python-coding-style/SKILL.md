@@ -16,7 +16,7 @@ The rules from the following list should apply to any Python code written, unles
     - comments should be added only:
         - to explain complex code parts;
         - to explain business rules and edge cases, which are not obvious from the scope of the function;
-- do not update or remove existing comments, unless the related code is changed;
+- do not update or remove existing comments, unless the related to the comment code is changed;
 - use absolute imports, when imports from other files of the project:
     - import path must start from a direct child of the project's root directory;
     - if a file is executable, ensure project root is in sys.path (check if file runs correctly after this line is added):
