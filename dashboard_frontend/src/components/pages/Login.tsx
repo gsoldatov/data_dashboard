@@ -4,6 +4,7 @@ import { useLoginMutation } from "@/store/api/auth";
 import { useAppSelector, useAppDispatch, selectIsAuthenticated } from "@/store";
 import { setUser } from "@/store/slices/auth";
 
+// TODO add redirect to previous page after login
 export const Login = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();

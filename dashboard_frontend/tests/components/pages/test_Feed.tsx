@@ -6,12 +6,14 @@ import { Feed } from "@/components/pages/Feed";
 describe("Feed", () => {
   it("renders page heading", () => {
     renderWithProviders(<Feed />);
-    expect(screen.getByText("Dashboard Pages")).toBeInTheDocument();
+    expect(screen.getByText("Dashboard Visualizations")).toBeInTheDocument();
   });
 
-  it("renders the hardcoded page list", () => {
+  it("renders the hardcoded visualization list", () => {
     renderWithProviders(<Feed />);
     expect(screen.getByText("Russia State Budget")).toBeInTheDocument();
-    expect(screen.getByText("/page/russia_state_budget")).toBeInTheDocument();
+    expect(
+      screen.getByText("/visualizations/russia_state_budget")
+    ).toBeInTheDocument();
   });
 });

@@ -67,7 +67,7 @@ export const UserProfile = () => {
         }
     };
 
-    const handleLogout = async () => {
+    const handleLogout = async () => {      // TODO remove logout
         try {
             await fetch("/api/auth/logout", {
                 method: "POST",

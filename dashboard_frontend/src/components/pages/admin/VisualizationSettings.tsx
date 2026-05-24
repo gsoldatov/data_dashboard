@@ -1,8 +1,9 @@
 import { type FormEvent, useState } from "react";
-import { useUpsertPageSettingsMutation } from "@/store/api/pageSettings";
+import { useUpsertVisualizationSettingsMutation } from "@/store/api/visualizationSettings";
 
-export const AdminPageSettings = () => {
-    const [upsert, { isLoading, error }] = useUpsertPageSettingsMutation();
+export const AdminVisualizationSettings = () => {
+    const [upsert, { isLoading, error }] =
+        useUpsertVisualizationSettingsMutation();
     const [slug, setSlug] = useState("");
     const [isPublished, setIsPublished] = useState(true);
     const [message, setMessage] = useState("");
@@ -11,8 +12,13 @@ export const AdminPageSettings = () => {
         e.preventDefault();
         setMessage("");
         try {
-            await upsert({ slug, body: { is_published: isPublished } }).unwrap();
-            setMessage(`Page "${slug}" updated: ${isPublished ? "published" : "unpublished"}.`);
+            await upsert({
+                slug,
+                body: { is_published: isPublished },
+            }).unwrap();
+            setMessage(
+                `Visualization "${slug}" updated: ${isPublished ? "published" : "unpublished"}.`
+            );
             setSlug("");
         } catch {
             // Error handled via RTK Query
@@ -21,21 +27,30 @@ export const AdminPageSettings = () => {
 
     return (
         <div className="mx-auto max-w-2xl">
-            <h1 className="mb-6 text-2xl font-semibold">Admin: Page Settings</h1>
+            <h1 className="mb-6 text-2xl font-semibold">
+                Admin: Visualization Settings
+            </h1>
 
             <section className="mb-8 rounded-lg border p-4">
-                <h2 className="mb-4 text-lg font-medium">Set Page Publish Status</h2>
+                <h2 className="mb-4 text-lg font-medium">
+                    Set Visualization Publish Status
+                </h2>
                 <p className="mb-4 text-sm text-muted-foreground">
-                    Enter a page slug (e.g. &quot;russia_state_budget&quot;) to update
-                    its publish status. Pages default to published if not configured.
+                    Enter a visualization slug (e.g.
+                    &quot;russia_state_budget&quot;) to update its publish
+                    status. Visualizations default to published if not
+                    configured.
                 </p>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <div className="flex flex-col gap-1">
-                        <label htmlFor="page-slug" className="text-sm font-medium">
-                            Page Slug
+                        <label
+                            htmlFor="viz-slug"
+                            className="text-sm font-medium"
+                        >
+                            Visualization Slug
                         </label>
                         <input
-                            id="page-slug"
+                            id="viz-slug"
                             type="text"
                             value={slug}
                             onChange={(e) => setSlug(e.target.value)}
@@ -64,7 +79,8 @@ export const AdminPageSettings = () => {
                 {error && (
                     <p className="mt-2 text-sm text-destructive">
                         {"data" in error
-                            ? (error.data as { detail?: string })?.detail ?? "Update failed"
+                            ? (error.data as { detail?: string })?.detail ??
+                              "Update failed"
                             : "Update failed"}
                     </p>
                 )}

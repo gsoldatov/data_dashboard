@@ -15,17 +15,17 @@ export interface SessionResponse {
   expires_at: string;
 }
 
-export interface PageSettingsResponse {
+export interface VisualizationSettingsResponse {
   slug: string;
   is_published: boolean;
 }
 
-export interface PageSettingsUpsert {
+export interface VisualizationSettingsUpsert {
   is_published: boolean;
 }
 
-/** TODO: replace with actual API response when GET /api/pages is available */
-export interface PageInfo {
+/** TODO: replace with actual API response when GET /api/visualizations is available */
+export interface VisualizationInfo {
   slug: string;
   title: string;
   is_published: boolean;

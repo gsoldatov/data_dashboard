@@ -1,0 +1,17 @@
+import { useGetVisualizationDataQuery } from "@/store/api/visualizationData";
+
+export const title = "Russia State Budget";
+
+# Russia State Budget
+
+Budget execution data for the Russian Federation.
+
+## Data
+
+{(() => {
+    const { data } = useGetVisualizationDataQuery("russia_state_budget");
+    if (!data) {
+        return <p>No data available.</p>;
+    }
+    return <pre>{JSON.stringify(data, null, 2)}</pre>;
+})()}
