@@ -25,12 +25,7 @@ export const VisualizationDataLoader = ({
     }
 
     if (error) {
-        const detail =
-            "data" in error
-                ? (error.data as { detail?: string })?.detail ??
-                  "Failed to load data"
-                : "Failed to load data";
-        return <ErrorPlaceholder message={detail} />;
+        return <ErrorPlaceholder message="Failed to load the page." />;
     }
 
     return <>{children}</>;

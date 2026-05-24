@@ -10,11 +10,11 @@ interface MDXErrorBoundaryState {
 }
 
 /**
- * Catches errors from lazy MDX imports and displays a not-found placeholder.
+ * Catches errors from lazy MDX imports and displays an error placeholder.
  *
- * If a dynamic MDX import fails (e.g. because no MDX file exists for the
- * requested slug) this boundary shows a user-friendly message instead of
- * crashing the application.
+ * If a dynamic MDX import fails (e.g. because a chunk fails to load or
+ * the component throws during render) this boundary shows a user-friendly
+ * message instead of crashing the application.
  */
 export class MDXErrorBoundary extends Component<
     MDXErrorBoundaryProps,
@@ -31,7 +31,7 @@ export class MDXErrorBoundary extends Component<
 
     render() {
         if (this.state.hasError) {
-            return <ErrorPlaceholder message="Visualization not found." />;
+            return <ErrorPlaceholder message="Failed to load the page." />;
         }
 
         return this.props.children;

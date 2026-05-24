@@ -1,8 +1,8 @@
 interface ErrorPlaceholderProps {
-    message?: string;
+    message: string;
 }
 
 /** Placeholder displayed when a visualization encounters an error. */
 export const ErrorPlaceholder = ({
-    message = "Failed to load visualization.",
+    message,
 }: ErrorPlaceholderProps) => <p className="text-destructive">{message}</p>;
