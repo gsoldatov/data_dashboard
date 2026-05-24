@@ -17,3 +17,4 @@ The rules from the following list should apply to any TypeScript code written, u
 - do not update or remove existing comments, unless the related to the comment code is changed;
 - use `const` or `let` for variable & function definitions;
 - use named module exports;
+- do not add default values for function arguments, unless it's explicitly required by task (or makes a strong sense) to do otherwise;

@@ -29,3 +29,4 @@ The rules from the following list should apply to any Python code written, unles
             sys.path.insert(0, str(PROJECT_ROOT))
         ```
 - use double quotes for for single or multiline strings by default (literals containing double quotes may be wrapped into single-quotted strings);
+- do not add default values for function arguments, unless it's explicitly required by task (or makes a strong sense) to do otherwise;
