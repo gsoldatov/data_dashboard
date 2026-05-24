@@ -13,7 +13,7 @@ export const visualizationSettingsApi = api.injectEndpoints({
             VisualizationSettingsResponse,
             string
         >({
-            query: (slug) => `/api/page-settings/${slug}`,
+            query: (slug) => `/api/visualization-settings/${slug}`,
             providesTags: (_result, _error, slug) => [
                 { type: "VisualizationSettings", id: slug },
             ],
@@ -25,7 +25,7 @@ export const visualizationSettingsApi = api.injectEndpoints({
             { slug: string; body: VisualizationSettingsUpsert }
         >({
             query: ({ slug, body }) => ({
-                url: `/api/page-settings/${slug}`,
+                url: `/api/visualization-settings/${slug}`,
                 method: "PUT",
                 body,
             }),
@@ -37,7 +37,7 @@ export const visualizationSettingsApi = api.injectEndpoints({
         /** Check whether a visualization is published. */
         getIsPublished: builder.query<string, string>({
             query: (slug) => ({
-                url: `/api/page-settings/${slug}/is-published`,
+                url: `/api/visualization-settings/${slug}/is-published`,
                 responseHandler: "text",
             }),
         }),

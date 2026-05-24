@@ -39,11 +39,11 @@ export const Navbar = () => {
                     </Link>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <Link to="/" className="hover:text-foreground transition-colors">
-                            Pages
+                            Visualizations
                         </Link>
                         {isAdmin && (
                             <Link
-                                to="/admin/pages"
+                                to="/admin/visualizations"
                                 className="hover:text-foreground transition-colors"
                             >
                                 Admin
@@ -64,7 +64,7 @@ export const Navbar = () => {
                             </Link>
                             {isAdmin && (
                                 <Link
-                                    to="/admin/pages"
+                                    to="/admin/visualizations"
                                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                                 >
                                     <Settings className="h-4 w-4" />

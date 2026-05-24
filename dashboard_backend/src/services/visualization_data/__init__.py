@@ -1,4 +1,4 @@
-"""Page data service — dispatches data getters for each page slug."""
+"""Visualization data service — dispatches data getters for each slug."""
 
 import asyncio
 from collections.abc import Callable
@@ -7,18 +7,20 @@ from typing import Any
 
 from fastapi import Request
 
-from dashboard_backend.src.services.page_data.russia_state_budget import get_data
+from dashboard_backend.src.services.visualization_data.russia_state_budget import (
+    get_data,
+)
 from dashboard_backend.src.util.exceptions import NotFoundException
 
-# Each key maps a page slug to a list of sync data-getter callables.
+# Each key maps a visualization slug to a list of sync data-getter callables.
 # Each getter receives the data directory and returns a dict.
 _REGISTRY: dict[str, list[Callable[[Path], dict[str, Any]]]] = {
     "russia_state_budget": [get_data],
 }
 
 
-class PageDataService:
-    """Dispatches data retrieval for a given page slug."""
+class VisualizationDataService:
+    """Dispatches data retrieval for a given visualization slug."""
 
     def __init__(self, data_directory: Path) -> None:
         self._data_directory = data_directory
@@ -38,6 +40,8 @@ class PageDataService:
         return await asyncio.to_thread(_call_all)
 
 
-def get_page_data_service(request: Request) -> PageDataService:
-    """FastAPI dependency: build a ``PageDataService`` from the app config."""
-    return PageDataService(request.app.state.config.data_directory)
+def get_visualization_data_service(
+    request: Request,
+) -> VisualizationDataService:
+    """FastAPI dependency: build a ``VisualizationDataService`` from the app config."""
+    return VisualizationDataService(request.app.state.config.data_directory)

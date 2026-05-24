@@ -51,7 +51,7 @@ def test_config(temp_directory: Path) -> Config:
     Database and data/log directories are redirected into *temp_directory*.
     """
     config = get_config("config.env.example")
-    config.data_directory = _TESTS_DIR / "mocks" / "page_data"
+    config.data_directory = _TESTS_DIR / "mocks" / "visualization_data"
     # config.logs_directory = temp_directory / "logs"
     config.backend_database_path = temp_directory / "test.db"
     # config.backend_default_user_name = "test_admin"

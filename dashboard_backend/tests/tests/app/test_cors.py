@@ -56,7 +56,7 @@ async def cors_client(app_with_cors: FastAPI) -> AsyncGenerator[AsyncClient]:
 async def test_cors_allowed_origin_get(cors_client: AsyncClient) -> None:
     """GET request from the allowed origin includes CORS headers."""
     response = await cors_client.get(
-        "/api/page-data/some-page",
+        "/api/visualization-data/some-page",
         headers={"Origin": _ALLOWED_ORIGIN},
     )
     assert response.status_code != 500
@@ -67,7 +67,7 @@ async def test_cors_allowed_origin_get(cors_client: AsyncClient) -> None:
 async def test_cors_allowed_origin_preflight(cors_client: AsyncClient) -> None:
     """OPTIONS preflight from the allowed origin includes CORS headers."""
     response = await cors_client.options(
-        "/api/page-data/some-page",
+        "/api/visualization-data/some-page",
         headers={
             "Origin": _ALLOWED_ORIGIN,
             "Access-Control-Request-Method": "GET",
@@ -84,7 +84,7 @@ async def test_cors_allowed_origin_preflight(cors_client: AsyncClient) -> None:
 async def test_cors_disallowed_origin_get(cors_client: AsyncClient) -> None:
     """GET request from a disallowed origin omits CORS headers."""
     response = await cors_client.get(
-        "/api/page-data/some-page",
+        "/api/visualization-data/some-page",
         headers={"Origin": "http://evil.com"},
     )
     assert response.status_code != 500
@@ -94,7 +94,7 @@ async def test_cors_disallowed_origin_get(cors_client: AsyncClient) -> None:
 async def test_cors_disallowed_origin_preflight(cors_client: AsyncClient) -> None:
     """OPTIONS preflight from a disallowed origin is rejected."""
     response = await cors_client.options(
-        "/api/page-data/some-page",
+        "/api/visualization-data/some-page",
         headers={
             "Origin": "http://evil.com",
             "Access-Control-Request-Method": "GET",

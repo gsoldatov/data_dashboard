@@ -1,4 +1,4 @@
-"""Test cases for GET /api/page-settings/{slug}/is-published."""
+"""Test cases for GET /api/visualization-settings/{slug}/is-published."""
 
 import sys
 from pathlib import Path
@@ -20,34 +20,34 @@ async def test_read_is_published_unauthenticated(
     data_generator: DataGenerator,
     db_operations: DBOperations,
 ) -> None:
-    """Unauthenticated users: published pages → 200, unpublished → 403."""
+    """Unauthenticated users: published visualizations → 200, unpublished → 403."""
     test_client.cookies.clear()
 
     # Default (no stored settings → is_published=True)
     response = await test_client.get(
-        "/api/page-settings/default-unauthed/is-published",
+        "/api/visualization-settings/default-unauthed/is-published",
     )
     assert response.status_code == 200
 
     # Custom published
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="published-unauthed", is_published=True
         )
     )
     response = await test_client.get(
-        "/api/page-settings/published-unauthed/is-published",
+        "/api/visualization-settings/published-unauthed/is-published",
     )
     assert response.status_code == 200
 
     # Custom unpublished
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="unpublished-unauthed", is_published=False
         )
     )
     response = await test_client.get(
-        "/api/page-settings/unpublished-unauthed/is-published",
+        "/api/visualization-settings/unpublished-unauthed/is-published",
     )
     assert response.status_code == 403
 
@@ -64,29 +64,29 @@ async def test_read_is_published_viewer(
 
     # Default
     response = await test_client.get(
-        "/api/page-settings/default-viewer/is-published",
+        "/api/visualization-settings/default-viewer/is-published",
     )
     assert response.status_code == 200
 
     # Custom published
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="published-viewer", is_published=True
         )
     )
     response = await test_client.get(
-        "/api/page-settings/published-viewer/is-published",
+        "/api/visualization-settings/published-viewer/is-published",
     )
     assert response.status_code == 200
 
     # Custom unpublished
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="unpublished-viewer", is_published=False
         )
     )
     response = await test_client.get(
-        "/api/page-settings/unpublished-viewer/is-published",
+        "/api/visualization-settings/unpublished-viewer/is-published",
     )
     assert response.status_code == 403
 
@@ -102,29 +102,29 @@ async def test_read_is_published_admin(
 
     # Default
     response = await test_client.get(
-        "/api/page-settings/default-admin/is-published",
+        "/api/visualization-settings/default-admin/is-published",
     )
     assert response.status_code == 200
 
     # Custom published
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="published-admin", is_published=True
         )
     )
     response = await test_client.get(
-        "/api/page-settings/published-admin/is-published",
+        "/api/visualization-settings/published-admin/is-published",
     )
     assert response.status_code == 200
 
     # Custom unpublished (admin can still view)
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="unpublished-admin", is_published=False
         )
     )
     response = await test_client.get(
-        "/api/page-settings/unpublished-admin/is-published",
+        "/api/visualization-settings/unpublished-admin/is-published",
     )
     assert response.status_code == 200
 

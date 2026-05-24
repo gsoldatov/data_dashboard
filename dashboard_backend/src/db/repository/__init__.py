@@ -3,9 +3,11 @@ from collections.abc import AsyncGenerator
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
-from dashboard_backend.src.db.repository.pages_settings import PagesSettingsRepository
 from dashboard_backend.src.db.repository.sessions import SessionsRepository
 from dashboard_backend.src.db.repository.users import UsersRepository
+from dashboard_backend.src.db.repository.visualizations_settings import (
+    VisualizationsSettingsRepository,
+)
 
 
 class Repository:
@@ -13,7 +15,7 @@ class Repository:
     def __init__(self, session: AsyncSession) -> None:
         self.users = UsersRepository(session)
         self.sessions = SessionsRepository(session)
-        self.pages_settings = PagesSettingsRepository(session)
+        self.visualizations_settings = VisualizationsSettingsRepository(session)
 
 
 async def get_repo(request: Request) -> AsyncGenerator[Repository]:

@@ -44,8 +44,8 @@ class Sessions(Base):
     user: Mapped["Users"] = relationship("Users", back_populates="sessions")
 
 
-class PagesSettings(Base):
-    __tablename__ = "page_settings"
+class VisualizationsSettings(Base):
+    __tablename__ = "visualization_settings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     slug: Mapped[str] = mapped_column(

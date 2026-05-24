@@ -1,4 +1,4 @@
-"""Test cases for GET /api/page-settings/{slug}."""
+"""Test cases for GET /api/visualization-settings/{slug}."""
 
 import sys
 from pathlib import Path
@@ -17,15 +17,15 @@ from dashboard_backend.tests.mocks.db_operations import DBOperations
 # ── auth failures ─────────────────────────────────────────────────────────
 
 
-async def test_read_page_settings_no_token(test_client: AsyncClient) -> None:
+async def test_read_visualization_settings_no_token(test_client: AsyncClient) -> None:
     test_client.cookies.clear()
     response = await test_client.get(
-        "/api/page-settings/some-page",
+        "/api/visualization-settings/some-page",
     )
     assert response.status_code == 401
 
 
-async def test_read_page_settings_viewer_token(
+async def test_read_visualization_settings_viewer_token(
     test_client: AsyncClient,
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
@@ -33,7 +33,7 @@ async def test_read_page_settings_viewer_token(
     test_client.cookies = cookies
 
     response = await test_client.get(
-        "/api/page-settings/some-page",
+        "/api/visualization-settings/some-page",
     )
 
     assert response.status_code == 403
@@ -42,13 +42,13 @@ async def test_read_page_settings_viewer_token(
 # ── success ───────────────────────────────────────────────────────────────
 
 
-async def test_read_page_settings_defaults(
+async def test_read_visualization_settings_defaults(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.get(
-        "/api/page-settings/nonexistent",
+        "/api/visualization-settings/nonexistent",
     )
 
     assert response.status_code == 200
@@ -56,14 +56,14 @@ async def test_read_page_settings_defaults(
     assert body == {"slug": "nonexistent", "is_published": True}
 
 
-async def test_read_page_settings_stored(
+async def test_read_visualization_settings_stored(
     test_client: AsyncClient,
     admin_session: dict[str, str],
     data_generator: DataGenerator,
     db_operations: DBOperations,
 ) -> None:
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="my-page",
             is_published=False,
         )
@@ -71,7 +71,7 @@ async def test_read_page_settings_stored(
 
     test_client.cookies = admin_session
     response = await test_client.get(
-        "/api/page-settings/my-page",
+        "/api/visualization-settings/my-page",
     )
 
     assert response.status_code == 200

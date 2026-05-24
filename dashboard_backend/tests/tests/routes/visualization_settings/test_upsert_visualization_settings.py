@@ -1,4 +1,4 @@
-"""Test cases for PUT /api/page-settings/{slug}."""
+"""Test cases for PUT /api/visualization-settings/{slug}."""
 
 import sys
 from pathlib import Path
@@ -17,7 +17,7 @@ from dashboard_backend.tests.mocks.db_operations import DBOperations
 # ── validation ────────────────────────────────────────────────────────────
 
 
-async def test_upsert_page_settings_validation(
+async def test_upsert_visualization_settings_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
@@ -29,7 +29,7 @@ async def test_upsert_page_settings_validation(
     ]
     for payload, expected_status in invalid_cases:
         response = await test_client.put(
-            "/api/page-settings/test-page",
+            "/api/visualization-settings/test-page",
             json=payload,
         )
         assert response.status_code == expected_status
@@ -38,16 +38,16 @@ async def test_upsert_page_settings_validation(
 # ── auth failures ─────────────────────────────────────────────────────────
 
 
-async def test_upsert_page_settings_no_token(test_client: AsyncClient) -> None:
+async def test_upsert_visualization_settings_no_token(test_client: AsyncClient) -> None:
     test_client.cookies.clear()
     response = await test_client.put(
-        "/api/page-settings/test-page",
+        "/api/visualization-settings/test-page",
         json={"is_published": True},
     )
     assert response.status_code == 401
 
 
-async def test_upsert_page_settings_viewer_token(
+async def test_upsert_visualization_settings_viewer_token(
     test_client: AsyncClient,
     viewer_session: tuple[int, dict[str, str]],
 ) -> None:
@@ -55,7 +55,7 @@ async def test_upsert_page_settings_viewer_token(
     test_client.cookies = cookies
 
     response = await test_client.put(
-        "/api/page-settings/test-page",
+        "/api/visualization-settings/test-page",
         json={"is_published": True},
     )
 
@@ -65,13 +65,13 @@ async def test_upsert_page_settings_viewer_token(
 # ── success ───────────────────────────────────────────────────────────────
 
 
-async def test_upsert_page_settings_insert(
+async def test_upsert_visualization_settings_insert(
     test_client: AsyncClient,
     admin_session: dict[str, str],
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.put(
-        "/api/page-settings/new-page",
+        "/api/visualization-settings/new-page",
         json={"is_published": False},
     )
 
@@ -82,14 +82,14 @@ async def test_upsert_page_settings_insert(
     assert "id" in body
 
 
-async def test_upsert_page_settings_update(
+async def test_upsert_visualization_settings_update(
     test_client: AsyncClient,
     admin_session: dict[str, str],
     data_generator: DataGenerator,
     db_operations: DBOperations,
 ) -> None:
-    await db_operations.pages_settings.insert(
-        data_generator.pages_settings.page_settings(
+    await db_operations.visualizations_settings.insert(
+        data_generator.visualization_settings.visualization_settings(
             slug="existing-page",
             is_published=True,
         )
@@ -97,7 +97,7 @@ async def test_upsert_page_settings_update(
 
     test_client.cookies = admin_session
     response = await test_client.put(
-        "/api/page-settings/existing-page",
+        "/api/visualization-settings/existing-page",
         json={"is_published": False},
     )
 
@@ -107,7 +107,7 @@ async def test_upsert_page_settings_update(
     assert body["is_published"] is False
 
     # Verify DB state
-    stored = await db_operations.pages_settings.by_slug("existing-page")
+    stored = await db_operations.visualizations_settings.by_slug("existing-page")
     assert stored is not None
     assert stored.is_published is False
 

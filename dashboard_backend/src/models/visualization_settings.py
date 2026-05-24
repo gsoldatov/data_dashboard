@@ -1,4 +1,4 @@
-"""Pydantic API schemas for PageSettings entity."""
+"""Pydantic API schemas for VisualizationSettings entity."""
 
 from typing import Annotated
 
@@ -7,20 +7,20 @@ from pydantic import BaseModel, Field
 SlugField = Annotated[str, Field(min_length=1, max_length=255)]
 
 
-class PageSettingsUpsert(BaseModel):
-    """Payload for creating or updating page settings."""
+class VisualizationSettingsUpsert(BaseModel):
+    """Payload for creating or updating visualization settings."""
 
     is_published: bool
 
 
-class PageSettingsResponse(BaseModel):
-    """Public page settings (merged defaults + overrides)."""
+class VisualizationSettingsResponse(BaseModel):
+    """Public visualization settings (merged defaults + overrides)."""
 
     slug: str
     is_published: bool
 
 
-class PageSettings(BaseModel):
+class VisualizationSettings(BaseModel):
     """Full SA model counterpart."""
 
     model_config = {"from_attributes": True}

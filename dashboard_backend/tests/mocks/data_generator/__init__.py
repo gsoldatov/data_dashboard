@@ -1,12 +1,12 @@
 """Data generator facade — provides factory methods for test data."""
 
-from dashboard_backend.tests.mocks.data_generator.pages_settings import (
-    PagesSettingsDataGenerator,
-)
 from dashboard_backend.tests.mocks.data_generator.sessions import (
     SessionsDataGenerator,
 )
 from dashboard_backend.tests.mocks.data_generator.users import UsersDataGenerator
+from dashboard_backend.tests.mocks.data_generator.visualization_settings import (
+    VisualizationsSettingsDataGenerator,
+)
 
 
 class DataGenerator:
@@ -14,4 +14,4 @@ class DataGenerator:
     def __init__(self) -> None:
         self.users = UsersDataGenerator()
         self.sessions = SessionsDataGenerator()
-        self.pages_settings = PagesSettingsDataGenerator()
+        self.visualization_settings = VisualizationsSettingsDataGenerator()

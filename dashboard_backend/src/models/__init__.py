@@ -1,10 +1,3 @@
-from dashboard_backend.src.models.page_settings import PageSettings as PageSettings
-from dashboard_backend.src.models.page_settings import (
-    PageSettingsResponse as PageSettingsResponse,
-)
-from dashboard_backend.src.models.page_settings import (
-    PageSettingsUpsert as PageSettingsUpsert,
-)
 from dashboard_backend.src.models.session import (
     LoginRequest as LoginRequest,
 )
@@ -15,3 +8,12 @@ from dashboard_backend.src.models.user import UserCreate as UserCreate
 from dashboard_backend.src.models.user import UserResponse as UserResponse
 from dashboard_backend.src.models.user import UserRole as UserRole
 from dashboard_backend.src.models.user import UserUpdate as UserUpdate
+from dashboard_backend.src.models.visualization_settings import (
+    VisualizationSettings as VisualizationSettings,
+)
+from dashboard_backend.src.models.visualization_settings import (
+    VisualizationSettingsResponse as VisualizationSettingsResponse,
+)
+from dashboard_backend.src.models.visualization_settings import (
+    VisualizationSettingsUpsert as VisualizationSettingsUpsert,
+)
