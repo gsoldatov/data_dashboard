@@ -45,7 +45,7 @@ uv run data_loading/src/prefect/local/client.py
 ## dashboard_backend
 REST API service, which:
 - provides data to frontend to visualize;
-- allows CRUD operations with dashboard pages' settings;
+- allows CRUD operations with dashboard visualizations' settings;
 - manages dashboard users' data;
 - handles user authentication & stores user sessions;
 - provides administrative & monitoring capabilities.
@@ -53,8 +53,8 @@ REST API service, which:
 ### Key Definitions
 - "user": dashboard user credentials, role and info;
 - "session": token-based session of a user;
-- "page settings": a collection of optional & configurable settings of a frontend page (such as its publication status);
-- "page data": data set(-s) prepared by data_loading subproject, displayed by frontend vizualizations and transferred by backend.
+- "visualization settings": a collection of optional & configurable settings of a visualization (such as its publication status);
+- "visualization data": data set(-s) prepared by data_loading subproject, displayed by frontend vizualizations and transferred by backend.
 
 ### Subproject Structure
 - `dashboard_backend/src/db`:
@@ -67,9 +67,9 @@ REST API service, which:
 - `dashboard_backend/src/routes`: FastAPI route handlers;
 - `dashboard_backend/src/services`:
     - API authentication & session checks (`auth.py`);
-    - page data retrieval (`page_data`);
+    - visualization data retrieval (`visualization_data`);
 - `dashboard_backend/src/util`: miscellaneous utility functions & objects (password hashing, exceptions, etc.);
-- ``dashboard_backend/tests`: test cases & test utilities for `dashboard_backend` subproject.
+- `dashboard_backend/tests`: test cases & test utilities for `dashboard_backend` subproject.
 
 ### Architecture Decisions
 - asynchronous;
@@ -98,8 +98,8 @@ A single page app containing a set of data visualizations and related pages.
 
 ### Subproject Structure
 - `dashboard_frontend/src/components` contain React components & MDX files:
-    - `pages/`: page-level components and subdirectories for admin pages and MDX visualizations;
-    - `page-parts/`: parts belonging to a single page-level component, not shared across pages;
+    - `pages/`: page-level components, which correspond to a URL in app's router (visualizations list, user profile, admin pages, etc.) and MDX visualizations;
+    - `page-parts/`: components belonging to a single page-level component, not shared across multiple pages;
     - `stateful/`: reusable components that access Redux store state (e.g., navbar and page layout);
     - `common/`: reusable components with no Redux dependency (shadcn/ui primitives, chart wrappers, other UI component, which do not rely on Redux state);
 - `dashboard_frontend/src/store`: Redux Toolkit store with backend `api/` (RTK Query endpoints) and `slices/` (client-side auth state);
@@ -114,8 +114,12 @@ A single page app containing a set of data visualizations and related pages.
 - RTK Query for server-state caching (auto-caches fetched data, avoids re-fetching);
 - RTK slices for client-only state (auth: current user, role);
 - shadcn/ui design tokens via CSS variables (theming, dark mode support);
-- MDX pages are compiled at build time via @mdx-js/rollup, code-split per page;
-- each MDX page has a thin wrapper component that fetches data via RTK Query and passes it as props to the MDX component;
+- visualization display logic:
+    - MDX files are compiled at build time as separate chunks and lazy-loaded at runtime;
+    - key visualization components:
+        - `<Visualization>` - page-level component, queries backend to check if a visualization can be displayed, then imports and renders corresponding MDX file;
+        - `VisualizationDataLoader` - wrapper for loading visualization data;
+        - MDX files - contain visualizations themselves, a single file per visualization;
 - auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
 - component dependency rules: top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`); same-level components may import from each other; no directory may depend on a higher-level directory;
 - tests:
