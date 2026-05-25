@@ -1,4 +1,5 @@
 import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualizationData";
+import { ErrorPlaceholder } from "@/components/page-parts/visualizations/ErrorPlaceholder";
 
 export const title = "Russia State Budget";
 
@@ -11,7 +12,7 @@ Budget execution data for the Russian Federation.
 {(() => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
     if (!data) {
-        return <p>No data available.</p>;
+        return <ErrorPlaceholder message="Failed to load the page." />;
     }
     return <pre>{JSON.stringify(data, null, 2)}</pre>;
 })()}
