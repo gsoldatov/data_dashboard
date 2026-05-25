@@ -1,3 +1,4 @@
+import "@/util/config";
 import "@/styles/global.css";
 
 import React from "react";

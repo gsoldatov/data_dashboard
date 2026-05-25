@@ -21,6 +21,11 @@ export default defineConfig({
         // Process CSS imports (Tailwind utility classes) in tests so
         // components that import styles don't cause errors.
         css: true,
+        // Expose env vars to import.meta.env in test files (mirrors
+        // Vite's VITE_ prefix handling).
+        env: {
+            VITE_BACKEND_URL: "http://localhost:14002",
+        },
 
         // ── Test discovery ─────────────────────────────────────────
         // Files matching this pattern under dashboard_frontend/tests/

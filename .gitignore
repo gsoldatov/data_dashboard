@@ -1,5 +1,6 @@
 # Project general
 config.env
+dashboard_frontend/.env
 data/
 logs/
 */tests/temp/

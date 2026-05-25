@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build-vite-dotenv-file": "grep '^export VITE_' config.env | sed 's/^export //' | tr -d '\"' > dashboard_frontend/.env",
+    "predev": "npm run build-vite-dotenv-file",
+    "prebuild": "npm run build-vite-dotenv-file",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
