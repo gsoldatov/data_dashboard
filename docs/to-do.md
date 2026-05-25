@@ -14,11 +14,14 @@
     - view etl jobs' logs;
 
 - dashboard frontend:
-    - list available pages;
-    - display pages;
-    - login / logout pages;
-    - user page (view / edit user settings);
-    - edit page settings (as admin);
+    - login page & logout funcitonality;
+    - list available visualizations;
+    - display a visualization;
+    - user page (view / edit);
+    - admin page:
+        - edit visualization settings;
+        - view ETL jobs statuses & logs;
+        ? run ETL jobs;
 
 - data sources / visualizations to implement:
     - Russia State budget (plan / fact, with drilldown by categories);
@@ -89,6 +92,41 @@
 
 
 - implement basic frontend:
+    + generate and check scaffold:
+        + stack used;
+        + frontend configuraiton files;
+        + parse & load config.env during build;
+    
+    - implement testing structure:
+        - mock backend;
+        - mock data;
+        - tests directory;
+        - update AGENTS.md with tests architecture & commands;
+    
+    - implement pages / functionality:
+        - page layout & navbar:
+            - layout should be used in each page-level component, rather than in router;
+        - login page / logout:
+            ? use RTK query for current user as well;
+            - add invalidation of current user on 401 responses;
+        - list available pages;
+        - display an MDX page:
+            - implement Russia state budget visualization;
+        - user page (view / edit user settings);
+        - admin page:
+            - edit page settings (as admin);
+            - view ETL jobs statuses & logs;
+            ? run ETL jobs;
+        
+    - refactor scaffolded code:
+        - remove unused functions & components;
+        - remove hardcoded settings & use app config instead;
+        - remove logout from user profile page;
+        
+    ? add zod for validation of backend data;
+
+    - add pre-commit checks for frontend;
+
     - add Russia state budget page (mdx);
     - dashboard layout:
         - navbar;
@@ -103,6 +141,9 @@
     - admin page:
         - view ETL jobs' logs & statuses;
         ???
+    
+    - check if dependencies are used after project is implemented:
+        - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
 
 - add readme files for project initialization & startup:
     - python:
