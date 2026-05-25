@@ -1,25 +1,71 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-    "paths": {
-      "@/*": ["./dashboard_frontend/src/*"]
+    "compilerOptions": {
+        // ── Build & emit ──────────────────────────────────────────────
+        // JS language version for emitted code. Vite/esbuild handles final
+        // transpilation; this mainly gates what syntax TS accepts.
+        "target": "ES2020",
+        // Module system for emitted code. ESNext preserves ES module syntax
+        // so Vite can process it (tree-shaking, code-splitting, etc.).
+        "module": "ESNext",
+        // Built-in type definitions available globally. DOM and DOM.Iterable
+        // are required for browser APIs used by React and Recharts.
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        // JSX transform. "react-jsx" uses React 17+ automatic runtime,
+        // so no `import React` is needed in JSX files.
+        "jsx": "react-jsx",
+        // Don't emit JS output. Required — Vite handles all compilation.
+        "noEmit": true,
+
+        // ── Module resolution ─────────────────────────────────────────
+        // How TS resolves import paths. "bundler" is required for Vite —
+        // supports package.json "exports", allows extensionless imports.
+        "moduleResolution": "bundler",
+        // Allow `.ts` / `.tsx` extensions in import paths. Required
+        // combination with `moduleResolution: "bundler"` and `noEmit`.
+        "allowImportingTsExtensions": true,
+        // Enforce `import type` for type-only imports so the bundler can
+        // safely erase them. Implies `isolatedModules` (required by Vite/esbuild).
+        "verbatimModuleSyntax": true,
+        // Treat every file as a module (vs. script). Prevents top-level
+        // declarations from leaking into the global scope.
+        "moduleDetection": "force",
+        // `@/` maps to `dashboard_frontend/src/`. Must mirror `resolve.alias`
+        // in vite.config.ts and vitest.config.ts.
+        "paths": {
+            "@/*": [
+                "./dashboard_frontend/src/*"
+            ]
+        },
+
+        // ── Type checking ─────────────────────────────────────────────
+        // Enable all strict type-checking flags (strictNullChecks,
+        // noImplicitAny, strictFunctionTypes, etc.).
+        "strict": true,
+        // Error on unused local variables.
+        "noUnusedLocals": true,
+        // Error on unused function parameters. Prefix with `_` to suppress
+        // (e.g. `_event`).
+        "noUnusedParameters": true,
+        // Error on fallthrough in switch cases (missing `break` / `return`).
+        "noFallthroughCasesInSwitch": true,
+        // Error on side-effect imports (`import "foo"`) that can't be
+        // resolved. Catches typos in module paths. TS 5.6+.
+        "noUncheckedSideEffectImports": true,
+        // Use ECMAScript spec-compliant `[[Define]]` semantics for class
+        // field declarations instead of `[[Set]]`.
+        "useDefineForClassFields": true,
+
+        // ── Performance ───────────────────────────────────────────────
+        // Skip type-checking `.d.ts` files from node_modules. Speeds up
+        // `tsc` significantly with no impact on own code correctness.
+        "skipLibCheck": true
     },
-    "baseUrl": "."
-  },
-  "include": ["dashboard_frontend/src", "dashboard_frontend/tests"]
+    "include": [
+        "dashboard_frontend/src",
+        "dashboard_frontend/tests"
+    ]
 }

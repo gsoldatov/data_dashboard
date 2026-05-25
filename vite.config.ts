@@ -5,21 +5,33 @@ import mdx from "@mdx-js/rollup";
 import path from "path";
 
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    { enforce: "pre", ...mdx() },
-    react(),
-  ],
-  root: "dashboard_frontend",
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "dashboard_frontend", "src"),
+    // ── Plugins ────────────────────────────────────────────────────
+    plugins: [
+        // Process Tailwind CSS v4 utility classes and theme configuration.
+        tailwindcss(),
+        // Transform MDX files before React sees them so JSX in .mdx is
+        // already resolved. `enforce: "pre"` ensures it runs first.
+        { enforce: "pre", ...mdx() },
+        // React JSX transform, Fast Refresh in dev, and production
+        // optimizations.
+        react(),
+    ],
+
+    // ── Project structure ──────────────────────────────────────────
+    // Set project root to the frontend subdirectory, where index.html
+    // and public assets live.
+    root: "dashboard_frontend",
+    resolve: {
+        alias: {
+            // `@/` maps to `dashboard_frontend/src/`. Must mirror `paths`
+            // in tsconfig.json and `resolve.alias` in vitest.config.ts.
+            "@": path.resolve(__dirname, "dashboard_frontend", "src"),
+        },
     },
-  },
-  server: {
-    port: 5173,
-  },
-  build: {
-    outDir: "dist",
-  },
+
+    // ── Build ──────────────────────────────────────────────────────
+    build: {
+        // Output directory, relative to `root`.
+        outDir: "dist",
+    },
 });
