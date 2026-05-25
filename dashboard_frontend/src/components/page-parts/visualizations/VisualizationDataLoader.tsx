@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/api/visualizationData";
+import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualizationData";
 import { LoadingPlaceholder } from "./LoadingPlaceholder";
 import { ErrorPlaceholder } from "./ErrorPlaceholder";
 

@@ -7,7 +7,7 @@
  */
 import { Suspense, lazy, type ComponentType } from "react";
 import { useParams } from "react-router-dom";
-import { useGetIsPublishedQuery } from "@/store/api/visualizationSettings";
+import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualizationSettings";
 import { VisualizationDataLoader } from "@/components/page-parts/visualizations/VisualizationDataLoader";
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/MDXErrorBoundary";
 import { LoadingPlaceholder } from "@/components/page-parts/visualizations/LoadingPlaceholder";

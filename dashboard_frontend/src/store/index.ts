@@ -1,31 +1,31 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector, type TypedUseSelectorHook } from "react-redux";
-import authReducer, {
-  selectCurrentUser,
-  selectIsAuthenticated,
-  selectIsAdmin,
-  selectAuthStatus,
-} from "./slices/auth";
-import { api } from "./api/base";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import {
+    useDispatch,
+    useSelector,
+    type TypedUseSelectorHook,
+} from "react-redux";
+import authReducer from "./slices/auth";
+import { backendAPI } from "./backend-api";
 
-export const store = configureStore({
-  reducer: {
+const rootReducer = combineReducers({
     auth: authReducer,
-    [api.reducerPath]: api.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+    [backendAPI.reducerPath]: backendAPI.reducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
+
+export function createStore(preloadedState?: Partial<RootState>) {
+    return configureStore({
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(backendAPI.middleware),
+        preloadedState,
+    });
+}
+
+export const store = createStore();
+
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
-
-export {
-  selectCurrentUser,
-  selectIsAuthenticated,
-  selectIsAdmin,
-  selectAuthStatus,
-};

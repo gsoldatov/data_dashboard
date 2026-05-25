@@ -1,8 +1,8 @@
-import { api } from "./base";
-import type { LoginRequest, SessionResponse, UserResponse } from "@/types";
+import { backendAPI } from "@/store/backend-api";
+import type { LoginRequest, SessionResponse } from "@/types";
 
 /** Endpoints for authentication (login, logout, current user). */
-export const authApi = api.injectEndpoints({
+const authApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Authenticate with username and password, returns a session. */
         login: builder.mutation<SessionResponse, LoginRequest>({
@@ -12,23 +12,24 @@ export const authApi = api.injectEndpoints({
                 body,
             }),
         }),
+
         /**
          * Fetch the currently authenticated user.
          *
          * TODO: replace with GET /api/auth/me when backend endpoint is available.
          */
-        getCurrentUser: builder.query<UserResponse, number>({
-            query: (userId) => `/api/users/${userId}`,
-        }),
+        // getCurrentUser: builder.query<UserResponse, number>({
+        //     query: (userId) => `/api/users/${userId}`,
+        // }),
+
         /** Terminate the current session. */
-        logout: builder.mutation<void, void>({
-            query: () => ({
-                url: "/api/auth/logout",
-                method: "POST",
-            }),
-        }),
+        // logout: builder.mutation<void, void>({
+        //     query: () => ({
+        //         url: "/api/auth/logout",
+        //         method: "POST",
+        //     }),
+        // }),
     }),
 });
 
-export const { useLoginMutation, useGetCurrentUserQuery, useLogoutMutation } =
-    authApi;
+export const { useLoginMutation } = authApi;

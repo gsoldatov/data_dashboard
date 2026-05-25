@@ -1,4 +1,4 @@
-import { api } from "./base";
+import { backendAPI } from "@/store/backend-api";
 import type { UserResponse } from "@/types";
 
 interface UserCreate {
@@ -14,15 +14,16 @@ interface UserUpdate {
 }
 
 /** Endpoints for user CRUD operations (admin only). */
-export const usersApi = api.injectEndpoints({
+const usersApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Fetch a single user by ID. */
-        getUser: builder.query<UserResponse, number>({
-            query: (userId) => `/api/users/${userId}`,
-            providesTags: (_result, _error, userId) => [
-                { type: "User", id: userId },
-            ],
-        }),
+        // getUser: builder.query<UserResponse, number>({
+        //     query: (userId) => `/api/users/${userId}`,
+        //     providesTags: (_result, _error, userId) => [
+        //         { type: "User", id: userId },
+        //     ],
+        // }),
+
         /** Create a new user. */
         createUser: builder.mutation<UserResponse, UserCreate>({
             query: (body) => ({
@@ -32,6 +33,7 @@ export const usersApi = api.injectEndpoints({
             }),
             invalidatesTags: ["User"],
         }),
+
         /** Update an existing user. */
         updateUser: builder.mutation<
             UserResponse,
@@ -46,6 +48,7 @@ export const usersApi = api.injectEndpoints({
                 { type: "User", id: userId },
             ],
         }),
+
         /** Delete a user. */
         deleteUser: builder.mutation<void, number>({
             query: (userId) => ({
@@ -58,7 +61,6 @@ export const usersApi = api.injectEndpoints({
 });
 
 export const {
-    useGetUserQuery,
     useCreateUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,

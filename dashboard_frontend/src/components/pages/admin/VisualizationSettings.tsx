@@ -1,5 +1,5 @@
 import { type FormEvent, useState } from "react";
-import { useUpsertVisualizationSettingsMutation } from "@/store/api/visualizationSettings";
+import { useUpsertVisualizationSettingsMutation } from "@/store/backend-api-slices/visualizationSettings";
 
 export const AdminVisualizationSettings = () => {
     const [upsert, { isLoading, error }] =

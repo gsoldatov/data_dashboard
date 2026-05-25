@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { useLoginMutation } from "@/store/api/auth";
-import { useAppSelector, useAppDispatch, selectIsAuthenticated } from "@/store";
+import { useLoginMutation } from "@/store/backend-api-slices/auth";
+import { useAppSelector, useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/auth";
 
 // TODO add redirect to previous page after login
 export const Login = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const isAuthenticated = useAppSelector(selectIsAuthenticated);
+    const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
     const [login, { isLoading, error }] = useLoginMutation();
 
     const [username, setUsername] = useState("");

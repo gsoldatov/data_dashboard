@@ -1,23 +1,22 @@
-import { api } from "./base";
+import { backendAPI } from "@/store/backend-api";
 import type {
     VisualizationSettingsResponse,
     VisualizationSettingsUpsert,
 } from "@/types";
 
-
 /** Endpoints for reading and updating visualization settings. */
-export const visualizationSettingsApi = api.injectEndpoints({
+const visualizationSettingsApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Fetch publish settings for a visualization by slug. */
-        getVisualizationSettings: builder.query<
-            VisualizationSettingsResponse,
-            string
-        >({
-            query: (slug) => `/api/visualization-settings/${slug}`,
-            providesTags: (_result, _error, slug) => [
-                { type: "VisualizationSettings", id: slug },
-            ],
-        }),
+        // getVisualizationSettings: builder.query<
+        //     VisualizationSettingsResponse,
+        //     string
+        // >({
+        //     query: (slug) => `/api/visualization-settings/${slug}`,
+        //     providesTags: (_result, _error, slug) => [
+        //         { type: "VisualizationSettings", id: slug },
+        //     ],
+        // }),
 
         /** Create or update publish settings for a visualization. */
         upsertVisualizationSettings: builder.mutation<
@@ -44,9 +43,7 @@ export const visualizationSettingsApi = api.injectEndpoints({
     }),
 });
 
-
 export const {
-    useGetVisualizationSettingsQuery,
     useUpsertVisualizationSettingsMutation,
     useGetIsPublishedQuery,
 } = visualizationSettingsApi;

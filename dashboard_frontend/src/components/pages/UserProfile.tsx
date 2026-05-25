@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch, selectCurrentUser } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
 import { clearUser } from "@/store/slices/auth";
-import { useUpdateUserMutation } from "@/store/api/users";
-import { api } from "@/store/api/base";
+import { useUpdateUserMutation } from "@/store/backend-api-slices/users";
+import { backendAPI } from "@/store/backend-api";
 
 export const UserProfile = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const currentUser = useAppSelector(selectCurrentUser);
-    const [updateUser, { isLoading, error, isSuccess }] = useUpdateUserMutation();
+    const currentUser = useAppSelector((state) => state.auth.user);
+    const [updateUser, { isLoading, error, isSuccess }] =
+        useUpdateUserMutation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -67,7 +68,8 @@ export const UserProfile = () => {
         }
     };
 
-    const handleLogout = async () => {      // TODO remove logout
+    const handleLogout = async () => {
+        // TODO remove logout
         try {
             await fetch("/api/auth/logout", {
                 method: "POST",
@@ -77,7 +79,7 @@ export const UserProfile = () => {
             // Proceed regardless
         }
         dispatch(clearUser());
-        dispatch(api.util.resetApiState());
+        dispatch(backendAPI.util.resetApiState());
         navigate("/");
     };
 

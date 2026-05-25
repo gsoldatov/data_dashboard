@@ -2,18 +2,17 @@ import { Link } from "react-router-dom";
 import {
     useAppSelector,
     useAppDispatch,
-    selectIsAuthenticated,
-    selectIsAdmin,
-    selectCurrentUser,
 } from "@/store";
 import { clearUser } from "@/store/slices/auth";
-import { api } from "@/store/api/base";
+import { backendAPI } from "@/store/backend-api";
 import { LogIn, LogOut, LayoutDashboard, User, Settings } from "lucide-react";
 
 export const Navbar = () => {
-    const isAuthenticated = useAppSelector(selectIsAuthenticated);
-    const isAdmin = useAppSelector(selectIsAdmin);
-    const currentUser = useAppSelector(selectCurrentUser);
+    const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
+    const isAdmin = useAppSelector(
+        (state) => state.auth.user?.role === "admin",
+    );
+    const currentUser = useAppSelector((state) => state.auth.user);
     const dispatch = useAppDispatch();
 
     const handleLogout = async () => {
@@ -26,7 +25,7 @@ export const Navbar = () => {
             // Logout should succeed regardless of server response
         }
         dispatch(clearUser());
-        dispatch(api.util.resetApiState());
+        dispatch(backendAPI.util.resetApiState());
     };
 
     return (

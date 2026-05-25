@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
     useCreateUserMutation,
     useDeleteUserMutation,
-} from "@/store/api/users";
+} from "@/store/backend-api-slices/users";
 
 export const AdminUsers = () => {
     const [createUser, { isLoading: isCreating, error: createError }] =

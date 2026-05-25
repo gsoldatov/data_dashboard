@@ -1,7 +1,7 @@
-import { api } from "./base";
+import { backendAPI } from "@/store/backend-api";
 
 /** Endpoints for fetching visualization page data. */
-export const visualizationDataApi = api.injectEndpoints({
+const visualizationDataApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Fetch data for a visualization by slug. */
         getVisualizationData: builder.query<unknown[], string>({

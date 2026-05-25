@@ -2,10 +2,7 @@ import { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Provider } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "@/store/slices/auth";
-import { api } from "@/store/api/base";
-import type { RootState } from "@/store";
+import { createStore, type RootState } from "@/store";
 
 
 interface RenderWithProvidersOptions extends Omit<RenderOptions, "wrapper"> {
@@ -16,7 +13,7 @@ interface RenderWithProvidersOptions extends Omit<RenderOptions, "wrapper"> {
 
 /**
  * Test rendering function with custom memory router.
- * 
+ *
  * Allows passing preloaded Redux state & router history.
  */
 export const renderWithProviders = (
@@ -27,15 +24,7 @@ export const renderWithProviders = (
         ...renderOptions
     }: RenderWithProvidersOptions = {},
 ) => {
-    const store = configureStore({
-        reducer: {
-            auth: authReducer,
-            [api.reducerPath]: api.reducer,
-        },
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(api.middleware),
-        preloadedState: preloadedState as RootState,
-    });
+    const store = createStore(preloadedState);
 
     function Wrapper({ children }: { children: React.ReactNode }) {
         return (
