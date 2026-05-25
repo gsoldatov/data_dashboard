@@ -111,8 +111,11 @@ A single page app containing a set of data visualizations and related pages.
 ### Architecture Decisions
 - SPA served as static assets (no SSR);
 - TypeScript strict mode;
-- RTK Query for server-state caching (auto-caches fetched data, avoids re-fetching);
-- RTK slices for client-only state (auth: current user, role);
+- app data:
+    - Redux Toolkit + RTK Query are used for storing app data retrieved from backend;
+    - number of exports from RTK-related files should be kept minimal:
+        - state selection is done manually in consumer code;
+        - reducers and RTK Query API hooks are exported from corresponding slices;
 - shadcn/ui design tokens via CSS variables (theming, dark mode support);
 - visualization display logic:
     - MDX files are compiled at build time as separate chunks and lazy-loaded at runtime;
