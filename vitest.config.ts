@@ -30,7 +30,7 @@ export default defineConfig({
         // ── Test discovery ─────────────────────────────────────────
         // Files matching this pattern under dashboard_frontend/tests/
         // are treated as test suites.
-        include: ["dashboard_frontend/tests/**/test_*.{ts,tsx}"],
+        include: ["dashboard_frontend/tests/tests/**/test_*.{ts,tsx}"],
         // Runs before each test file — adds jest-dom matchers
         // (`.toBeInTheDocument()`, `.toHaveTextContent()`, etc.).
         setupFiles: ["./dashboard_frontend/tests/setup.ts"],
