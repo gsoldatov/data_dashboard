@@ -9,30 +9,8 @@ import { loginRequestSchema } from "@/types/backend/requests/auth";
  * `SessionResponse`.  Rejects everything else with 401.
  */
 export const loginHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
-    let body: unknown;
-    try {
-        body = await req.json();
-    } catch {
-        return new Response(JSON.stringify({ detail: "Invalid JSON" }), {
-            status: 400,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
-
-    const result = loginRequestSchema.safeParse(body);
-    if (!result.success) {
-        const formatted = result.error.flatten();
-        console.error(
-            "[mock-backend] POST /api/auth/login validation error:",
-            JSON.stringify(formatted, null, 2),
-        );
-        return new Response(JSON.stringify({ detail: formatted }), {
-            status: 422,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
-
-    const { username, password } = result.data;
+    const body: unknown = await req.json();
+    const { username, password } = loginRequestSchema.parse(body);
 
     if (username === "admin" && password === "admin") {
         return new Response(

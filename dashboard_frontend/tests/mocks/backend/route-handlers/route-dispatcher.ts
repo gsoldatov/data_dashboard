@@ -59,23 +59,28 @@ export class RouteDispatcher {
     async handleRequest(req: Request, backend: MockBackend): Promise<Response> {
         const path = this.stripBackendPrefix(req.url);
 
-        // Overrides first
-        const override = this.overrides[path]?.[req.method.toUpperCase()];
-        if (override) {
-            return await override(req, backend);
+        const handler =
+            this.overrides[path]?.[req.method.toUpperCase()]
+            ?? RouteDispatcher.defaultHandlers[path]?.[req.method.toUpperCase()];
+
+        if (!handler) {
+            return new Response(
+                JSON.stringify({ detail: `No mock handler for ${req.method} ${path}` }),
+                { status: 404, headers: { "Content-Type": "application/json" } },
+            );
         }
 
-        // Then defaults
-        const defaultHandler =
-            RouteDispatcher.defaultHandlers[path]?.[req.method.toUpperCase()];
-        if (defaultHandler) {
-            return await defaultHandler(req, backend);
+        try {
+            return await handler(req, backend);
+        } catch (error) {
+            // Throw outside the fetch promise chain so vitest fails the test
+            // instead of RTK Query silently catching the rejection.
+            console.error("[mock-backend] Handler error:", error);
+            setTimeout(() => {
+                throw error;
+            }, 0);
+            return Promise.reject(error);
         }
-
-        return new Response(
-            JSON.stringify({ detail: `No mock handler for ${req.method} ${path}` }),
-            { status: 404, headers: { "Content-Type": "application/json" } },
-        );
     }
 
     /** Remove `document.app.config.backendUrl` prefix from a request URL. */
