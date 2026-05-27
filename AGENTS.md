@@ -117,14 +117,22 @@ A single page app containing a set of data visualizations and related pages.
         - state selection is done manually in consumer code;
         - reducers and RTK Query API hooks are exported from corresponding slices;
 - shadcn/ui design tokens via CSS variables (theming, dark mode support);
+- component dependency rules:
+    - top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`);
+    - same-level components may import from each other;
+    - no directory may depend on a higher-level directory;
 - visualization display logic:
     - MDX files are compiled at build time as separate chunks and lazy-loaded at runtime;
     - key visualization components:
         - `<Visualization>` - page-level component, queries backend to check if a visualization can be displayed, then imports and renders corresponding MDX file;
         - `VisualizationDataLoader` - wrapper for loading visualization data;
         - MDX files - contain visualizations themselves, a single file per visualization;
+- data validation and typing:
+    - Zod schemas and other types are stored in `dashboard_frontend/src/types`;
+    - schema names should with a small letter and type names with a capital one;
 - auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
-- component dependency rules: top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`); same-level components may import from each other; no directory may depend on a higher-level directory;
+- global objects (app config, etc. are stored in document.app & accessed STRICTLY via functions from `dashboard_frontend/src/util/document-app.ts`);
+
 - tests:
     - test cases are located in `dashboard_frontend/tests` and follow the structure of `src` directory;
     - a `renderWithProviders` utility wraps components with Router + Redux store for testing;
@@ -153,6 +161,7 @@ A single page app containing a set of data visualizations and related pages.
 - React 18 for UI rendering;
 - React Router v7 for routing;
 - Redux Toolkit + RTK Query for state management & data fetching;
+- Zod for data validation;
 - Tailwind CSS v4 + shadcn/ui for styling;
 - @mdx-js/rollup for MDX compilation;
 - Recharts for data visualizations;
