@@ -1,11 +1,11 @@
-"""Authentication routes (login, logout)."""
+"""Authentication routes (login, logout, current user)."""
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse, Response
 
 from dashboard_backend.src.db.repository import Repository
 from dashboard_backend.src.models.session import LoginRequest
-from dashboard_backend.src.models.user import UserResponse
+from dashboard_backend.src.models.user import User, UserResponse
 from dashboard_backend.src.services.auth import anonymous_user
 
 router = APIRouter(tags=["auth"])
@@ -57,3 +57,12 @@ async def logout(request: Request) -> Response:
     response = Response(status_code=204)
     response.delete_cookie(key="session_token")
     return response
+
+
+@router.get("/me", response_model=UserResponse)
+async def read_current_user(request: Request) -> User | Response:
+    """Return the authenticated user, or 404 if no valid session."""
+    current: User | None = request.state.current_user
+    if current is None:
+        return Response(status_code=404)
+    return current
