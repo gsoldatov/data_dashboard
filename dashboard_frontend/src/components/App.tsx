@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import { PageLayout } from "@/components/stateful/PageLayout";
 import { Feed } from "@/components/pages/Feed";
 import { Login } from "@/components/pages/Login";
 import { Visualization } from "@/components/pages/visualizations/Visualization";
@@ -11,16 +10,14 @@ import { AdminEtl } from "@/components/pages/admin/EtlJobs";
 export const App = () => {
     return (
         <Routes>
-            <Route element={<PageLayout />}>
-                <Route index element={<Feed />} />
-                <Route path="login" element={<Login />} />
-                <Route path="visualizations/:slug" element={<Visualization />} />
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="admin">
-                    <Route path="users" element={<AdminUsers />} />
-                    <Route path="visualizations" element={<AdminVisualizationSettings />} />
-                    <Route path="etl" element={<AdminEtl />} />
-                </Route>
+            <Route index element={<Feed />} />
+            <Route path="login" element={<Login />} />
+            <Route path="visualizations/:slug" element={<Visualization />} />
+            <Route path="profile" element={<UserProfile />} />
+            <Route path="admin">
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="visualizations" element={<AdminVisualizationSettings />} />
+                <Route path="etl" element={<AdminEtl />} />
             </Route>
         </Routes>
     );

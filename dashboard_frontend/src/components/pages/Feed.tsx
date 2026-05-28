@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PageLayout } from "@/components/stateful/PageLayout";
 import type { VisualizationInfo } from "@/types";
 
 /**
@@ -10,7 +11,7 @@ const VISUALIZATIONS: VisualizationInfo[] = [
 
 export const Feed = () => {
     return (
-        <div>
+        <PageLayout>
             <h1 className="mb-6 text-2xl font-semibold">Dashboard Visualizations</h1>
             {VISUALIZATIONS.length === 0 ? (
                 <p className="text-muted-foreground">No visualizations available.</p>
@@ -31,6 +32,6 @@ export const Feed = () => {
                     ))}
                 </ul>
             )}
-        </div>
+        </PageLayout>
     );
 };

@@ -7,6 +7,7 @@
  */
 import { Suspense, lazy, type ComponentType } from "react";
 import { useParams } from "react-router-dom";
+import { PageLayout } from "@/components/stateful/PageLayout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualizationSettings";
 import { VisualizationDataLoader } from "@/components/page-parts/visualizations/VisualizationDataLoader";
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/MDXErrorBoundary";
@@ -65,12 +66,14 @@ export const Visualization = () => {
     const MdxComponent = mdxComponents[slug];
 
     return (
-        <MDXErrorBoundary>
-            <Suspense fallback={<LoadingPlaceholder />}>
-                <VisualizationDataLoader slug={slug}>
-                    <MdxComponent />
-                </VisualizationDataLoader>
-            </Suspense>
-        </MDXErrorBoundary>
+        <PageLayout>
+            <MDXErrorBoundary>
+                <Suspense fallback={<LoadingPlaceholder />}>
+                    <VisualizationDataLoader slug={slug}>
+                        <MdxComponent />
+                    </VisualizationDataLoader>
+                </Suspense>
+            </MDXErrorBoundary>
+        </PageLayout>
     );
 };

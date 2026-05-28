@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { PageLayout } from "@/components/stateful/PageLayout";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { clearUser } from "@/store/slices/auth";
 import { useUpdateUserMutation } from "@/store/backend-api-slices/users";
@@ -24,17 +25,19 @@ export const UserProfile = () => {
 
     if (!currentUser) {
         return (
-            <div className="mx-auto mt-16 max-w-sm text-center">
-                <p className="mb-4 text-muted-foreground">
-                    You must be logged in to view this page.
-                </p>
-                <button
-                    onClick={() => navigate("/login")}
-                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer"
-                >
-                    Go to Login
-                </button>
-            </div>
+            <PageLayout>
+                <div className="mx-auto mt-16 max-w-sm text-center">
+                    <p className="mb-4 text-muted-foreground">
+                        You must be logged in to view this page.
+                    </p>
+                    <button
+                        onClick={() => navigate("/login")}
+                        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 cursor-pointer"
+                    >
+                        Go to Login
+                    </button>
+                </div>
+            </PageLayout>
         );
     }
 
@@ -84,6 +87,7 @@ export const UserProfile = () => {
     };
 
     return (
+        <PageLayout>
         <div className="mx-auto max-w-sm">
             <h1 className="mb-6 text-2xl font-semibold">Profile</h1>
             <div className="mb-6 rounded-lg border p-4 text-sm">
@@ -158,5 +162,6 @@ export const UserProfile = () => {
                 Logout
             </button>
         </div>
+        </PageLayout>
     );
 };
