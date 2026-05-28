@@ -2,12 +2,14 @@ from pathlib import Path
 from typing import Any, Literal
 
 from pydantic import computed_field, field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _PROJECT_ROOT = Path(__file__).parents[2]
 
 
 class Config(BaseSettings):
+    model_config = SettingsConfigDict(extra="ignore")
+
     data_directory: Path
     logs_directory: Path
     data_loading_log_mode: Literal["stderr", "file"]

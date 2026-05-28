@@ -90,7 +90,9 @@ uv run alembic -c dashboard_backend/src/db/migrations/alembic.ini <alembic comma
 
 ## python_common
 Shared functionlaity for Python subprojects:
-- config validation.
+- config validation;
+- shared test fixtures;
+- tests for shared functionality;
 
 
 ## dashboard_frontend
