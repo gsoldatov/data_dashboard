@@ -21,7 +21,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         repo: Repository = request.state.repository
         user = await _resolve_user(request, repo)
         request.state.current_user = user
-        return await call_next(request)
+        response = await call_next(request)
+        response.headers["X-Is-Authenticated"] = str(user is not None).lower()
+        return response
 
 
 async def _resolve_user(
