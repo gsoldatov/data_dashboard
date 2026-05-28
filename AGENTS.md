@@ -102,7 +102,9 @@ A single page app containing a set of data visualizations and related pages.
     - `page-parts/`: components belonging to a single page-level component, not shared across multiple pages;
     - `stateful/`: reusable components that access Redux store state (e.g., navbar and page layout);
     - `common/`: reusable components with no Redux dependency (shadcn/ui primitives, chart wrappers, other UI component, which do not rely on Redux state);
-- `dashboard_frontend/src/store`: Redux Toolkit store with backend `api/` (RTK Query endpoints) and `slices/` (client-side auth state);
+- `dashboard_frontend/src/store`:
+    - RTK store (`index.ts` + slices in `slices/` subdirectory);
+    - RTK Query API for dashboard backend (`backend-api.ts` + slices in `backend-api-slice` subdirectory);
 - `dashboard_frontend/src/styles`: CSS styles and related utilities (e.g., `cn()` for Tailwind class merging);
 - `dashboard_frontend/src/types`: shared TypeScript types mirroring backend Pydantic schemas;
 - `dashboard_frontend/tests`: test cases mirroring `src/` structure;
@@ -116,7 +118,7 @@ A single page app containing a set of data visualizations and related pages.
     - number of exports from RTK-related files should be kept minimal:
         - state selection is done manually in consumer code;
         - reducers and RTK Query API hooks are exported from corresponding slices;
-- shadcn/ui design tokens via CSS variables (theming, dark mode support);
+
 - component dependency rules:
     - top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`);
     - same-level components may import from each other;
@@ -131,13 +133,18 @@ A single page app containing a set of data visualizations and related pages.
     - Zod schemas and other types are stored in `dashboard_frontend/src/types`;
     - schema names should with a small letter and type names with a capital one;
 - auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
-- global objects (app config, etc. are stored in document.app & accessed STRICTLY via functions from `dashboard_frontend/src/util/document-app.ts`);
+- global objects (app config, etc. are stored in `document.app` & accessed STRICTLY via functions from `dashboard_frontend/src/util/document-app.ts`);
+
+- shadcn/ui design tokens via CSS variables (theming, dark mode support);
 
 - tests:
-    - test cases are located in `dashboard_frontend/tests` and follow the structure of `src` directory;
-    - a `renderWithProviders` utility wraps components with Router + Redux store for testing;
+    - test cases are located in `dashboard_frontend/tests/tests` and follow the structure of `src` directory;
+    - key test mocks:
+        - `MockBackend` (`dashboard_backend/tests/mocks/backend/mock-backend.ts`) - monkeypatches fetch to simulate interaction with dashboard backend in each test case, where it's needed;
+        - `RouteDispatcher` (available via `MockBackend`) - provides route handlers of mock backend and allows to override them;
     - test cases are written as functions (one test file per component/slice);
-    - Vitest + React Testing Library as test runner.
+    - test case order (where applicable): network errors,  validation & data errors, other errors, correct execution;
+    - mock backend route handlers validate incoming request data using Zod;
 
 
 
@@ -165,7 +172,7 @@ A single page app containing a set of data visualizations and related pages.
 - Tailwind CSS v4 + shadcn/ui for styling;
 - @mdx-js/rollup for MDX compilation;
 - Recharts for data visualizations;
-- Vitest + React Testing Library for tests.
+- Vitest, React Testing Library, vitest-fetch-mock for tests.
 
 
 
