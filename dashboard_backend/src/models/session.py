@@ -14,13 +14,6 @@ class LoginRequest(BaseModel):
     password: PasswordField
 
 
-class SessionResponse(BaseModel):
-    """Public-facing session representation (token excluded)."""
-
-    user_id: int
-    expires_at: datetime
-
-
 class Session(BaseModel):
     """Full SA model counterpart."""
 

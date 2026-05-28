@@ -4,6 +4,7 @@ import { PageLayout } from "@/components/stateful/PageLayout";
 import { useLoginMutation } from "@/store/backend-api-slices/auth";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setUser } from "@/store/slices/auth";
+import { user } from "@/types/user";
 
 // TODO add redirect to previous page after login
 export const Login = () => {
@@ -22,15 +23,9 @@ export const Login = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const session = await login({ username, password }).unwrap();
-            // TODO: replace with GET /api/auth/me
-            const response = await fetch(`/api/users/${session.user_id}`, {
-                credentials: "include",
-            });
-            if (response.ok) {
-                const user = await response.json();
-                dispatch(setUser(user));
-            }
+            const userData = await login({ username, password }).unwrap();
+            const validated = user.parse(userData);
+            dispatch(setUser(validated));
             navigate("/");
         } catch {
             // Error handled via RTK Query error state

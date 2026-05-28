@@ -87,9 +87,10 @@ async def test_login_success(
 
     assert response.status_code == 200
     body = response.json()
-    assert "user_id" in body
-    assert "expires_at" in body
-    assert "token" not in body
+    assert body["username"] == "login_user"
+    assert body["role"] == "viewer"
+    assert "id" in body
+    assert "created_at" in body
     # Verify session_token cookie was set
     assert "session_token" in response.cookies
 

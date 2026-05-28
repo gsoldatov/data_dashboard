@@ -2,7 +2,7 @@
 
 from datetime import UTC, datetime, timedelta
 
-from dashboard_backend.src.models.session import LoginRequest, Session, SessionResponse
+from dashboard_backend.src.models.session import LoginRequest, Session
 
 
 class SessionsDataGenerator:
@@ -14,15 +14,6 @@ class SessionsDataGenerator:
         password: str = "test_password",
     ) -> LoginRequest:
         return LoginRequest(username=username, password=password)
-
-    def session_response(
-        self,
-        user_id: int = 1,
-        expires_at: datetime | None = None,
-    ) -> SessionResponse:
-        if expires_at is None:
-            expires_at = datetime.now(UTC) + timedelta(hours=1)
-        return SessionResponse(user_id=user_id, expires_at=expires_at)
 
     def session(
         self,

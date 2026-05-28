@@ -4,20 +4,21 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse, Response
 
 from dashboard_backend.src.db.repository import Repository, get_repo
-from dashboard_backend.src.models.session import LoginRequest, SessionResponse
+from dashboard_backend.src.models.session import LoginRequest
+from dashboard_backend.src.models.user import UserResponse
 from dashboard_backend.src.services.auth import anonymous_user
 
 router = APIRouter(tags=["auth"])
 
 
-@router.post("/login", response_model=SessionResponse)
+@router.post("/login", response_model=UserResponse)
 async def login(
     data: LoginRequest,
     request: Request,
     repo: Repository = Depends(get_repo),
     _anon: None = Depends(anonymous_user),
 ) -> JSONResponse:
-    """Create a session for valid credentials (anonymous only)."""
+    """Create a session for valid credentials and return user data (anonymous only)."""
     user = await repo.users.by_credentials(data.username, data.password)
     if user is None:
         return JSONResponse(
@@ -29,9 +30,11 @@ async def login(
     session = await repo.sessions.create(user.id, ttl)
     response = JSONResponse(
         status_code=200,
-        content=SessionResponse(
-            user_id=session.user_id,
-            expires_at=session.expires_at,
+        content=UserResponse(
+            id=user.id,
+            username=user.username,
+            role=user.role,
+            created_at=user.created_at,
         ).model_dump(mode="json"),
     )
     response.set_cookie(

@@ -6,7 +6,7 @@ import { loginRequestSchema } from "@/types/backend/requests/auth";
  * Default handler for `POST /api/auth/login`.
  *
  * Accepts `{ username: "admin", password: "admin" }` and returns a
- * `SessionResponse`.  Rejects everything else with 401.
+ * `User` object.  Sets a `session_token` cookie.  Rejects everything else with 401.
  */
 export const loginHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const body: unknown = await req.json();
@@ -15,12 +15,17 @@ export const loginHandler: RouteHandler = async (req: Request, _backend: MockBac
     if (username === "admin" && password === "admin") {
         return new Response(
             JSON.stringify({
-                user_id: 1,
-                expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+                id: 1,
+                username: "admin",
+                role: "admin",
+                created_at: "2025-01-01T00:00:00Z",
             }),
             {
                 status: 200,
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Set-Cookie": "session_token=mock-token; HttpOnly; Path=/",
+                },
             },
         );
     }

@@ -1,11 +1,12 @@
 import { backendAPI } from "@/store/backend-api";
-import type { LoginRequest, SessionResponse } from "@/types";
+import type { LoginRequest } from "@/types";
+import type { User } from "@/types/user";
 
 /** Endpoints for authentication (login, logout, current user). */
 const authApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
-        /** Authenticate with username and password, returns a session. */
-        login: builder.mutation<SessionResponse, LoginRequest>({
+        /** Authenticate with username and password, returns the user. */
+        login: builder.mutation<User, LoginRequest>({
             query: (body) => ({
                 url: "/api/auth/login",
                 method: "POST",
@@ -18,7 +19,7 @@ const authApi = backendAPI.injectEndpoints({
          *
          * TODO: replace with GET /api/auth/me when backend endpoint is available.
          */
-        // getCurrentUser: builder.query<UserResponse, number>({
+        // getCurrentUser: builder.query<User, number>({
         //     query: (userId) => `/api/users/${userId}`,
         // }),
 

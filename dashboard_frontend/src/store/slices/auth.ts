@@ -1,28 +1,24 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { UserResponse } from "@/types";
+import type { User } from "@/types/user";
 
 // TODO refactor slice, when login / logout is implemented
 interface AuthState {
-    user: UserResponse | null;
-    status: "idle" | "loading" | "failed";
+    user: User | null;
 }
 
 const initialState: AuthState = {
     user: null,
-    status: "idle",
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setUser(state, action: PayloadAction<UserResponse>) {
+        setUser(state, action: PayloadAction<User>) {
             state.user = action.payload;
-            state.status = "idle";
         },
         clearUser(state) {
             state.user = null;
-            state.status = "idle";
         },
     },
 });

@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import authReducer, { setUser, clearUser } from "@/store/slices/auth";
-import type { UserResponse } from "@/types";
+import type { User } from "@/types/user";
 
-const mockUser: UserResponse = {
+const mockUser: User = {
     id: 1,
     username: "admin",
     role: "admin",
@@ -13,7 +13,6 @@ describe("auth slice", () => {
     it("should return initial state", () => {
         const state = authReducer(undefined, { type: "unknown" });
         expect(state.user).toBeNull();
-        expect(state.status).toBe("idle");
     });
 
     it("should handle setUser", () => {
@@ -23,7 +22,7 @@ describe("auth slice", () => {
 
     it("should handle clearUser", () => {
         const state = authReducer(
-            { user: mockUser, status: "idle" },
+            { user: mockUser },
             clearUser(),
         );
         expect(state.user).toBeNull();

@@ -1,18 +1,7 @@
-export interface UserResponse {
-  id: number;
-  username: string;
-  role: "admin" | "viewer";
-  created_at: string;
-}
-
+// TODO review if types are used and move them to more specific files
 export interface LoginRequest {
   username: string;
   password: string;
-}
-
-export interface SessionResponse {
-  user_id: number;
-  expires_at: string;
 }
 
 export interface VisualizationSettingsResponse {

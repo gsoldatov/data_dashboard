@@ -7,7 +7,6 @@ import { Login } from "@/components/pages/Login";
 const authenticatedState: Partial<RootState> = {
   auth: {
     user: { id: 1, username: "admin", role: "admin", created_at: "2025-01-01T00:00:00Z" },
-    status: "idle",
   },
 };
 
