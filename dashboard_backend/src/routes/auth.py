@@ -3,7 +3,7 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse, Response
 
-from dashboard_backend.src.db.repository import Repository, get_repo
+from dashboard_backend.src.db.repository import Repository
 from dashboard_backend.src.models.session import LoginRequest
 from dashboard_backend.src.models.user import UserResponse
 from dashboard_backend.src.services.auth import anonymous_user
@@ -15,10 +15,10 @@ router = APIRouter(tags=["auth"])
 async def login(
     data: LoginRequest,
     request: Request,
-    repo: Repository = Depends(get_repo),
     _anon: None = Depends(anonymous_user),
 ) -> JSONResponse:
     """Create a session for valid credentials and return user data (anonymous only)."""
+    repo: Repository = request.state.repository
     user = await repo.users.by_credentials(data.username, data.password)
     if user is None:
         return JSONResponse(
@@ -47,11 +47,9 @@ async def login(
 
 
 @router.post("/logout", status_code=204)
-async def logout(
-    request: Request,
-    repo: Repository = Depends(get_repo),
-) -> Response:
+async def logout(request: Request) -> Response:
     """Delete the session cookie if present (always succeeds)."""
+    repo: Repository = request.state.repository
     token: str | None = request.cookies.get("session_token")
     if token is not None:
         await repo.sessions.delete(token)

@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from dashboard_backend.src.db.engine import close_engine, init_engine
+from dashboard_backend.src.middleware.auth import AuthMiddleware
+from dashboard_backend.src.middleware.db_repository import DBRepositoryMiddleware
 from dashboard_backend.src.routes import setup_routes
 from dashboard_backend.src.util.exceptions import DuplicateException, NotFoundException
 from python_common.src.config import Config, get_config
@@ -50,8 +52,11 @@ def create_app(config: Config | None = None) -> FastAPI:
         _request: Request, exc: DuplicateException
     ) -> JSONResponse:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
+    
+    # Middleware (last added runs first)
+    app.add_middleware(AuthMiddleware)
+    app.add_middleware(DBRepositoryMiddleware)
 
-    # CORS
     origins = [o.strip() for o in config.backend_cors_origins.split(",") if o.strip()]
     app.add_middleware(
         CORSMiddleware,

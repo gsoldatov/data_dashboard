@@ -1,7 +1,4 @@
-from collections.abc import AsyncGenerator
-
-from fastapi import Request
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from dashboard_backend.src.db.repository.sessions import SessionsRepository
 from dashboard_backend.src.db.repository.users import UsersRepository
@@ -16,11 +13,3 @@ class Repository:
         self.users = UsersRepository(session)
         self.sessions = SessionsRepository(session)
         self.visualizations_settings = VisualizationsSettingsRepository(session)
-
-
-async def get_repo(request: Request) -> AsyncGenerator[Repository]:
-    """Yield a Repository bound to a fresh session."""
-    engine: AsyncEngine = request.app.state.engine
-    async with AsyncSession(engine) as session:
-        yield Repository(session)
-        await session.commit()

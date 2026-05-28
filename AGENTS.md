@@ -63,6 +63,7 @@ REST API service, which:
     - database repository (`repository` dir):
         - accepts and returns Pydantic or other types (but not SQLAlchemy models);
         - uses `internal_validation` decorator for separating internal validation errors from invalid requests;
+- `dashboard_backend/src/middleware`: app's middleware (DB repository, auth);
 - `dashboard_backend/src/models`: Pydantic models used for request validation and data transfer;
 - `dashboard_backend/src/routes`: FastAPI route handlers;
 - `dashboard_backend/src/services`:
