@@ -52,6 +52,11 @@ ignore = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 addopts = "-n auto"
+testpaths = [
+    "data_loading/tests/tests",
+    "python_common/tests/tests",
+    "dashboard_backend/tests/tests",
+]
 
 [tool.mypy]
 python_version = "3.13"
