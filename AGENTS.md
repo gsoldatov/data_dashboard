@@ -116,11 +116,17 @@ A single page app containing a set of data visualizations and related pages.
 ### Architecture Decisions
 - SPA served as static assets (no SSR);
 - TypeScript strict mode;
+
 - app data:
     - Redux Toolkit + RTK Query are used for storing app data retrieved from backend;
     - number of exports from RTK-related files should be kept minimal:
         - state selection is done manually in consumer code;
         - reducers and RTK Query API hooks are exported from corresponding slices;
+        - RTKQ fetches should validate response data using Zod schemas, console.log validation errors and set a custom user-friendly error message to fetch result;
+- auth:
+    - cookie-based (httponly, same-origin);
+    - frontend also fetches current user on app load via RTKQ slice and resets it, when it becomes stale (user != null and X-Is-Authenticated response header = false);
+- navigation is done using `setRedirectOnRender` reducer or with React Router, where applicable;
 
 - component dependency rules:
     - top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`);
@@ -135,7 +141,8 @@ A single page app containing a set of data visualizations and related pages.
 - data validation and typing:
     - Zod schemas and other types are stored in `dashboard_frontend/src/types`;
     - schema names should with a small letter and type names with a capital one;
-- auth is cookie-based (httponly, same-origin); the frontend tracks current user + role in Redux, derives isAuthenticated/isAdmin from it;
+
+
 - global objects (app config, etc. are stored in `document.app` & accessed STRICTLY via functions from `dashboard_frontend/src/util/document-app.ts`);
 
 - shadcn/ui design tokens via CSS variables (theming, dark mode support);
