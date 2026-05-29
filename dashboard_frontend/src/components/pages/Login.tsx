@@ -1,31 +1,29 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { PageLayout } from "@/components/stateful/PageLayout";
-import { useLoginMutation } from "@/store/backend-api-slices/auth";
-import { useAppSelector, useAppDispatch } from "@/store";
-import { setUser } from "@/store/slices/auth";
-import { user } from "@/types/user";
+import { useLoginMutation, useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
 
 // TODO add redirect to previous page after login
 export const Login = () => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
+    const { data: currentUser, isLoading: isQueryLoading } = useGetCurrentUserQuery();
     const [login, { isLoading, error }] = useLoginMutation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    if (isAuthenticated) {
+    if (isQueryLoading) {
+        return null;
+    }
+
+    if (currentUser) {
         return <Navigate to="/" replace />;
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const userData = await login({ username, password }).unwrap();
-            const validated = user.parse(userData);
-            dispatch(setUser(validated));
+            await login({ username, password }).unwrap();
             navigate("/");
         } catch {
             // Error handled via RTK Query error state

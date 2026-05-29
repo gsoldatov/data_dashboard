@@ -1,9 +1,4 @@
 // TODO review if types are used and move them to more specific files
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
 export interface VisualizationSettingsResponse {
   slug: string;
   is_published: boolean;

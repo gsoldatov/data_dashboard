@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageLayout } from "@/components/stateful/PageLayout";
-import { useAppSelector, useAppDispatch } from "@/store";
-import { clearUser } from "@/store/slices/auth";
+import { useAppDispatch } from "@/store";
 import { useUpdateUserMutation } from "@/store/backend-api-slices/users";
+import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";
 import { backendAPI } from "@/store/backend-api";
 
 export const UserProfile = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const currentUser = useAppSelector((state) => state.auth.user);
+    const { data: currentUser, isLoading: isQueryLoading } = useGetCurrentUserQuery();
     const [updateUser, { isLoading, error, isSuccess }] =
         useUpdateUserMutation();
+    const [logout] = useLogoutMutation();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -22,6 +23,10 @@ export const UserProfile = () => {
             setUsername(currentUser.username);
         }
     }, [currentUser]);
+
+    if (isQueryLoading) {
+        return null;
+    }
 
     if (!currentUser) {
         return (
@@ -74,14 +79,10 @@ export const UserProfile = () => {
     const handleLogout = async () => {
         // TODO remove logout
         try {
-            await fetch("/api/auth/logout", {
-                method: "POST",
-                credentials: "include",
-            });
+            await logout().unwrap();
         } catch {
             // Proceed regardless
         }
-        dispatch(clearUser());
         dispatch(backendAPI.util.resetApiState());
         navigate("/");
     };

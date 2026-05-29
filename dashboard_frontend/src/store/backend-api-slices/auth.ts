@@ -1,5 +1,5 @@
 import { backendAPI } from "@/store/backend-api";
-import type { LoginRequest } from "@/types";
+import type { LoginRequest } from "@/types/backend/requests/auth";
 import type { User } from "@/types/user";
 import { user as userSchema } from "@/types/user";
 

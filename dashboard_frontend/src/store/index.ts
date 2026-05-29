@@ -4,12 +4,10 @@ import {
     useSelector,
     type TypedUseSelectorHook,
 } from "react-redux";
-import authReducer from "./slices/auth";
 import uiReducer from "./slices/ui";
 import { backendAPI } from "./backend-api";
 
 const rootReducer = combineReducers({
-    auth: authReducer,
     ui: uiReducer,
     [backendAPI.reducerPath]: backendAPI.reducer,
 });

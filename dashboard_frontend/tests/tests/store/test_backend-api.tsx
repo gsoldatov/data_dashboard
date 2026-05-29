@@ -97,7 +97,7 @@ describe("baseQuery session expiry", () => {
     it("does not redirect for POST /api/auth/login", async () => {
         renderWithProviders(<App />, {
             initialEntries: ["/login"],
-            preloadedState: preloadedUserState(),
+            preloadedState: preloadedNullUserState(),
         });
 
         const usernameInput = screen.getByLabelText("Username");

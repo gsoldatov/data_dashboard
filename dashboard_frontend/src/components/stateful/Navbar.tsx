@@ -1,31 +1,25 @@
-import { Link } from "react-router-dom";
-import {
-    useAppSelector,
-    useAppDispatch,
-} from "@/store";
-import { clearUser } from "@/store/slices/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "@/store";
 import { backendAPI } from "@/store/backend-api";
+import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";
 import { LogIn, LogOut, LayoutDashboard, User, Settings } from "lucide-react";
 
 export const Navbar = () => {
-    const isAuthenticated = useAppSelector((state) => state.auth.user !== null);
-    const isAdmin = useAppSelector(
-        (state) => state.auth.user?.role === "admin",
-    );
-    const currentUser = useAppSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+    const { data: currentUser } = useGetCurrentUserQuery();
+    const isAuthenticated = currentUser != null;
+    const isAdmin = currentUser?.role === "admin";
     const dispatch = useAppDispatch();
+    const [logout] = useLogoutMutation();
 
     const handleLogout = async () => {
         try {
-            await fetch("/api/auth/logout", {
-                method: "POST",
-                credentials: "include",
-            });
+            await logout().unwrap();
         } catch {
             // Logout should succeed regardless of server response
         }
-        dispatch(clearUser());
         dispatch(backendAPI.util.resetApiState());
+        navigate("/");
     };
 
     return (
