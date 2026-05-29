@@ -13,6 +13,7 @@ import { VisualizationDataLoader } from "@/components/page-parts/visualizations/
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/MDXErrorBoundary";
 import { LoadingPlaceholder } from "@/components/page-parts/visualizations/LoadingPlaceholder";
 import { ErrorPlaceholder } from "@/components/page-parts/visualizations/ErrorPlaceholder";
+import { rtkqErrorHasStatus } from "@/store/util";
 
 
 const mdxGlob = import.meta.glob("./mdx/*.mdx");
@@ -56,7 +57,7 @@ export const Visualization = () => {
     }
 
     if (publishedStatusCheckError) {
-        if ("status" in publishedStatusCheckError && publishedStatusCheckError.status === 403) {
+        if (rtkqErrorHasStatus(publishedStatusCheckError, 403)) {
             return <ErrorPlaceholder message="Page not found." />;
         }
         return <ErrorPlaceholder message="Failed to load the page." />;

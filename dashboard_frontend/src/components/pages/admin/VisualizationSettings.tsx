@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { PageLayout } from "@/components/stateful/PageLayout";
 import { useUpsertVisualizationSettingsMutation } from "@/store/backend-api-slices/visualizationSettings";
+import { rtkqErrorMessage } from "@/store/util";
 
 export const AdminVisualizationSettings = () => {
     const [upsert, { isLoading, error }] =
@@ -78,14 +79,11 @@ export const AdminVisualizationSettings = () => {
                             {isLoading ? "Saving..." : "Save"}
                         </button>
                     </form>
-                    {error && (
+                    {error ? (
                         <p className="mt-2 text-sm text-destructive">
-                            {"data" in error
-                                ? (error.data as { detail?: string })?.detail ??
-                                "Update failed"
-                                : "Update failed"}
+                            {rtkqErrorMessage(error, "Update failed")}
                         </p>
-                    )}
+                    ) : null}
                 </section>
 
                 {message && (

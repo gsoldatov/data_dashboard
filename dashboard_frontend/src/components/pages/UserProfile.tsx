@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/store";
 import { useUpdateUserMutation } from "@/store/backend-api-slices/users";
 import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";
 import { backendAPI } from "@/store/backend-api";
+import { rtkqErrorMessage } from "@/store/util";
 
 export const UserProfile = () => {
     const navigate = useNavigate();
@@ -131,13 +132,11 @@ export const UserProfile = () => {
                     />
                 </div>
 
-                {error && (
+                {error ? (
                     <p className="text-sm text-destructive">
-                        {"data" in error
-                            ? (error.data as { detail?: string })?.detail ?? "Update failed"
-                            : "Update failed"}
+                        {rtkqErrorMessage(error, "Update failed")}
                     </p>
-                )}
+                ) : null}
                 {isSuccess && message && (
                     <p className="text-sm text-green-600">{message}</p>
                 )}

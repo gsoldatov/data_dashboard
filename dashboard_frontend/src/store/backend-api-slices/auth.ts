@@ -10,7 +10,8 @@ const authApi = backendAPI.injectEndpoints({
         getCurrentUser: builder.query<User | null, void>({
             queryFn: async (_arg, _api, _extraOptions, baseQuery) => {
                 const result = await baseQuery("/api/auth/me");
-                if (result.meta?.response?.status === 404) {
+                const meta = result.meta as { response?: { status?: number } } | undefined;
+                if (meta?.response?.status === 404) {
                     return { data: null };
                 }
                 if (result.error) {

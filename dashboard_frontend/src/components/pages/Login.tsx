@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { PageLayout } from "@/components/stateful/PageLayout";
 import { useLoginMutation, useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
+import { rtkqErrorMessage } from "@/store/util";
 
 // TODO add redirect to previous page after login
 export const Login = () => {
@@ -62,13 +63,11 @@ export const Login = () => {
                             required
                         />
                     </div>
-                    {error && (
+                    {error ? (
                         <p className="text-sm text-destructive">
-                            {"data" in error
-                                ? (error.data as { detail?: string })?.detail ?? "Login failed"
-                                : "Login failed"}
+                            {rtkqErrorMessage(error, "Login failed")}
                         </p>
-                    )}
+                    ) : null}
                     <button
                         type="submit"
                         disabled={isLoading}

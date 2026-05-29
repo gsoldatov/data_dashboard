@@ -4,6 +4,7 @@ import {
     useCreateUserMutation,
     useDeleteUserMutation,
 } from "@/store/backend-api-slices/users";
+import { rtkqErrorMessage } from "@/store/util";
 
 export const AdminUsers = () => {
     const [createUser, { isLoading: isCreating, error: createError }] =
@@ -84,14 +85,11 @@ export const AdminUsers = () => {
                             {isCreating ? "Creating..." : "Create User"}
                         </button>
                     </form>
-                    {createError && (
+                    {createError ? (
                         <p className="mt-2 text-sm text-destructive">
-                            {"data" in createError
-                                ? (createError.data as { detail?: string })?.detail ??
-                                    "Create failed"
-                                : "Create failed"}
+                            {rtkqErrorMessage(createError, "Create failed")}
                         </p>
-                    )}
+                    ) : null}
                 </section>
 
                 {/* Delete User */}
