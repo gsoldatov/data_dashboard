@@ -24,15 +24,14 @@ export default defineConfig({
         // Expose env vars to import.meta.env in test files (mirrors
         // Vite's VITE_ prefix handling).
         env: {
-            VITE_BACKEND_URL: "http://localhost:14002",
+            VITE_BACKEND_URL: "http://localhost:14002",     // TODO bundle project config in tests and delete this
         },
 
         // ── Test discovery ─────────────────────────────────────────
         // Files matching this pattern under dashboard_frontend/tests/
         // are treated as test suites.
         include: ["dashboard_frontend/tests/tests/**/test_*.{ts,tsx}"],
-        // Runs before each test file — adds jest-dom matchers
-        // (`.toBeInTheDocument()`, `.toHaveTextContent()`, etc.).
+        // Per-file setup
         setupFiles: ["./dashboard_frontend/tests/setup.ts"],
     },
 });
