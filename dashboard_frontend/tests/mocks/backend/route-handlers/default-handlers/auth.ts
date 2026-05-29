@@ -35,3 +35,41 @@ export const loginHandler: RouteHandler = async (req: Request, _backend: MockBac
         headers: { "Content-Type": "application/json" },
     });
 };
+
+/**
+ * Default handler for `GET /api/auth/me`.
+ *
+ * Returns the user if a ``session_token`` cookie is present, 404 otherwise.
+ */
+export const meHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
+    const cookie = req.headers.get("cookie") ?? "";
+    if (cookie.includes("session_token=")) {
+        return new Response(
+            JSON.stringify({
+                id: 1,
+                username: "admin",
+                role: "admin",
+                created_at: "2025-01-01T00:00:00Z",
+            }),
+            {
+                status: 200,
+                headers: { "Content-Type": "application/json" },
+            },
+        );
+    }
+    return new Response(null, { status: 404 });
+};
+
+/**
+ * Default handler for `POST /api/auth/logout`.
+ *
+ * Always returns 204 and clears the session cookie.
+ */
+export const logoutHandler: RouteHandler = async (_req: Request, _backend: MockBackend) => {
+    return new Response(null, {
+        status: 204,
+        headers: {
+            "Set-Cookie": "session_token=; HttpOnly; Path=/; Max-Age=0",
+        },
+    });
+};

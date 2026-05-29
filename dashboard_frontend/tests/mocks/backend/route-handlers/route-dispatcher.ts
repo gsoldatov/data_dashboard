@@ -1,7 +1,7 @@
 import { getDocumentApp } from "@/util/document-app";
 
 import type { MockBackend } from "../mock-backend";
-import { loginHandler } from "./default-handlers/auth";
+import { loginHandler, meHandler, logoutHandler } from "./default-handlers/auth";
 import {
     isPublishedHandler,
     visualizationDataHandler,
@@ -35,6 +35,8 @@ export class RouteDispatcher {
     /** Module-scope default handlers. */
     private static readonly defaultHandlers: HandlerMap = {
         "/api/auth/login": { POST: loginHandler },
+        "/api/auth/me": { GET: meHandler },
+        "/api/auth/logout": { POST: logoutHandler },
         "/api/visualization-data/{slug}": { GET: visualizationDataHandler },
         "/api/visualization-settings/{slug}/is-published": { GET: isPublishedHandler },
     };
