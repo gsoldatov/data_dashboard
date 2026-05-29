@@ -19,10 +19,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
         self, request: Request, call_next: RequestResponseEndpoint
     ) -> Response:
         repo: Repository = request.state.repository
+        token = request.cookies.get("session_token")
         user = await _resolve_user(request, repo)
         request.state.current_user = user
         response = await call_next(request)
         response.headers["X-Is-Authenticated"] = str(user is not None).lower()
+        if token is not None and user is None:
+            response.delete_cookie(key="session_token", httponly=True)
         return response
 
 

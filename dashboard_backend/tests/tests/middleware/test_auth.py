@@ -7,7 +7,7 @@ import pytest
 from httpx import AsyncClient
 
 # Support direct file execution
-PROJECT_ROOT = Path(__file__).parents[5]
+PROJECT_ROOT = Path(__file__).parents[4]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -22,6 +22,7 @@ async def test_header_no_cookie(test_client: AsyncClient) -> None:
     test_client.cookies.clear()
     response = await test_client.get("/api/auth/me")
     assert response.headers["x-is-authenticated"] == "false"
+    assert "set-cookie" not in response.headers
 
 
 async def test_header_invalid_token(test_client: AsyncClient) -> None:
@@ -59,6 +60,41 @@ async def test_header_expired_session(
     test_client.cookies = {"session_token": session.token}
     response = await test_client.get("/api/auth/me")
     assert response.headers["x-is-authenticated"] == "false"
+
+
+async def test_cookie_cleared_on_invalid_token(
+    test_client: AsyncClient,
+) -> None:
+    """A nonexistent session token should cause the cookie to be cleared."""
+    test_client.cookies = {"session_token": "nonexistent_token"}
+    response = await test_client.get("/api/auth/me")
+    set_cookie = response.headers["set-cookie"]
+    assert "session_token=" in set_cookie
+    assert "Max-Age=0" in set_cookie or "expires=" in set_cookie.lower()
+
+
+async def test_cookie_cleared_on_expired_session(
+    test_config: Config,
+    test_client: AsyncClient,
+    data_generator: DataGenerator,
+    db_operations: DBOperations,
+) -> None:
+    """An expired session should cause the cookie to be cleared."""
+    user = await db_operations.users.by_username(
+        test_config.backend_default_user_name
+    )
+    assert user is not None
+    session = data_generator.sessions.session(
+        user_id=user.id,
+        expires_at=datetime.now(UTC) - timedelta(hours=1),
+    )
+    await db_operations.sessions.insert(session)
+
+    test_client.cookies = {"session_token": session.token}
+    response = await test_client.get("/api/auth/me")
+    set_cookie = response.headers["set-cookie"]
+    assert "session_token=" in set_cookie
+    assert "Max-Age=0" in set_cookie or "expires=" in set_cookie.lower()
 
 
 async def test_header_public_route(
