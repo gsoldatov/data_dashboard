@@ -150,7 +150,7 @@ A single page app containing a set of data visualizations and related pages.
 - tests:
     - test cases are located in `dashboard_frontend/tests/tests` and follow the structure of `src` directory;
     - key test mocks:
-        - `MockBackend` (`dashboard_backend/tests/mocks/backend/mock-backend.ts`) - monkeypatches fetch to simulate interaction with dashboard backend in each test case, where it's needed;
+        - `MockBackend` (`dashboard_backend/tests/mocks/backend/mock-backend.ts`) - mocks `fetch` with test backend route handlers, using `vitest-fetch-mock`, set it up in `beforeEach()` for test cases, which imply interaction with backend;
         - `RouteDispatcher` (available via `MockBackend`) - provides route handlers of mock backend and allows to override them;
     - test cases are written as functions (one test file per component/slice);
     - test case order (where applicable): network errors,  validation & data errors, other errors, correct execution;
