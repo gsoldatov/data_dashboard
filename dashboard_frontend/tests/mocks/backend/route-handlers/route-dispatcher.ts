@@ -76,31 +76,29 @@ export class RouteDispatcher {
         const path = this.stripBackendPrefix(req.url);
         const method = req.method.toUpperCase();
 
+        // Resolve a handler for the current request
         const handler =
             this.overrides[path]?.[method]
             ?? RouteDispatcher.defaultHandlers[path]?.[method]
             ?? this.matchPatternHandler(path, method);
 
         if (!handler) {
-            const response = new Response(
-                JSON.stringify({ detail: `No mock handler for ${req.method} ${path}` }),
-                { status: 404, headers: { "Content-Type": "application/json" } },
-            );
-            this.postProcessResponse(response);
-            return response;
+            const error = `[mock-backend] Missing route handler for ${req.method} ${path}`;
+            // Throw outside of the test case (test case may still complete, based on its logic,
+            // but the error will be output by vitest and the test process will have a non-zero exit code)
+            setTimeout(() => { throw error; }, 0);
+            return Promise.reject(error);
         }
 
+        // Process request
         try {
             const response = await handler(req, backend);
             this.postProcessResponse(response);
             return response;
         } catch (error) {
-            // Throw outside the fetch promise chain so vitest fails the test
-            // instead of RTK Query silently catching the rejection.
-            console.error("[mock-backend] Handler error:", error);
-            setTimeout(() => {
-                throw error;
-            }, 0);
+            // Throw outside of the test case (test case may still complete, based on its logic,
+            // but the error will be output by vitest and the test process will have a non-zero exit code)
+            setTimeout(() => { throw error; }, 0);
             return Promise.reject(error);
         }
     }
