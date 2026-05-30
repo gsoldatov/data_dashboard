@@ -1,5 +1,26 @@
 import { defineConfig } from "vitest/config";
 import path from "path";
+import fs from "fs";
+
+/**
+ * Load environment variables from config.env.example,
+ * so global object with app's config can be created.
+ */
+function loadViteEnvs(): Record<string, string> {
+    const configPath = path.resolve(__dirname, "config.env.example");
+    const viteEnvs: Record<string, string> = {};
+    const lines = fs.readFileSync(configPath, "utf-8").split("\n");
+    const exportRe = /^export\s+(VITE_\w+)\s*=\s*"([^"]*)"/;
+
+    for (const line of lines) {
+        const match = line.match(exportRe);
+        if (match) {
+            viteEnvs[match[1]] = match[2];
+        }
+    }
+
+    return viteEnvs;
+}
 
 export default defineConfig({
     // ── Module resolution ──────────────────────────────────────────
@@ -21,11 +42,9 @@ export default defineConfig({
         // Process CSS imports (Tailwind utility classes) in tests so
         // components that import styles don't cause errors.
         css: true,
-        // Expose env vars to import.meta.env in test files (mirrors
-        // Vite's VITE_ prefix handling).
-        env: {
-            VITE_BACKEND_URL: "http://localhost:14002",     // TODO bundle project config in tests and delete this
-        },
+        // Populate environment variables from config example, so
+        // app config can be properly build
+        env: loadViteEnvs(),
 
         // ── Test discovery ─────────────────────────────────────────
         // Files matching this pattern under dashboard_frontend/tests/
