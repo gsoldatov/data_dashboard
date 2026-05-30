@@ -24,6 +24,9 @@ type HandlerMap = Record<string, Record<string, RouteHandler>>;
  *
  * Custom overrides for route handlers can be changed via `addHandlerOverride` & `removeHandlerOverride`.
  *
+ * Both defaults and overrides support ``{param}`` placeholders
+ * (e.g. ``/api/visualization-data/{slug}``).
+ *
  * The ``xIsAuthenticated`` flag (default ``true``) controls the
  * ``x-is-authenticated`` header on every response.  If a handler
  * already sets the header the flag is ignored for that response.
@@ -73,14 +76,11 @@ export class RouteDispatcher {
      * in default handler paths (e.g. ``/api/users/{id}``).
      */
     async handleRequest(req: Request, backend: MockBackend): Promise<Response> {
-        const path = this.stripBackendPrefix(req.url);
+        const path = stripBackendPrefix(req.url);
         const method = req.method.toUpperCase();
 
-        // Resolve a handler for the current request
-        const handler =
-            this.overrides[path]?.[method]
-            ?? RouteDispatcher.defaultHandlers[path]?.[method]
-            ?? this.matchPatternHandler(path, method);
+        const handler = findHandlerInMap(this.overrides, path, method)
+            ?? findHandlerInMap(RouteDispatcher.defaultHandlers, path, method);
 
         if (!handler) {
             const error = `[mock-backend] Missing route handler for ${req.method} ${path}`;
@@ -104,33 +104,6 @@ export class RouteDispatcher {
     }
 
     /**
-     * Try to find a handler whose path pattern (with ``{param}``
-     * placeholders) matches the request path.
-     */
-    private matchPatternHandler(
-        path: string,
-        method: string,
-    ): RouteHandler | undefined {
-        for (const [pattern, methods] of Object.entries(
-            RouteDispatcher.defaultHandlers,
-        )) {
-            if (!pattern.includes("{")) continue;
-            const regex = this.patternToRegex(pattern);
-            if (regex.test(path)) {
-                return methods[method];
-            }
-        }
-        return undefined;
-    }
-
-    /** Convert a path pattern like ``/api/users/{id}`` to a RegExp. */
-    private patternToRegex(pattern: string): RegExp {
-        const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&");
-        const regexStr = escaped.replace(/\\\{[^}]+\}/g, "[^/]+");
-        return new RegExp(`^${regexStr}$`);
-    }
-
-    /**
      * Ensure the ``x-is-authenticated`` header is present on the response.
      *
      * If the handler already set it the flag is a no-op.
@@ -140,13 +113,47 @@ export class RouteDispatcher {
             response.headers.set("x-is-authenticated", String(this.xIsAuthenticated));
         }
     }
-
-    /** Remove `document.app.config.backendUrl` prefix from a request URL. */
-    private stripBackendPrefix(url: string): string {
-        const { backendUrl } = getDocumentApp().config;
-        if (url.startsWith(backendUrl)) {
-            return url.slice(backendUrl.length);
-        }
-        return url;
-    }
 }
+
+
+/** Remove `document.app.config.backendUrl` prefix from a request URL. */
+const stripBackendPrefix = (url: string): string => {
+    const { backendUrl } = getDocumentApp().config;
+    if (url.startsWith(backendUrl)) {
+        return url.slice(backendUrl.length);
+    }
+    return url;
+};
+
+
+/**
+ * Try to find a handler in `map` for the given path and method.
+ *
+ * Checks exact match first, then falls back to parametrized-route
+ * pattern matching (``{param}`` placeholders).
+ */
+const findHandlerInMap = (
+    map: HandlerMap,
+    path: string,
+    method: string,
+): RouteHandler | undefined => {
+    const exact = map[path]?.[method];
+    if (exact) return exact;
+
+    for (const [pattern, methods] of Object.entries(map)) {
+        if (!pattern.includes("{")) continue;
+        const regex = patternToRegex(pattern);
+        if (regex.test(path)) {
+            return methods[method];
+        }
+    }
+    return undefined;
+};
+
+
+/** Convert a path pattern like ``/api/users/{id}`` to a RegExp. */
+const patternToRegex = (pattern: string): RegExp => {
+    const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, "\\$&");
+    const regexStr = escaped.replace(/\\\{[^}]+\}/g, "[^/]+");
+    return new RegExp(`^${regexStr}$`);
+};
