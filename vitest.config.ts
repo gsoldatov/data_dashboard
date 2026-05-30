@@ -49,7 +49,7 @@ export default defineConfig({
         // ── Test discovery ─────────────────────────────────────────
         // Files matching this pattern under dashboard_frontend/tests/
         // are treated as test suites.
-        include: ["dashboard_frontend/tests/tests/**/test_*.{ts,tsx}"],
+        include: ["dashboard_frontend/tests/tests/**/*.test.{ts,tsx}"],
         // Per-file setup
         setupFiles: ["./dashboard_frontend/tests/setup.ts"],
     },
