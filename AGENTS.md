@@ -122,7 +122,9 @@ A single page app containing a set of data visualizations and related pages.
     - number of exports from RTK-related files should be kept minimal:
         - state selection is done manually in consumer code;
         - reducers and RTK Query API hooks are exported from corresponding slices;
-        - RTKQ fetches should validate response data using Zod schemas, console.log validation errors and set a custom user-friendly error message to fetch result;
+        - RTKQ fetches:
+            - may validate request data with Zod schemas (if data was not validated earlier) and return validation errors in the format parseable by `parseRTKQError`;
+            - should validate response data using Zod schemas, console.log validation errors and set a custom user-friendly error message to fetch result;
 - auth:
     - cookie-based (httponly, same-origin);
     - frontend also fetches current user on app load via RTKQ slice and resets it, when it becomes stale (user != null and X-Is-Authenticated response header = false);
