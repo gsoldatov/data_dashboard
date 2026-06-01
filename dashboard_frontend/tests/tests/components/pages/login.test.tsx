@@ -5,6 +5,7 @@ import { MockBackend } from "../../../mocks/backend/mock-backend";
 
 import type { RootState } from "@/store";
 import { Login } from "@/components/pages/login";
+import { AnonymousRoute } from "@/components/stateful/protected-routes/anonymous-route";
 
 const userData = {
     id: 1,
@@ -56,7 +57,7 @@ describe("Login", () => {
     });
 
     it("redirects to home when already authenticated", async () => {
-        renderWithProviders(<Login />, { preloadedState: preloadedUserState() });
+        renderWithProviders(<AnonymousRoute><Login /></AnonymousRoute>, { preloadedState: preloadedUserState() });
         // Should redirect away from login (Feed is rendered at "/")
         await waitFor(() => {
             expect(screen.queryByLabelText("Username")).not.toBeInTheDocument();
