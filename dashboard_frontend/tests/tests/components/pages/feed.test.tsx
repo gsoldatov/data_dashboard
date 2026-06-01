@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
-import { Feed } from "@/components/pages/Feed";
+import { Feed } from "@/components/pages/feed";
 
 
 describe("Feed", () => {

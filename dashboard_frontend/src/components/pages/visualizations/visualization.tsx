@@ -7,12 +7,12 @@
  */
 import { Suspense, lazy, type ComponentType } from "react";
 import { useParams } from "react-router-dom";
-import { PageLayout } from "@/components/stateful/PageLayout";
-import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualizationSettings";
-import { VisualizationDataLoader } from "@/components/page-parts/visualizations/VisualizationDataLoader";
-import { MDXErrorBoundary } from "@/components/page-parts/visualizations/MDXErrorBoundary";
-import { LoadingPlaceholder } from "@/components/page-parts/visualizations/LoadingPlaceholder";
-import { ErrorPlaceholder } from "@/components/page-parts/visualizations/ErrorPlaceholder";
+import { PageLayout } from "@/components/stateful/page-layout";
+import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
+import { VisualizationDataLoader } from "@/components/page-parts/visualizations/visualization-data-loader";
+import { MDXErrorBoundary } from "@/components/page-parts/visualizations/mdx-error-boundary";
+import { LoadingPlaceholder } from "@/components/page-parts/visualizations/loading-placeholder";
+import { ErrorPlaceholder } from "@/components/page-parts/visualizations/error-placeholder";
 import { rtkqErrorHasStatus } from "@/store/util";
 
 

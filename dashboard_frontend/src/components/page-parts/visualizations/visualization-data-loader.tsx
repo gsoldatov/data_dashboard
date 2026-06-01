@@ -1,6 +1,6 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualizationData";
-import { LoadingPlaceholder } from "./LoadingPlaceholder";
-import { ErrorPlaceholder } from "./ErrorPlaceholder";
+import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { LoadingPlaceholder } from "./loading-placeholder";
+import { ErrorPlaceholder } from "./error-placeholder";
 
 interface VisualizationDataLoaderProps {
     slug: string;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
-import { PageLayout } from "@/components/stateful/PageLayout";
+import { PageLayout } from "@/components/stateful/page-layout";
 import { useLoginMutation, useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
 import { rtkqErrorMessage } from "@/store/util";
 

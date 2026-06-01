@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react";
-import { PageLayout } from "@/components/stateful/PageLayout";
-import { useUpsertVisualizationSettingsMutation } from "@/store/backend-api-slices/visualizationSettings";
+import { PageLayout } from "@/components/stateful/page-layout";
+import { useUpsertVisualizationSettingsMutation } from "@/store/backend-api-slices/visualization-settings";
 import { rtkqErrorMessage } from "@/store/util";
 
 export const AdminVisualizationSettings = () => {

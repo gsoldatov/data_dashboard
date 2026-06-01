@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/stateful/Navbar";
+import { Navbar } from "@/components/stateful/navbar";
 
 /**
  * App shell: renders the top navbar and a centered content area.

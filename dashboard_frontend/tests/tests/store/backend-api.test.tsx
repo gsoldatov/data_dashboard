@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
-import { App } from "@/components/App";
+import { App } from "@/components/app";
 import { renderWithProviders } from "../../test-utils";
 import type { RootState } from "@/store";
 import { MockBackend } from "../../mocks/backend/mock-backend";

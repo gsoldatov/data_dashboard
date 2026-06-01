@@ -1,4 +1,4 @@
-import { PageLayout } from "@/components/stateful/PageLayout";
+import { PageLayout } from "@/components/stateful/page-layout";
 
 export const AdminEtl = () => {
     return (

@@ -4,7 +4,7 @@ import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
 
 import type { RootState } from "@/store";
-import { Login } from "@/components/pages/Login";
+import { Login } from "@/components/pages/login";
 
 const userData = {
     id: 1,

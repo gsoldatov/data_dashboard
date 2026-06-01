@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PageLayout } from "@/components/stateful/PageLayout";
+import { PageLayout } from "@/components/stateful/page-layout";
 import {
     useCreateUserMutation,
     useDeleteUserMutation,

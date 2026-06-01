@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { PageLayout } from "@/components/stateful/PageLayout";
+import { PageLayout } from "@/components/stateful/page-layout";
 import type { VisualizationInfo } from "@/types";
 
 /**

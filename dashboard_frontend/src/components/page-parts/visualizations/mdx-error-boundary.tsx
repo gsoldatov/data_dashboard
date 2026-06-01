@@ -1,5 +1,5 @@
 import { Component, type ReactNode } from "react";
-import { ErrorPlaceholder } from "./ErrorPlaceholder";
+import { ErrorPlaceholder } from "./error-placeholder";
 
 interface MDXErrorBoundaryProps {
     children: ReactNode;

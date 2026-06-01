@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PageLayout } from "@/components/stateful/PageLayout";
+import { PageLayout } from "@/components/stateful/page-layout";
 import { useAppDispatch } from "@/store";
 import { useUpdateUserMutation } from "@/store/backend-api-slices/users";
 import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";

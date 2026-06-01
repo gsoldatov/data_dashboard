@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import { Feed } from "@/components/pages/Feed";
-import { Login } from "@/components/pages/Login";
-import { Visualization } from "@/components/pages/visualizations/Visualization";
-import { UserProfile } from "@/components/pages/UserProfile";
-import { AdminUsers } from "@/components/pages/admin/Users";
-import { AdminVisualizationSettings } from "@/components/pages/admin/VisualizationSettings";
-import { AdminEtl } from "@/components/pages/admin/EtlJobs";
-import { LocationManageWrapper } from "@/components/stateful/LocationManageWrapper";
+import { Feed } from "@/components/pages/feed";
+import { Login } from "@/components/pages/login";
+import { Visualization } from "@/components/pages/visualizations/visualization";
+import { UserProfile } from "@/components/pages/user-profile";
+import { AdminUsers } from "@/components/pages/admin/users";
+import { AdminVisualizationSettings } from "@/components/pages/admin/visualization-settings";
+import { AdminEtl } from "@/components/pages/admin/etl-jobs";
+import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 
 export const App = () => {
     return (

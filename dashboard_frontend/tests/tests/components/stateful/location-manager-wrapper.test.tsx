@@ -3,7 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import { Routes, Route } from "react-router-dom";
 import { renderWithProviders } from "../../../test-utils";
 import type { RootState } from "@/store";
-import { LocationManageWrapper } from "@/components/stateful/LocationManageWrapper";
+import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 
 function TestRoutes() {
     return (
