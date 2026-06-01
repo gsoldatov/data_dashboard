@@ -1,10 +1,43 @@
+import { ZodError } from "zod";
+
 /**
- * Extract a human-readable error message from an RTK Query error object.
+ * Parse an RTK Query error object into structured fields.
  *
- * RTK Query mutations return `FetchBaseQueryError | SerializedError | undefined`.
- * Both have a `data` property that may contain a `detail` string from the backend.
+ * If RTK Query error was provided with a zod error (status === "ZOD_VALIDATION_ERROR"),
+ * returns `validation` object, containing zod field (`fieldErrors` map) & schema (`formErrors` list) errors.
+ * 
+ * Otherwise, returns response `status` and `message` provided by RTK Query .
  */
-export function rtkqErrorMessage(error: unknown, fallback: string): string {
+export function parseRTKQError(error: unknown): {
+    status?: number;
+    validation?: ReturnType<ZodError["flatten"]>;
+    message?: string;
+} {
+    // ── validation (Zod error from queryFn) ─────────────────────────────
+    if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        (error as { status: unknown }).status === "ZOD_VALIDATION_ERROR" &&
+        "data" in error &&
+        (error as { data: unknown }).data instanceof ZodError
+    ) {
+        return { validation: (error as { data: ZodError }).data.flatten() };
+    }
+
+    // ── status ──────────────────────────────────────────────────────────
+    let status: number | undefined;
+    if (
+        typeof error === "object" &&
+        error !== null &&
+        "status" in error &&
+        typeof (error as { status: unknown }).status === "number"
+    ) {
+        status = (error as { status: number }).status;
+    }
+
+    // ── message ─────────────────────────────────────────────────────────
+    let message: string | undefined;
     if (
         typeof error === "object" &&
         error !== null &&
@@ -17,20 +50,18 @@ export function rtkqErrorMessage(error: unknown, fallback: string): string {
             "detail" in data &&
             typeof (data as { detail: unknown }).detail === "string"
         ) {
-            return (data as { detail: string }).detail;
+            message = (data as { detail: string }).detail;
         }
     }
-    return fallback;
-}
-
-/**
- * Check whether an RTK Query error has a specific HTTP status code.
- */
-export function rtkqErrorHasStatus(error: unknown, status: number): boolean {
-    return (
+    if (
+        message === undefined &&
         typeof error === "object" &&
         error !== null &&
-        "status" in error &&
-        (error as { status: unknown }).status === status
-    );
+        "message" in error &&
+        typeof (error as { message: unknown }).message === "string"
+    ) {
+        message = (error as { message: string }).message;
+    }
+
+    return { status, message };
 }

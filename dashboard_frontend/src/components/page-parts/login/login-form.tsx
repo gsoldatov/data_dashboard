@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "@/store/backend-api-slices/auth";
-import { rtkqErrorMessage } from "@/store/util";
+import { parseRTKQError } from "@/store/util";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ export const LoginForm = () => {
                 </div>
                 {error ? (
                     <p className="text-sm text-destructive">
-                        {rtkqErrorMessage(error, "Login failed")}
+                        {parseRTKQError(error).message ?? "Login failed"}
                     </p>
                 ) : null}
                 <button
