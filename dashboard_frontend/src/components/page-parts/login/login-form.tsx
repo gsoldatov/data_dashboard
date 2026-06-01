@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "@/store/backend-api-slices/auth";
 import { parseRTKQError } from "@/store/util";
+import { Error } from "@/components/common/messages";
 
 export const LoginForm = () => {
     const navigate = useNavigate();
@@ -20,9 +21,14 @@ export const LoginForm = () => {
         }
     };
 
+    const parsedError = error ? parseRTKQError(error) : null;
+    const fieldErrors = parsedError?.validation?.fieldErrors;
+    const formError = parsedError?.message;
+
     return (
         <div className="mx-auto mt-16 max-w-sm">
             <h1 className="mb-6 text-2xl font-semibold">Login</h1>
+            {formError ? <Error message={formError} /> : null}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <label htmlFor="username" className="text-sm font-medium">
@@ -37,6 +43,11 @@ export const LoginForm = () => {
                         required
                         autoFocus
                     />
+                    {fieldErrors?.username?.[0] ? (
+                        <p className="text-sm text-destructive">
+                            {fieldErrors.username[0]}
+                        </p>
+                    ) : null}
                 </div>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="password" className="text-sm font-medium">
@@ -50,12 +61,12 @@ export const LoginForm = () => {
                         className="rounded-md border px-3 py-2 text-sm"
                         required
                     />
+                    {fieldErrors?.password?.[0] ? (
+                        <p className="text-sm text-destructive">
+                            {fieldErrors.password[0]}
+                        </p>
+                    ) : null}
                 </div>
-                {error ? (
-                    <p className="text-sm text-destructive">
-                        {parseRTKQError(error).message ?? "Login failed"}
-                    </p>
-                ) : null}
                 <button
                     type="submit"
                     disabled={isLoading}

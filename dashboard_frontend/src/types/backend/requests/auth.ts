@@ -5,8 +5,14 @@ import { z } from "zod";
  * Mirrors the backend Pydantic `LoginRequest` model.
  */
 export const loginRequestSchema = z.object({
-    username: z.string().min(1).max(255),
-    password: z.string().min(1).max(255),
+    username: z
+        .string()
+        .min(1, "Username is required.")
+        .max(255, "Username must be at most 255 characters."),
+    password: z
+        .string()
+        .min(1, "Password is required.")
+        .max(255, "Password must be at most 255 characters."),
 });
 
 /** Inferred TypeScript type from `loginRequestSchema`. */

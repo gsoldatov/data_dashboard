@@ -1,5 +1,3 @@
-import { ZodError } from "zod";
-
 /**
  * Parse an RTK Query error object into structured fields.
  *
@@ -10,19 +8,30 @@ import { ZodError } from "zod";
  */
 export function parseRTKQError(error: unknown): {
     status?: number;
-    validation?: ReturnType<ZodError["flatten"]>;
+    validation?: { formErrors: string[]; fieldErrors: Record<string, string[]> };
     message?: string;
 } {
-    // ── validation (Zod error from queryFn) ─────────────────────────────
+    // ── Zod validation errors ─────────────────────────
     if (
         typeof error === "object" &&
         error !== null &&
         "status" in error &&
         (error as { status: unknown }).status === "ZOD_VALIDATION_ERROR" &&
-        "data" in error &&
-        (error as { data: unknown }).data instanceof ZodError
+        "data" in error
     ) {
-        return { validation: (error as { data: ZodError }).data.flatten() };
+        const data = (error as { data: unknown }).data;
+        if (
+            typeof data === "object" &&
+            data !== null &&
+            "fieldErrors" in data
+        ) {
+            return {
+                validation: data as {
+                    formErrors: string[];
+                    fieldErrors: Record<string, string[]>;
+                },
+            };
+        }
     }
 
     // ── status ──────────────────────────────────────────────────────────
