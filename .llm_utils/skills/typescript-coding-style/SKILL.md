@@ -10,6 +10,10 @@ The following rules should apply to any TypeScript code (or config files in a Ty
 - use 4 space chars for indentation;
 - use 2 empty lines for separation in the modules scope (similar items, like global variables and one-line functions, do not need separation);
 
+# Naming
+- file & directory names must consist of lowercase letters, digits and hyphens, which separate words;
+- file & directory names should either have the name of the main artifact inside them or reflect the meaning of contents inside them;
+
 # Comments
 - add docstrings for functions, classes, methods and top-level variables:
     - for trivial cases, parameter and return variables, or the docstring itself may be skipped:

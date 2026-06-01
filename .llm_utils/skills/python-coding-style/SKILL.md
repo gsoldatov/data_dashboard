@@ -10,6 +10,10 @@ The following rules should apply to any Python code written, unless user instruc
 - stick to PEP8;
 - use double quotes for for single or multiline strings by default (literals containing double quotes may be wrapped into single-quotted strings);
 
+# Naming
+- file & directory names must consist of lowercase letters, digits and underscores, which separate words;
+- file & directory names should either have the name of the main artifact inside them or reflect the meaning of contents inside them;
+
 # Comments
 - add docstrings and comments to functions & methods, but keep them short:
     - docstrings should contain:
