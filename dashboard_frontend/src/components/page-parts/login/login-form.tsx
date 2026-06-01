@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "@/store/backend-api-slices/auth";
 import { parseRTKQError } from "@/store/util";
 import { Error } from "@/components/common/messages";
 
 export const LoginForm = () => {
-    const navigate = useNavigate();
     const [login, { isLoading, error }] = useLoginMutation();
 
     const [username, setUsername] = useState("");
@@ -15,7 +13,6 @@ export const LoginForm = () => {
         e.preventDefault();
         try {
             await login({ username, password }).unwrap();
-            navigate("/");
         } catch {
             // Error handled via RTK Query error state
         }

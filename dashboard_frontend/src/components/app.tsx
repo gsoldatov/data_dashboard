@@ -7,14 +7,13 @@ import { AdminUsers } from "@/components/pages/admin/users";
 import { AdminVisualizationSettings } from "@/components/pages/admin/visualization-settings";
 import { AdminEtl } from "@/components/pages/admin/etl-jobs";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
-import { AnonymousRoute } from "@/components/stateful/protected-routes/anonymous-route";
 
 export const App = () => {
     return (
         <LocationManageWrapper>
             <Routes>
                 <Route index element={<Feed />} />
-                <Route path="login" element={<AnonymousRoute><Login /></AnonymousRoute>} />
+                <Route path="login" element={<Login />} />
                 <Route path="visualizations/:slug" element={<Visualization />} />
                 <Route path="profile" element={<UserProfile />} />
                 <Route path="admin">

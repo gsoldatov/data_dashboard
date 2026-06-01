@@ -4,9 +4,7 @@ import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
 
 import type { RootState } from "@/store";
-import { Login } from "@/components/pages/login";
-import { LoginForm } from "@/components/page-parts/login/login-form";
-import { AnonymousRoute } from "@/components/stateful/protected-routes/anonymous-route";
+import { App } from "@/components/app";
 
 const userData = {
     id: 1,
@@ -41,8 +39,12 @@ function preloadedNullUserState(): Partial<RootState> {
     } as unknown as Partial<RootState>;
 }
 
+function renderLogin(preloadedState: Partial<RootState>, initialEntries: string[] = ["/login"]) {
+    return renderWithProviders(<App />, { initialEntries, preloadedState });
+}
+
 let backend: MockBackend;
-    
+
 beforeEach(() => {
     backend = new MockBackend();
     backend.setup();
@@ -51,24 +53,25 @@ beforeEach(() => {
 
 describe("Basic load", () => {
     it("renders login form when not authenticated", () => {
-        renderWithProviders(<Login />, { preloadedState: preloadedNullUserState() });
+        renderLogin(preloadedNullUserState());
         expect(screen.getByRole("heading", { name: "Login" })).toBeInTheDocument();
         expect(screen.getByLabelText("Username")).toBeInTheDocument();
         expect(screen.getByLabelText("Password")).toBeInTheDocument();
     });
 
     it("redirects to home when already authenticated", async () => {
-        renderWithProviders(<AnonymousRoute><Login /></AnonymousRoute>, { preloadedState: preloadedUserState() });
-        // Should redirect away from login (Feed is rendered at "/")
+        renderLogin(preloadedUserState());
         await waitFor(() => {
-            expect(screen.queryByLabelText("Username")).not.toBeInTheDocument();
+            expect(
+                screen.getByRole("heading", { name: "Dashboard Visualizations" }),
+            ).toBeInTheDocument();
         });
     });
 });
 
 describe("Validation", () => {
     it("displays field-level errors for empty fields", async () => {
-        const { container } = renderWithProviders(<Login />, { preloadedState: preloadedNullUserState() });
+        const { container } = renderLogin(preloadedNullUserState());
 
         const form = container.querySelector("form")!;
         fireEvent.submit(form);
@@ -80,7 +83,7 @@ describe("Validation", () => {
     });
 
     it("displays message from fetch error when validation passes", async () => {
-        renderWithProviders(<Login />, { preloadedState: preloadedNullUserState() });
+        renderLogin(preloadedNullUserState());
 
         const usernameInput = screen.getByLabelText("Username");
         const passwordInput = screen.getByLabelText("Password");
@@ -92,6 +95,62 @@ describe("Validation", () => {
 
         await waitFor(() => {
             expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
+        });
+    });
+});
+
+describe("Successful login", () => {
+    it("redirects to home when no redirect param is provided", async () => {
+        renderLogin(preloadedNullUserState());
+
+        const usernameInput = screen.getByLabelText("Username");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", { name: "Login" });
+
+        await fireEvent.change(usernameInput, { target: { value: "admin" } });
+        await fireEvent.change(passwordInput, { target: { value: "admin" } });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole("heading", { name: "Dashboard Visualizations" }),
+            ).toBeInTheDocument();
+        });
+    });
+
+    it("redirects to the path specified in the redirect param", async () => {
+        renderLogin(preloadedNullUserState(), ["/login?redirect=/profile"]);
+
+        const usernameInput = screen.getByLabelText("Username");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", { name: "Login" });
+
+        await fireEvent.change(usernameInput, { target: { value: "admin" } });
+        await fireEvent.change(passwordInput, { target: { value: "admin" } });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole("heading", { name: "Profile" }),
+            ).toBeInTheDocument();
+        });
+    });
+
+    it("falls back to home when redirect param is an external URL", async () => {
+        renderLogin(preloadedNullUserState(), ["/login?redirect=https://evil.com"]);
+
+        const usernameInput = screen.getByLabelText("Username");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", { name: "Login" });
+
+        await fireEvent.change(usernameInput, { target: { value: "admin" } });
+        await fireEvent.change(passwordInput, { target: { value: "admin" } });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(
+                screen.getByRole("heading", { name: "Dashboard Visualizations" }),
+            ).toBeInTheDocument();
         });
     });
 });
