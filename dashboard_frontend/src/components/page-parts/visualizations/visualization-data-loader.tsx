@@ -1,6 +1,6 @@
 import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
-import { LoadingPlaceholder } from "./loading-placeholder";
-import { ErrorPlaceholder } from "./error-placeholder";
+import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
+import { Error } from "@/components/common/messages";
 
 interface VisualizationDataLoaderProps {
     slug: string;
@@ -25,7 +25,7 @@ export const VisualizationDataLoader = ({
     }
 
     if (error) {
-        return <ErrorPlaceholder message="Failed to load the page." />;
+        return <Error message="Failed to load the page." />;
     }
 
     return <>{children}</>;

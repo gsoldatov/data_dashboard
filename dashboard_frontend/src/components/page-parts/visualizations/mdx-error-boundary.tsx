@@ -1,5 +1,5 @@
 import { Component, type ReactNode } from "react";
-import { ErrorPlaceholder } from "./error-placeholder";
+import { Error } from "@/components/common/messages";
 
 interface MDXErrorBoundaryProps {
     children: ReactNode;
@@ -31,7 +31,7 @@ export class MDXErrorBoundary extends Component<
 
     render() {
         if (this.state.hasError) {
-            return <ErrorPlaceholder message="Failed to load the page." />;
+            return <Error message="Failed to load the page." />;
         }
 
         return this.props.children;

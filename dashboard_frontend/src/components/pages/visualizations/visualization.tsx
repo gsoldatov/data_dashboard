@@ -11,8 +11,8 @@ import { PageLayout } from "@/components/stateful/page-layout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { VisualizationDataLoader } from "@/components/page-parts/visualizations/visualization-data-loader";
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/mdx-error-boundary";
-import { LoadingPlaceholder } from "@/components/page-parts/visualizations/loading-placeholder";
-import { ErrorPlaceholder } from "@/components/page-parts/visualizations/error-placeholder";
+import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
+import { Error } from "@/components/common/messages";
 import { rtkqErrorHasStatus } from "@/store/util";
 
 
@@ -48,7 +48,7 @@ export const Visualization = () => {
     } = useGetIsPublishedQuery(slug!, { skip: !slug });
 
     if (!slug || !mdxComponents[slug]) {
-        return <ErrorPlaceholder message="Page not found." />;
+        return <Error message="Page not found." />;
     }
 
     // Phase 1 — query backend to check if visualization can be displayed.
@@ -58,9 +58,9 @@ export const Visualization = () => {
 
     if (publishedStatusCheckError) {
         if (rtkqErrorHasStatus(publishedStatusCheckError, 403)) {
-            return <ErrorPlaceholder message="Page not found." />;
+            return <Error message="Page not found." />;
         }
-        return <ErrorPlaceholder message="Failed to load the page." />;
+        return <Error message="Failed to load the page." />;
     }
 
     // Phase 2 — lazily load MDX, fetch required data and display main page content.
