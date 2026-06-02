@@ -97,18 +97,45 @@
         + frontend configuraiton files;
         + parse & load config.env during build;
     
-    - implement testing structure:
-        - mock backend;
-        - mock data;
-        - tests directory;
-        - update AGENTS.md with tests architecture & commands;
+    + implement testing structure:
+        - mock backend:
+            + route handler dispatching;
+            + reuqest history;
+            - mock data generation & overrides;
+        + tests directory;
+        + update AGENTS.md with tests architecture, patterns & commands;
     
     - implement pages / functionality:
+        - login page:
+            + use RTK query for current user as well;
+            + credentials are validated with zod before sent to backend;
+            + validation errors are displayed in form;
+            + fetch errors are displayed;   // reuse <ErrorPlaceholder>, when other things are done
+            x response validation error is properly displayed;
+            + can have an optional URL param, which stores the page to redirect to;
+            - refactor loading placeholder & error to use shadcn;   // move out of this list
+            - refactor login form to use shadcn components:
+                - add required components;
+                - refactor login form;
+                - remove validation in fetch;
+                - make common components & CSS class names reusable;    // if any are left
+            - 
+            - fetch errors are properly displayed;
+        
+        - not found page;
+        
+        - check if any tests are stubs & remove them;
+
         - page layout & navbar:
-            - layout should be used in each page-level component, rather than in router;
-        - login page / logout:
-            ? use RTK query for current user as well;
-            - add invalidation of current user on 401 responses;
+            + layout should be used in each page-level component, rather than in router;
+            - expired & invalid tokens (401 backend responses) should result in cookie removal & redirect to /auth/login;
+            - navbar links work properly:
+                - logged out:
+                    - login button adds redict param to the url;
+                    ???
+                - logged in as admin:
+                    - logout from navbar;
+                    ???
         - list available pages;
         - display an MDX page:
             - implement Russia state budget visualization;
@@ -118,12 +145,15 @@
             - view ETL jobs statuses & logs;
             ? run ETL jobs;
         
+        - ensure all fetches timeouts are are properly covered by error placeholders;
+        
     - refactor scaffolded code:
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
         - remove logout from user profile page;
-        
-    ? add zod for validation of backend data;
+    
+    - refactoring:
+        - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
 
     - add pre-commit checks for frontend;
 
@@ -144,6 +174,9 @@
     
     - check if dependencies are used after project is implemented:
         - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
+
+
+- add a scheduled job for removing expired sessions;
 
 - add readme files for project initialization & startup:
     - python:
