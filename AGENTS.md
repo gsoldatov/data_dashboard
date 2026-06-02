@@ -5,7 +5,7 @@ Current project implements a set of packages for fetching and visualizing data f
 
 # Subprojects in the repository
 ## data_loading
-A set of ETL jobs, which load data.
+A set of ETL jobs with orchestration.
 
 ### Subproject Structure
 - `data_loading/src/jobs`: ETL jobs definitions;
