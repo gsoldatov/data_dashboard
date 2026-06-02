@@ -101,10 +101,13 @@ A single page app containing a set of data visualizations and related pages.
 
 ### Subproject Structure
 - `dashboard_frontend/src/components` contain React components & MDX files:
-    - `pages/`: page-level components, which correspond to a URL in app's router (visualizations list, user profile, admin pages, etc.) and MDX visualizations;
-    - `page-parts/`: components belonging to a single page-level component, not shared across multiple pages;
+    - `pages/`:
+        - page-level components, which correspond to a URL in app's router (visualizations list, user profile, admin pages, etc.) and MDX visualizations;
+        - components added here should top-level structure of the page (but may contain full structure for simple pages);
+        - complex logic and UI should be decomposed and / or move to `page-parts` directory;
+    - `page-parts/`: parts of page-level componentc, which are not shared with other pages;
     - `stateful/`: reusable components that access Redux store state (e.g., navbar and page layout);
-    - `common/`: reusable components with no Redux dependency (shadcn/ui primitives, chart wrappers, other UI component, which do not rely on Redux state);
+    - `common/`: reusable components with no Redux dependency (shadcn/ui primitives, chart wrappers, other UI components, which do not rely on Redux state);
 - `dashboard_frontend/src/store`:
     - RTK store (`index.ts` + slices in `slices/` subdirectory);
     - RTK Query API for dashboard backend (`backend-api.ts` + slices in `backend-api-slice` subdirectory);
@@ -130,10 +133,12 @@ A single page app containing a set of data visualizations and related pages.
     - frontend also fetches current user on app load via RTKQ slice and resets it, when it becomes stale (user != null and X-Is-Authenticated response header = false);
 - navigation is done using `setRedirectOnRender` reducer or with React Router, where applicable;
 
-- component dependency rules:
+- component usage and dependency rules:
     - top-level directories may depend on lower levels (`pages` → `page-parts` → `stateful` → `common`);
     - same-level components may import from each other;
     - no directory may depend on a higher-level directory;
+    - component reuse should be preferred over creating new components, including cases, where existing components requires a reasonable, but not overcomplicated amount of refactoring;
+    - shadcn/ui components should be preferred over basic JSX elements representing raw HTML;
 - visualization display logic:
     - MDX files are compiled at build time as separate chunks and lazy-loaded at runtime;
     - key visualization components:
