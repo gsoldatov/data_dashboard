@@ -94,7 +94,7 @@ describe("Validation", () => {
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(screen.getByText("Invalid credentials")).toBeInTheDocument();
+            expect(screen.getByText("Invalid credentials.")).toBeInTheDocument();
         });
     });
 });
@@ -151,6 +151,85 @@ describe("Successful login", () => {
             expect(
                 screen.getByRole("heading", { name: "Dashboard Visualizations" }),
             ).toBeInTheDocument();
+        });
+    });
+});
+
+describe("Errors", () => {
+    it("renders login form when user fetch fails with network error", async () => {
+        backend.dispatcher.addHandlerOverride(
+            "/api/auth/me",
+            "GET",
+            async () => Response.error(),
+        );
+
+        renderLogin({});
+
+        await waitFor(() => {
+            expect(screen.getByRole("heading", { name: "Login" })).toBeInTheDocument();
+        });
+    });
+
+    it("renders login form when user fetch returns 500", async () => {
+        backend.dispatcher.addHandlerOverride(
+            "/api/auth/me",
+            "GET",
+            async () =>
+                new Response(null, { status: 500 }),
+        );
+
+        renderLogin({});
+
+        await waitFor(() => {
+            expect(screen.getByRole("heading", { name: "Login" })).toBeInTheDocument();
+        });
+    });
+
+    it("displays 'Failed to log in.' on network error during submit", async () => {
+        backend.dispatcher.addHandlerOverride(
+            "/api/auth/login",
+            "POST",
+            async () => Response.error(),
+        );
+
+        renderLogin(preloadedNullUserState());
+
+        const usernameInput = screen.getByLabelText("Username");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", { name: "Login" });
+
+        await fireEvent.change(usernameInput, { target: { value: "admin" } });
+        await fireEvent.change(passwordInput, { target: { value: "admin" } });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText("Failed to log in.")).toBeInTheDocument();
+        });
+    });
+
+    it("displays 'Failed to log in.' on 500 during submit", async () => {
+        backend.dispatcher.addHandlerOverride(
+            "/api/auth/login",
+            "POST",
+            async () =>
+                new Response(
+                    JSON.stringify({ detail: "Internal server error" }),
+                    { status: 500, headers: { "Content-Type": "application/json" } },
+                ),
+        );
+
+        renderLogin(preloadedNullUserState());
+
+        const usernameInput = screen.getByLabelText("Username");
+        const passwordInput = screen.getByLabelText("Password");
+        const submitButton = screen.getByRole("button", { name: "Login" });
+
+        await fireEvent.change(usernameInput, { target: { value: "admin" } });
+        await fireEvent.change(passwordInput, { target: { value: "admin" } });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText("Failed to log in.")).toBeInTheDocument();
         });
     });
 });

@@ -106,21 +106,16 @@
         + update AGENTS.md with tests architecture, patterns & commands;
     
     - implement pages / functionality:
-        - login page:
+        + login page:
             + use RTK query for current user as well;
             + credentials are validated with zod before sent to backend;
             + validation errors are displayed in form;
             + fetch errors are displayed;   // reuse <ErrorPlaceholder>, when other things are done
             x response validation error is properly displayed;
             + can have an optional URL param, which stores the page to redirect to;
-            - refactor loading placeholder & error to use shadcn;   // move out of this list
-            - refactor login form to use shadcn components:
-                - add required components;
-                - refactor login form;
-                - remove validation in fetch;
-                - make common components & CSS class names reusable;    // if any are left
-            - 
-            - fetch errors are properly displayed;
+            + refactor login form to use shadcn components;
+            + add remaining tests tests:
+                + fetch errors are properly displayed;
         
         - not found page;
         

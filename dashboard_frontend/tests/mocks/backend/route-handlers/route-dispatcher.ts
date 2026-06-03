@@ -109,6 +109,10 @@ export class RouteDispatcher {
      * If the handler already set it the flag is a no-op.
      */
     postProcessResponse(response: Response): void {
+        // If a network error is simulated via Response.error(),
+        // we can't change its headers
+        if (response.type === "error") return;
+
         if (!response.headers.has("x-is-authenticated")) {
             response.headers.set("x-is-authenticated", String(this.xIsAuthenticated));
         }

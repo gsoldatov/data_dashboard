@@ -43,7 +43,6 @@ const authApi = backendAPI.injectEndpoints({
                         error: {
                             status: "CUSTOM_ERROR",
                             error: "Failed to log in.",
-                            data: { message: "Failed to log in." },
                         },
                     };
                 }

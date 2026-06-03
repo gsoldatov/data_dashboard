@@ -26,8 +26,12 @@ export const LoginForm = () => {
         try {
             await login(data).unwrap();
         } catch (err) {
+            const parsed = parseRTKQError(err);
             form.setError("root", {
-                message: parseRTKQError(err).message ?? "An unexpected error occurred.",
+                message:
+                    parsed.status === 401
+                        ? "Invalid credentials."
+                        : "Failed to log in.",
             });
         }
     };
