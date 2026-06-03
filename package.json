@@ -13,7 +13,10 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "@mdx-js/react": "^3.1.0",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@reduxjs/toolkit": "^2.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -21,6 +24,7 @@
     "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.77.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
     "recharts": "^2.15.3",
@@ -36,6 +40,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.6.0",
     "jsdom": "^26.1.0",
+    "shadcn": "^4.10.0",
     "tailwindcss": "^4.1.6",
     "typescript": "~5.7.3",
     "vite": "^6.3.5",

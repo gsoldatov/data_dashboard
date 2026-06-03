@@ -1,5 +1,5 @@
 import { backendAPI } from "@/store/backend-api";
-import { loginRequestSchema, type LoginRequest } from "@/types/backend/requests/auth";
+import type { LoginRequest } from "@/types/backend/requests/auth";
 import type { User } from "@/types/user";
 import { user as userSchema } from "@/types/user";
 
@@ -25,16 +25,6 @@ const authApi = backendAPI.injectEndpoints({
         /** Authenticate with username and password, returns the user. */
         login: builder.mutation<User, LoginRequest>({
             queryFn: async (body, api, _extraOptions, baseQuery) => {
-                const parsedRequest = loginRequestSchema.safeParse(body);
-                if (!parsedRequest.success) {
-                    return {
-                        error: {
-                            status: "ZOD_VALIDATION_ERROR",
-                            data: parsedRequest.error.flatten(),
-                        },
-                    };
-                }
-
                 const result = await baseQuery({
                     url: "/api/auth/login",
                     method: "POST",

@@ -1,77 +1,83 @@
-import { useState } from "react";
 import { useLoginMutation } from "@/store/backend-api-slices/auth";
+import { loginRequestSchema, type LoginRequest } from "@/types/backend/requests/auth";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { parseRTKQError } from "@/store/util";
-import { Error } from "@/components/common/messages";
+import {
+    Form,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormControl,
+    FormMessage,
+} from "@/components/common/shadcn-ui/form";
+import { Input } from "@/components/common/shadcn-ui/input";
+import { Button } from "@/components/common/shadcn-ui/button";
 
 export const LoginForm = () => {
-    const [login, { isLoading, error }] = useLoginMutation();
+    const [login, { isLoading }] = useLoginMutation();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const form = useForm<LoginRequest>({
+        resolver: zodResolver(loginRequestSchema),
+        defaultValues: { username: "", password: "" },
+    });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = async (data: LoginRequest) => {
         try {
-            await login({ username, password }).unwrap();
-        } catch {
-            // Error handled via RTK Query error state
+            await login(data).unwrap();
+        } catch (err) {
+            form.setError("root", {
+                message: parseRTKQError(err).message ?? "An unexpected error occurred.",
+            });
         }
     };
 
-    const parsedError = error ? parseRTKQError(error) : null;
-    const fieldErrors = parsedError?.validation?.fieldErrors;
-    const formError = parsedError?.message;
+    const rootError = form.formState.errors.root?.message;
 
     return (
         <div className="mx-auto mt-16 max-w-sm">
             <h1 className="mb-6 text-2xl font-semibold">Login</h1>
-            {formError ? <Error message={formError} /> : null}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="username" className="text-sm font-medium">
-                        Username
-                    </label>
-                    <input
-                        id="username"
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="rounded-md border px-3 py-2 text-sm"
-                        required
-                        autoFocus
-                    />
-                    {fieldErrors?.username?.[0] ? (
-                        <p className="text-sm text-destructive">
-                            {fieldErrors.username[0]}
-                        </p>
-                    ) : null}
-                </div>
-                <div className="flex flex-col gap-1">
-                    <label htmlFor="password" className="text-sm font-medium">
-                        Password
-                    </label>
-                    <input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="rounded-md border px-3 py-2 text-sm"
-                        required
-                    />
-                    {fieldErrors?.password?.[0] ? (
-                        <p className="text-sm text-destructive">
-                            {fieldErrors.password[0]}
-                        </p>
-                    ) : null}
-                </div>
-                <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50 cursor-pointer"
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col gap-4"
                 >
-                    {isLoading ? "Logging in..." : "Login"}
-                </button>
-            </form>
+                    {rootError ? (
+                        <p className="text-sm font-medium text-destructive">
+                            {rootError}
+                        </p>
+                    ) : null}
+                    <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input {...field} autoFocus />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Password</FormLabel>
+                                <FormControl>
+                                    <Input {...field} type="password" />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? "Logging in..." : "Login"}
+                    </Button>
+                </form>
+            </Form>
         </div>
     );
 };
