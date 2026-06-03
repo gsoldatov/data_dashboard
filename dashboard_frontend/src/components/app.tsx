@@ -6,6 +6,7 @@ import { UserProfile } from "@/components/pages/user-profile";
 import { AdminUsers } from "@/components/pages/admin/users";
 import { AdminVisualizationSettings } from "@/components/pages/admin/visualization-settings";
 import { AdminEtl } from "@/components/pages/admin/etl-jobs";
+import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 
 export const App = () => {
@@ -21,6 +22,8 @@ export const App = () => {
                     <Route path="visualizations" element={<AdminVisualizationSettings />} />
                     <Route path="etl" element={<AdminEtl />} />
                 </Route>
+                <Route path="not-found" element={<NotFound />} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </LocationManageWrapper>
     );

@@ -5,8 +5,10 @@
  * endpoint), lazily loads the corresponding MDX file, and wraps it in
  * a data loader.
  */
-import { Suspense, lazy, type ComponentType } from "react";
+import { Suspense, lazy, useEffect, type ComponentType } from "react";
 import { useParams } from "react-router-dom";
+import { useAppDispatch } from "@/store";
+import { setRedirectOnRender } from "@/store/slices/ui";
 import { PageLayout } from "@/components/stateful/page-layout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { VisualizationDataLoader } from "@/components/page-parts/visualizations/visualization-data-loader";
@@ -40,6 +42,7 @@ const mdxComponents: Record<
 
 export const Visualization = () => {
     const { slug } = useParams<{ slug: string }>();
+    const dispatch = useAppDispatch();
 
     // Skip the query when slug is missing, so hooks are called unconditionally.
     const {
@@ -47,12 +50,22 @@ export const Visualization = () => {
         error: publishedStatusCheckError,
     } = useGetIsPublishedQuery(slug!, { skip: !slug });
 
-    if (!slug || !mdxComponents[slug]) {
-        return (
-            <PageLayout>
-                <Error message="Page not found." />
-            </PageLayout>
-        );
+    const redirectToNotFound =
+        // invalid slug
+        !slug || !mdxComponents[slug] ||
+        // visualization is not published
+        (publishedStatusCheckError != null &&
+            parseRTKQError(publishedStatusCheckError).status === 403);
+
+    // Redirect effect — dispatched after render to avoid React warning.
+    useEffect(() => {
+        if (redirectToNotFound) {
+            dispatch(setRedirectOnRender("/not-found"));
+        }
+    }, [redirectToNotFound, dispatch]);
+
+    if (redirectToNotFound) {
+        return null;
     }
 
     // Phase 1 — query backend to check if visualization can be displayed.
@@ -65,10 +78,9 @@ export const Visualization = () => {
     }
 
     if (publishedStatusCheckError) {
-        const message = parseRTKQError(publishedStatusCheckError).status === 403 ? "Page not found." : "Failed to load the page.";
         return (
             <PageLayout>
-                <Error message={message} />
+                <Error message="Failed to load the page." />
             </PageLayout>
         );
     }

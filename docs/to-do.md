@@ -117,9 +117,7 @@
             + add remaining tests tests:
                 + fetch errors are properly displayed;
         
-        - not found page;
-        
-        - check if any tests are stubs & remove them;
+        + not found page;
 
         - page layout & navbar:
             + layout should be used in each page-level component, rather than in router;
