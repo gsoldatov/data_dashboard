@@ -48,19 +48,29 @@ export const Visualization = () => {
     } = useGetIsPublishedQuery(slug!, { skip: !slug });
 
     if (!slug || !mdxComponents[slug]) {
-        return <Error message="Page not found." />;
+        return (
+            <PageLayout>
+                <Error message="Page not found." />
+            </PageLayout>
+        );
     }
 
     // Phase 1 — query backend to check if visualization can be displayed.
     if (isCheckingPublishedStatus) {
-        return <LoadingPlaceholder />;
+        return (
+            <PageLayout>
+                <LoadingPlaceholder />
+            </PageLayout>
+        );
     }
 
     if (publishedStatusCheckError) {
-        if (parseRTKQError(publishedStatusCheckError).status === 403) {
-            return <Error message="Page not found." />;
-        }
-        return <Error message="Failed to load the page." />;
+        const message = parseRTKQError(publishedStatusCheckError).status === 403 ? "Page not found." : "Failed to load the page.";
+        return (
+            <PageLayout>
+                <Error message={message} />
+            </PageLayout>
+        );
     }
 
     // Phase 2 — lazily load MDX, fetch required data and display main page content.
