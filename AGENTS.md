@@ -126,7 +126,7 @@ A single page app containing a set of data visualizations and related pages.
         - state selection is done manually in consumer code;
         - reducers and RTK Query API hooks are exported from corresponding slices;
         - RTKQ fetches:
-            - may validate request data with Zod schemas (if data was not validated earlier) and return validation errors in the format parseable by `parseRTKQError`;
+            - may validate request data with Zod schemas (if data was not validated earlier, in shadcn/ui form, for example) and return validation errors in the format parseable by `parseRTKQError`;
             - should validate response data using Zod schemas, console.log validation errors and set a custom user-friendly error message to fetch result;
 - auth:
     - cookie-based (httponly, same-origin);
