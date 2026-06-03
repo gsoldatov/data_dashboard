@@ -13,6 +13,7 @@ interface QueriesState {
 const rawBaseQuery = fetchBaseQuery({
     baseUrl: getDocumentApp().config.backendUrl,
     credentials: "include",
+    timeout: 10000
 });
 
 const customBaseQuery: BaseQueryFn = async (args, api, extraOptions) => {
