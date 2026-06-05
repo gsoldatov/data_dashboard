@@ -8,23 +8,29 @@ import { AdminVisualizationSettings } from "@/components/pages/admin/visualizati
 import { AdminEtl } from "@/components/pages/admin/etl-jobs";
 import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
+import { AdminRoute } from "@/components/stateful/protected/admin-route";
+
+/** Top-level route elements — exported so tests can extract admin paths. */
+export const appRouteElements = (
+    <>
+        <Route index element={<Feed />} />
+        <Route path="login" element={<Login />} />
+        <Route path="visualizations/:slug" element={<Visualization />} />
+        <Route path="profile" element={<UserProfile />} />
+        <Route path="admin" element={<AdminRoute />}>
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="visualizations" element={<AdminVisualizationSettings />} />
+            <Route path="etl" element={<AdminEtl />} />
+        </Route>
+        <Route path="not-found" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
+    </>
+);
 
 export const App = () => {
     return (
         <LocationManageWrapper>
-            <Routes>
-                <Route index element={<Feed />} />
-                <Route path="login" element={<Login />} />
-                <Route path="visualizations/:slug" element={<Visualization />} />
-                <Route path="profile" element={<UserProfile />} />
-                <Route path="admin">
-                    <Route path="users" element={<AdminUsers />} />
-                    <Route path="visualizations" element={<AdminVisualizationSettings />} />
-                    <Route path="etl" element={<AdminEtl />} />
-                </Route>
-                <Route path="not-found" element={<NotFound />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Routes>{appRouteElements}</Routes>
         </LocationManageWrapper>
     );
 };
