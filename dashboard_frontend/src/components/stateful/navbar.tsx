@@ -4,12 +4,49 @@ import { backendAPI } from "@/store/backend-api";
 import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";
 import { LogIn, LogOut, LayoutDashboard, User, Settings } from "lucide-react";
 
-export const Navbar = () => {
-    const navigate = useNavigate();
+
+const NavbarLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+    <Link
+        to={to}
+        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+    >
+        {children}
+    </Link>
+);
+
+
+const NavbarMenu = () => {
     const { data: currentUser } = useGetCurrentUserQuery();
-    const isAuthenticated = currentUser != null;
+    const isAdmin = currentUser?.role === "admin";
+
+    return (
+        <div className="flex items-center gap-6">
+            <Link to="/" className="flex items-center gap-2 font-semibold text-lg">
+                <LayoutDashboard className="h-5 w-5" />
+                Data Dashboard
+            </Link>
+            <div className="flex items-center gap-4">
+                <NavbarLink to="/">Visualizations</NavbarLink>
+                {isAdmin && <NavbarLink to="/admin/visualizations">Admin</NavbarLink>}
+            </div>
+        </div>
+    );
+};
+
+
+const NavbarSecondaryMenuLoggedOut = () => (
+    <NavbarLink to="/login">
+        <LogIn className="h-4 w-4" />
+        Login
+    </NavbarLink>
+);
+
+
+const NavbarSecondaryMenuLoggedIn = () => {
+    const { data: currentUser } = useGetCurrentUserQuery();
     const isAdmin = currentUser?.role === "admin";
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const [logout] = useLogoutMutation();
 
     const handleLogout = async () => {
@@ -23,65 +60,52 @@ export const Navbar = () => {
     };
 
     return (
-        <nav className="border-b bg-background">
-            <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-6">
-                    <Link to="/" className="flex items-center gap-2 font-semibold text-lg">
-                        <LayoutDashboard className="h-5 w-5" />
-                        Data Dashboard
-                    </Link>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <Link to="/" className="hover:text-foreground transition-colors">
-                            Visualizations
-                        </Link>
-                        {isAdmin && (
-                            <Link
-                                to="/admin/visualizations"
-                                className="hover:text-foreground transition-colors"
-                            >
-                                Admin
-                            </Link>
-                        )}
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                    {isAuthenticated ? (
-                        <>
-                            <Link
-                                to="/profile"
-                                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                                <User className="h-4 w-4" />
-                                {currentUser?.username}
-                            </Link>
-                            {isAdmin && (
-                                <Link
-                                    to="/admin/visualizations"
-                                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                    <Settings className="h-4 w-4" />
-                                </Link>
-                            )}
-                            <button
-                                onClick={handleLogout}
-                                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
-                            >
-                                <LogOut className="h-4 w-4" />
-                                Logout
-                            </button>
-                        </>
-                    ) : (
-                        <Link
-                            to="/login"
-                            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                            <LogIn className="h-4 w-4" />
-                            Login
-                        </Link>
-                    )}
-                </div>
-            </div>
-        </nav>
+        <>
+            <NavbarLink to="/profile">
+                <User className="h-4 w-4" />
+                {currentUser?.username}
+            </NavbarLink>
+            {isAdmin && (
+                <NavbarLink to="/admin/visualizations">
+                    <Settings className="h-4 w-4" />
+                </NavbarLink>
+            )}
+            <button
+                onClick={handleLogout}
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+            >
+                <LogOut className="h-4 w-4" />
+                Logout
+            </button>
+        </>
     );
 };
+
+
+const NavbarSecondaryMenu = () => {
+    const { data: currentUser } = useGetCurrentUserQuery();
+    const isAuthenticated = currentUser != null;
+
+    return (
+        <div className="flex items-center gap-3">
+            {isAuthenticated ? <NavbarSecondaryMenuLoggedIn /> : <NavbarSecondaryMenuLoggedOut />}
+        </div>
+    );
+};
+
+
+/**
+ * Top-level navigation bar with branding, page links, and auth controls.
+ *
+ * Adapts to the current authentication state: shows user info and logout
+ * when authenticated, a login link otherwise.  Admin users see additional
+ * admin links in both the main menu and the secondary menu.
+ */
+export const Navbar = () => (
+    <nav className="border-b bg-background">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+            <NavbarMenu />
+            <NavbarSecondaryMenu />
+        </div>
+    </nav>
+);
