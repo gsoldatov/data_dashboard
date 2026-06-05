@@ -2,41 +2,11 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { App } from "@/components/app";
 import { renderWithProviders } from "../../test-utils";
-import type { RootState } from "@/store";
 import { MockBackend } from "../../mocks/backend/mock-backend";
-
-const userData = {
-    id: 1,
-    username: "admin",
-    role: "admin" as const,
-    created_at: "2025-01-01T00:00:00Z",
-};
-
-function preloadedUserState(): Partial<RootState> {
-    return {
-        api: {
-            queries: {
-                "getCurrentUser(undefined)": {
-                    status: "fulfilled" as const,
-                    data: userData,
-                },
-            },
-        },
-    } as unknown as Partial<RootState>;
-}
-
-function preloadedNullUserState(): Partial<RootState> {
-    return {
-        api: {
-            queries: {
-                "getCurrentUser(undefined)": {
-                    status: "fulfilled" as const,
-                    data: null,
-                },
-            },
-        },
-    } as unknown as Partial<RootState>;
-}
+import {
+    preloadedAdminState,
+    preloadedNullUserState,
+} from "../../mocks/mock-data/store";
 
 describe("baseQuery session expiry", () => {
     let backend: MockBackend;
@@ -50,7 +20,7 @@ describe("baseQuery session expiry", () => {
     it("redirects to login when x-is-authenticated is false and getCurrentUser has cached data", async () => {
         const { store } = renderWithProviders(<App />, {
             initialEntries: ["/visualizations/test"],
-            preloadedState: preloadedUserState(),
+            preloadedState: preloadedAdminState(),
         });
 
         await waitFor(() => {
@@ -65,7 +35,7 @@ describe("baseQuery session expiry", () => {
 
         renderWithProviders(<App />, {
             initialEntries: ["/visualizations/test"],
-            preloadedState: preloadedUserState(),
+            preloadedState: preloadedAdminState(),
         });
 
         await waitFor(() => {

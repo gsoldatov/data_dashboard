@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { Routes, Route } from "react-router-dom";
 import { renderWithProviders } from "../../../test-utils";
-import type { RootState } from "@/store";
+import { redirectState } from "../../../mocks/mock-data/store";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 
 function TestRoutes() {
@@ -15,10 +15,6 @@ function TestRoutes() {
         </LocationManageWrapper>
     );
 }
-
-const redirectState: Partial<RootState> = {
-    ui: { redirectOnRender: "/login" },
-};
 
 describe("LocationManageWrapper", () => {
     it("renders children when no redirect is set", () => {

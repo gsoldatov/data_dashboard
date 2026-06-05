@@ -53,3 +53,8 @@ export function preloadedAdminState(): Partial<RootState> {
         },
     } as unknown as Partial<RootState>;
 }
+
+/** Preloaded state with a pending UI redirect. */
+export const redirectState: Partial<RootState> = {
+    ui: { redirectOnRender: "/login" },
+};
