@@ -9,12 +9,16 @@ import { AdminEtl } from "@/components/pages/admin/etl-jobs";
 import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 import { AdminRoute } from "@/components/stateful/protected/admin-route";
+import { AnonymousRoute } from "@/components/stateful/protected/anonymous-route";
 
-/** Top-level route elements — exported so tests can extract admin paths. */
+
+/** Export Top-level route elements to allow introspection in tests. */
 export const appRouteElements = (
     <>
         <Route index element={<Feed />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={<AnonymousRoute />}>
+            <Route index element={<Login />} />
+        </Route>
         <Route path="visualizations/:slug" element={<Visualization />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="admin" element={<AdminRoute />}>

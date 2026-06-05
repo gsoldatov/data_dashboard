@@ -119,9 +119,13 @@
         
         + not found page;
 
+        - add protected routes:
+            + admin;
+
         - page layout & navbar:
             + layout should be used in each page-level component, rather than in router;
-            - expired & invalid tokens (401 backend responses) should result in cookie removal & redirect to /auth/login;
+            + expired & invalid tokens (401 backend responses) should result in cookie removal & redirect to /auth/login;
+            ? refactor with shadcn;
             - navbar links work properly:
                 - logged out:
                     - login button adds redict param to the url;
@@ -129,6 +133,7 @@
                 - logged in as admin:
                     - logout from navbar;
                     ???
+
         - list available pages;
         - display an MDX page:
             - implement Russia state budget visualization;
