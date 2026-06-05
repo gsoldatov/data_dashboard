@@ -158,7 +158,9 @@ A single page app containing a set of data visualizations and related pages.
     - test cases are located in `dashboard_frontend/tests/tests` and follow the structure of `src` directory;
     - key test mocks:
         - `MockBackend` (`dashboard_backend/tests/mocks/backend/mock-backend.ts`) - mocks `fetch` with test backend route handlers, using `vitest-fetch-mock`, set it up in `beforeEach()` for test cases, which imply interaction with backend;
-        - `RouteDispatcher` (available via `MockBackend`) - provides route handlers of mock backend and allows to override them;
+        - `RouteDispatcher` (available via `MockBackend`) - provides route handlers of mock backend and allows to override them:
+            - reusable overrides are stored in `dashboard_backend/tests/mocks/backend/route-handlers/overrides.ts`;
+        - preloaded state & mocks for other data should be in `dashboard_backend/tests/mocks/mock-data/`;
     - test cases are written as functions (one test file per component/slice);
     - test case order (where applicable): network errors,  validation & data errors, other errors, correct execution;
     - mock backend route handlers validate incoming request data using Zod;

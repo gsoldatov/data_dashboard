@@ -2,6 +2,10 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
+import {
+    addNetworkErrorOverride,
+    add500Override,
+} from "../../../mocks/backend/route-handlers/overrides";
 import { preloadedNullUserState } from "../../../mocks/mock-data/store";
 import { App } from "@/components/app";
 
@@ -13,6 +17,19 @@ beforeEach(() => {
     backend.setup();
 });
 
+/** Fill the login form fields and click the submit button. */
+async function fillAndSubmitLoginForm(
+    username = "admin",
+    password = "admin",
+): Promise<void> {
+    await fireEvent.change(screen.getByLabelText("Username"), {
+        target: { value: username },
+    });
+    await fireEvent.change(screen.getByLabelText("Password"), {
+        target: { value: password },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Login" }));
+}
 
 describe("Login", () => {
     it("renders login form", () => {
@@ -54,17 +71,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "wrong" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "wrong" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm("wrong", "wrong");
 
             await waitFor(() => {
                 expect(
@@ -81,17 +88,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "admin" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "admin" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm();
 
             await waitFor(() => {
                 expect(
@@ -108,17 +105,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "admin" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "admin" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm();
 
             await waitFor(() => {
                 expect(
@@ -133,17 +120,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "admin" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "admin" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm();
 
             await waitFor(() => {
                 expect(
@@ -157,10 +134,10 @@ describe("Login", () => {
 
     describe("Errors", () => {
         it("displays 'Failed to log in.' on network error during submit", async () => {
-            backend.dispatcher.addHandlerOverride(
+            addNetworkErrorOverride(
+                backend.dispatcher,
                 "/api/auth/login",
                 "POST",
-                async () => Response.error(),
             );
 
             renderWithProviders(<App />, {
@@ -168,17 +145,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "admin" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "admin" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm();
 
             await waitFor(() => {
                 expect(
@@ -188,19 +155,11 @@ describe("Login", () => {
         });
 
         it("displays 'Failed to log in.' on 500 during submit", async () => {
-            backend.dispatcher.addHandlerOverride(
+            add500Override(
+                backend.dispatcher,
                 "/api/auth/login",
                 "POST",
-                async () =>
-                    new Response(
-                        JSON.stringify({ detail: "Internal server error" }),
-                        {
-                            status: 500,
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        },
-                    ),
+                { detail: "Internal server error" },
             );
 
             renderWithProviders(<App />, {
@@ -208,17 +167,7 @@ describe("Login", () => {
                 preloadedState: preloadedNullUserState(),
             });
 
-            const usernameInput = screen.getByLabelText("Username");
-            const passwordInput = screen.getByLabelText("Password");
-            const submitButton = screen.getByRole("button", { name: "Login" });
-
-            await fireEvent.change(usernameInput, {
-                target: { value: "admin" },
-            });
-            await fireEvent.change(passwordInput, {
-                target: { value: "admin" },
-            });
-            fireEvent.click(submitButton);
+            await fillAndSubmitLoginForm();
 
             await waitFor(() => {
                 expect(

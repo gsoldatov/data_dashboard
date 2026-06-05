@@ -3,6 +3,10 @@ import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../../test-utils";
 import { MockBackend } from "../../../../mocks/backend/mock-backend";
 import {
+    addNetworkErrorOverride,
+    add500Override,
+} from "../../../../mocks/backend/route-handlers/overrides";
+import {
     preloadedNullUserState,
     preloadedAdminState,
 } from "../../../../mocks/mock-data/store";
@@ -30,10 +34,10 @@ describe("AnonymousRoute", () => {
 
     describe("Fetch error", () => {
         it("displays an error message on network failure", async () => {
-            backend.dispatcher.addHandlerOverride(
+            addNetworkErrorOverride(
+                backend.dispatcher,
                 "/api/auth/me",
                 "GET",
-                async () => Response.error(),
             );
 
             renderWithProviders(<App />, {
@@ -44,12 +48,7 @@ describe("AnonymousRoute", () => {
         });
 
         it("displays an error message on 500", async () => {
-            backend.dispatcher.addHandlerOverride(
-                "/api/auth/me",
-                "GET",
-                async () =>
-                    new Response(null, { status: 500 }),
-            );
+            add500Override(backend.dispatcher, "/api/auth/me", "GET");
 
             renderWithProviders(<App />, {
                 initialEntries: [anonymousPaths[0]],
