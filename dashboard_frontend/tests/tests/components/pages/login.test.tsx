@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
-import { preloadedNullUserState } from "../../../mocks/data/store";
+import { preloadedNullUserState } from "../../../mocks/mock-data/store";
 import { App } from "@/components/app";
 
 

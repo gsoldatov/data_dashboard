@@ -5,7 +5,7 @@ import { MockBackend } from "../../../../mocks/backend/mock-backend";
 import {
     preloadedNullUserState,
     preloadedAdminState,
-} from "../../../../mocks/data/store";
+} from "../../../../mocks/mock-data/store";
 import { findProtectedRoutes } from "../../../../util/routes";
 import { appRouteElements } from "@/components/app";
 import { AnonymousRoute } from "@/components/stateful/protected/anonymous-route";

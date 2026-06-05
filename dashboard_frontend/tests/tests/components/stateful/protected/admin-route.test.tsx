@@ -6,7 +6,7 @@ import {
     preloadedNullUserState,
     preloadedViewerState,
     preloadedAdminState,
-} from "../../../../mocks/data/store";
+} from "../../../../mocks/mock-data/store";
 import { findProtectedRoutes } from "../../../../util/routes";
 import { appRouteElements } from "@/components/app";
 import { AdminRoute } from "@/components/stateful/protected/admin-route";
