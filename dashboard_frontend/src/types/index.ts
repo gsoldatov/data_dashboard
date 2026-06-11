@@ -8,9 +8,15 @@ export interface VisualizationSettingsUpsert {
   is_published: boolean;
 }
 
-/** TODO: replace with actual API response when GET /api/visualizations is available */
+/** Visualizations known to the feed page (slug + title). */
 export interface VisualizationInfo {
   slug: string;
   title: string;
-  is_published: boolean;
+}
+
+/** Response from GET /api/visualization-settings/?settings=...&slugs=... */
+export interface BatchVisualizationSettingsResponse {
+  [slug: string]: {
+    is_published: boolean;
+  };
 }

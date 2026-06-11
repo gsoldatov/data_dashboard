@@ -3,7 +3,7 @@ import { getDocumentApp } from "@/util/document-app";
 import type { MockBackend } from "../mock-backend";
 import { loginHandler, meHandler, logoutHandler } from "./default-handlers/auth";
 import {
-    isPublishedHandler,
+    batchVisualizationSettingsHandler,
     visualizationDataHandler,
 } from "./default-handlers/visualizations";
 
@@ -41,7 +41,7 @@ export class RouteDispatcher {
         "/api/auth/me": { GET: meHandler },
         "/api/auth/logout": { POST: logoutHandler },
         "/api/visualization-data/{slug}": { GET: visualizationDataHandler },
-        "/api/visualization-settings/{slug}/is-published": { GET: isPublishedHandler },
+        "/api/visualization-settings/": { GET: batchVisualizationSettingsHandler },
     };
 
     /** Per-instance overrides (checked before defaults). */
@@ -123,10 +123,15 @@ export class RouteDispatcher {
 /** Remove `document.app.config.backendUrl` prefix from a request URL. */
 const stripBackendPrefix = (url: string): string => {
     const { backendUrl } = getDocumentApp().config;
-    if (url.startsWith(backendUrl)) {
-        return url.slice(backendUrl.length);
+    let path = url.startsWith(backendUrl)
+        ? url.slice(backendUrl.length)
+        : url;
+    // Strip query string so keys match without query params
+    const queryIndex = path.indexOf("?");
+    if (queryIndex !== -1) {
+        path = path.slice(0, queryIndex);
     }
-    return url;
+    return path;
 };
 
 

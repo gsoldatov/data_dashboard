@@ -15,7 +15,6 @@ import { VisualizationDataLoader } from "@/components/page-parts/visualizations/
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/mdx-error-boundary";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error } from "@/components/common/messages";
-import { parseRTKQError } from "@/store/util";
 
 
 const mdxGlob = import.meta.glob("./mdx/*.mdx");
@@ -48,14 +47,17 @@ export const Visualization = () => {
     const {
         isLoading: isCheckingPublishedStatus,
         error: publishedStatusCheckError,
-    } = useGetIsPublishedQuery(slug!, { skip: !slug });
+        data: publishedStatus,
+    } = useGetIsPublishedQuery(
+        { slugs: slug ? [slug] : [], settings: ["is-published"] },
+        { skip: !slug },
+    );
 
     const redirectToNotFound =
         // invalid slug
         !slug || !mdxComponents[slug] ||
         // visualization is not published
-        (publishedStatusCheckError != null &&
-            parseRTKQError(publishedStatusCheckError).status === 403);
+        (publishedStatus != null && !publishedStatus[slug]?.is_published);
 
     // Redirect effect — dispatched after render to avoid React warning.
     useEffect(() => {
