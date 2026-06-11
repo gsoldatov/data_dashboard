@@ -119,20 +119,17 @@
         
         + not found page;
 
-        - add protected routes:
+        + add protected routes:
             + admin;
+            + anonymous;
 
-        - page layout & navbar:
+        + page layout & navbar:
             + layout should be used in each page-level component, rather than in router;
             + expired & invalid tokens (401 backend responses) should result in cookie removal & redirect to /auth/login;
-            ? refactor with shadcn;
-            - navbar links work properly:
-                - logged out:
-                    - login button adds redict param to the url;
-                    ???
-                - logged in as admin:
-                    - logout from navbar;
-                    ???
+            + decompose into smaller components;
+            x refactor with shadcn;
+            + add stacked style & toggle
+            + add tests;
 
         - list available pages;
         - display an MDX page:
@@ -172,6 +169,8 @@
     
     - check if dependencies are used after project is implemented:
         - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
+
+    - add non tailwaind css classnames to components and use them in tests for more specific checks
 
 
 - add a scheduled job for removing expired sessions;
