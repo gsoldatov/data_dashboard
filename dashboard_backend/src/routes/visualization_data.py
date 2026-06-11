@@ -32,8 +32,8 @@ async def read_visualization_data(
     current: User | None = request.state.current_user
     repo: Repository = request.state.repository
     if current is None or current.role != "admin":
-        settings = await resolve_visualization_settings(slug, repo)
-        if not settings.is_published:
+        resolved = await resolve_visualization_settings([slug], repo)
+        if not resolved[slug].is_published:
             raise NotFoundException(
                 f"Visualization not found: {slug}"
             )
