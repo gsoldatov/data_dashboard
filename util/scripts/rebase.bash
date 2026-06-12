@@ -49,28 +49,15 @@ if [ -n "$WT_INFO" ]; then
         exit 1
     fi
 
-    # Create a temp branch and switch to it
-    echo "🌿 Checking out temp branch in worktree..."
-    # Delete old temp branch
-    git -C "$WT_PATH" branch -D temp 2>/dev/null || true
-    git -C "$WT_PATH" checkout -b temp -q
-
-    # Run rebase
-    echo "⚡ Rebasing '$REBASED_BRANCH' to '$UPSTREAM_BRANCH'..."
-    if git rebase "$UPSTREAM_BRANCH" "$REBASED_BRANCH"; then
+    # Run rebase INSIDE the target worktree
+    echo "⚡ Rebasing '$REBASED_BRANCH' to '$UPSTREAM_BRANCH' inside its worktree..."
+    if git -C "$WT_PATH" rebase "$UPSTREAM_BRANCH"; then
         echo "✅ Rebase complete."
     else
         echo "❌ Rebase failed."
-        echo "👉 Resolve existing conflicts, then run: git rebase --continue"
-        echo "👉 After that, restore worktree branch, using:"
-        echo "   git -C '$WT_PATH' checkout '$REBASED_BRANCH' && git -C '$WT_PATH' branch -D temp"
+        echo "👉 Resolve existing conflicts inside '$WT_PATH', then run: git rebase --continue"
         exit 1
     fi
-
-    # Restore worktree branch
-    echo "🔄 Restoring '$REBASED_BRANCH' into its worktree..."
-    git -C "$WT_PATH" checkout "$REBASED_BRANCH" -q
-    git -C "$WT_PATH" branch -D temp -q
 
 else
     # If the rebased branch is not active in any worktree
@@ -79,7 +66,5 @@ else
     echo "✅ Rebase complete."
 fi
 
-# Ensure CWD is project root & upstream branch is checked out
-cd "$PROJECT_ROOT"
-git checkout "$UPSTREAM_BRANCH" -q
-echo "🏠 Switched back to project root: $PROJECT_ROOT (on branch: $UPSTREAM_BRANCH)"
+# Script finish
+echo "🏠 Script execution finished."
