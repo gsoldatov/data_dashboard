@@ -132,51 +132,32 @@
             + add tests;
 
         + list available pages;
-
-        - display an MDX page:
-            - implement Russia state budget visualization;
-            - handle absent data on backend;
+        + display an MDX page;
         
         - user page (view / edit user settings);
-        - admin page:
-            - edit page settings (as admin);
-            - view ETL jobs statuses & logs;
-            ? run ETL jobs;
         
-        - ensure all fetches timeouts are are properly covered by error placeholders;
-        
-    - refactor scaffolded code:
+    - refactoring:
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
-        - remove logout from user profile page;
-    
-    - refactoring:
+        ? remove logout from user profile page;     // allow clearing all existing sessions
+
+        - ensure all fetches timeouts are are properly covered by error placeholders;
         - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
-
-    - add pre-commit checks for frontend;
-
-    - add Russia state budget page (mdx);
-    - dashboard layout:
-        - navbar;
-        - main content (single column);
     
-    - page feed;
-    - template of a single page:
-        - layout;
-        - data fetching & placeholders;
-        - display of page mdx;
+        - check if dependencies are used after project is implemented:
+            - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
+
+        - add non tailwaind css classnames to components and use them in tests for more specific checks
+        ? refactor app router:
+            - history object is available in test cases after component rendering;
+            - existing tests pass (render the wholee app or add support to rendering parts of it);
     
-    - admin page:
-        - view ETL jobs' logs & statuses;
-        ???
-    
-    - check if dependencies are used after project is implemented:
-        - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
+    - utility:
+        + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
 
-    - add non tailwaind css classnames to components and use them in tests for more specific checks
-    - add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
-
-
+- handle absent data on backend;
+- add pre-commit checks for frontend;
+- implement Russia state budget visualization;
 - add a scheduled job for removing expired sessions;
 
 - add readme files for project initialization & startup:
@@ -186,6 +167,12 @@
         - setup Prefect (profile -> server);
 
 - update skills in skill repo;
+
+- replace prefect with airflow;
+- admin page:   // add corresponding backend routes
+    - edit page settings (as admin);
+    - view ETL jobs statuses & logs;
+    ? run ETL jobs;
 
 # Additional
 ? add Prefect basic auth (configure PREFECT_SERVER_API_AUTH_STRING on server & add auth string when using clients);
