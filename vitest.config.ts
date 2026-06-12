@@ -1,6 +1,7 @@
 import { defineConfig } from "vitest/config";
 import path from "path";
 import fs from "fs";
+import mdx from "@mdx-js/rollup";
 
 /**
  * Load environment variables from config.env.example,
@@ -31,6 +32,12 @@ export default defineConfig({
             "@": path.resolve(__dirname, "dashboard_frontend", "src"),
         },
     },
+
+    plugins: [
+        // Transform MDX files before React sees them.  Must mirror the
+        // Vite build config.  `enforce: "pre"` ensures it runs first.
+        { enforce: "pre", ...mdx() },
+    ],
 
     test: {
         // ── Test environment ───────────────────────────────────────
