@@ -1,7 +1,8 @@
 """Visualization settings routes."""
 
-from fastapi import APIRouter, Depends, Request
-from fastapi.responses import Response
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from dashboard_backend.src.db.repository import Repository
 from dashboard_backend.src.models.user import User
@@ -9,6 +10,7 @@ from dashboard_backend.src.models.visualization_settings import (
     VisualizationSettings,
     VisualizationSettingsResponse,
     VisualizationSettingsUpsert,
+    VisualizationSettingsValues,
 )
 from dashboard_backend.src.services.auth import admin_user
 from dashboard_backend.src.services.visualization_settings import (
@@ -26,7 +28,8 @@ async def read_visualization_settings(
 ) -> VisualizationSettingsResponse:
     """Return current visualization settings, merging defaults with stored overrides."""
     repo: Repository = request.state.repository
-    return await resolve_visualization_settings(slug, repo)
+    resolved = await resolve_visualization_settings([slug], repo)
+    return resolved[slug]
 
 
 @router.put("/{slug}", response_model=VisualizationSettings)
@@ -41,22 +44,55 @@ async def upsert_visualization_settings(
     return await repo.visualizations_settings.upsert(slug, data)
 
 
-@router.get("/{slug}/is-published")
-async def read_is_published(
-    slug: str,
+@router.get("/", response_model=dict[str, VisualizationSettingsValues])
+async def read_visualization_settings_batch(
+    settings: Annotated[str, Query(min_length=1)],
+    slugs: Annotated[str, Query(min_length=1)],
     request: Request,
-) -> Response:
-    """Check whether a visualization can be displayed.
+) -> dict[str, VisualizationSettingsValues]:
+    """Return settings for the requested slugs.
 
-    Returns 200 if the current user is an admin or the visualization is
-    published, otherwise returns 403.
+    Query parameters:
+    - ``settings``: comma-separated setting names (e.g. ``is-published``).
+    - ``slugs``: comma-separated visualization slugs.
+
+    Admins always receive ``is_published: true`` for every slug.
     """
+    setting_names = _parse_comma_separated(settings)
+    slugs_list = _parse_comma_separated(slugs)
+
+    _validate_setting_names(setting_names)
+
     current: User | None = request.state.current_user
     repo: Repository = request.state.repository
-    settings = await resolve_visualization_settings(slug, repo)
+    # NOTE: add logic for returning only specified settings,
+    # when there's more than one setting to return
+    resolved = await resolve_visualization_settings(slugs_list, repo)
 
-    if current is not None and current.role == "admin":
-        return Response(status_code=200)
-    if settings.is_published:
-        return Response(status_code=200)
-    return Response(status_code=403)
+    result: dict[str, VisualizationSettingsValues] = {}
+    for slug in slugs_list:
+        is_published = resolved[slug].is_published
+        if current is not None and current.role == "admin":
+            is_published = True
+        result[slug] = VisualizationSettingsValues(
+            is_published=is_published,
+        )
+    return result
+
+
+def _parse_comma_separated(raw: str) -> list[str]:
+    """Split a comma-separated query parameter into a list of non-empty values."""
+    return [v.strip() for v in raw.split(",") if v.strip()]
+
+
+_VALID_SETTINGS = frozenset({"is-published"})
+
+
+def _validate_setting_names(names: list[str]) -> None:
+    """Raise a 422 if any requested setting name is unknown."""
+    for name in names:
+        if name not in _VALID_SETTINGS:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Unknown setting: {name}",
+            )

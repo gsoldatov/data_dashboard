@@ -28,3 +28,17 @@ export const Error = ({ header, message }: ErrorProps) => (
         </CardContent>
     </Card>
 );
+
+
+interface InfoProps {
+    message: string;
+}
+
+/** Card-styled informational message (no error styling). */
+export const Info = ({ message }: InfoProps) => (
+    <Card>
+        <CardContent className="pt-6">
+            <p className="text-muted-foreground">{message}</p>
+        </CardContent>
+    </Card>
+);

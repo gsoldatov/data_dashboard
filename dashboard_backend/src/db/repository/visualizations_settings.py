@@ -30,6 +30,21 @@ class VisualizationsSettingsRepository:
         return VisualizationSettings.model_validate(sa_obj)
 
     @internal_validation
+    async def by_slugs(self, slugs: list[str]) -> list[VisualizationSettings]:
+        """Return stored settings for the given slugs (single query)."""
+        if not slugs:
+            return []
+        result = await self._session.execute(
+            select(VisualizationsSettings).where(
+                VisualizationsSettings.slug.in_(slugs)
+            )
+        )
+        return [
+            VisualizationSettings.model_validate(obj)
+            for obj in result.scalars().all()
+        ]
+
+    @internal_validation
     async def list_all(self) -> list[VisualizationSettings]:
         result = await self._session.execute(select(VisualizationsSettings))
         return [

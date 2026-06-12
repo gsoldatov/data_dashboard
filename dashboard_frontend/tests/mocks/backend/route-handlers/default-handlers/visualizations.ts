@@ -2,14 +2,23 @@ import type { RouteHandler } from "../route-dispatcher";
 import type { MockBackend } from "../../mock-backend";
 
 /**
- * Default handler for `GET /api/visualization-settings/{slug}/is-published`.
+ * Default handler for `GET /api/visualization-settings/`.
  *
- * Returns ``"true"`` as plain text (the frontend uses ``responseHandler: "text"``).
+ * Parses ``slugs`` from the query string and returns
+ * ``{ [slug]: { is_published: true } }`` for each slug.
  */
-export const isPublishedHandler: RouteHandler = async (_req: Request, _backend: MockBackend) => {
-    return new Response("true", {
+export const batchVisualizationSettingsHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
+    const url = new URL(req.url);
+    const slugs = url.searchParams.get("slugs")?.split(",").filter(Boolean) ?? [];
+
+    const result: Record<string, { is_published: boolean }> = {};
+    for (const slug of slugs) {
+        result[slug] = { is_published: true };
+    }
+
+    return new Response(JSON.stringify(result), {
         status: 200,
-        headers: { "Content-Type": "text/plain" },
+        headers: { "Content-Type": "application/json" },
     });
 };
 

@@ -1,5 +1,6 @@
 import { backendAPI } from "@/store/backend-api";
 import type {
+    BatchVisualizationSettingsResponse,
     VisualizationSettingsResponse,
     VisualizationSettingsUpsert,
 } from "@/types";
@@ -33,11 +34,17 @@ const visualizationSettingsApi = backendAPI.injectEndpoints({
             ],
         }),
 
-        /** Check whether a visualization is published. */
-        getIsPublished: builder.query<string, string>({
-            query: (slug) => ({
-                url: `/api/visualization-settings/${slug}/is-published`,
-                responseHandler: "text",
+        /** Check whether visualizations are published. */
+        getIsPublished: builder.query<
+            BatchVisualizationSettingsResponse,
+            { slugs: string[]; settings: string[] }
+        >({
+            query: ({ slugs, settings }) => ({
+                url: "/api/visualization-settings/",
+                params: {
+                    settings: settings.join(","),
+                    slugs: slugs.join(","),
+                },
             }),
         }),
     }),

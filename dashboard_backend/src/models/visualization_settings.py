@@ -28,3 +28,9 @@ class VisualizationSettings(BaseModel):
     id: int
     slug: str
     is_published: bool
+
+
+class VisualizationSettingsValues(BaseModel):
+    """Settings values returned in a batch query (extensible per setting name)."""
+
+    is_published: bool
