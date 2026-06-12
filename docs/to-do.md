@@ -131,9 +131,12 @@
             + add stacked style & toggle
             + add tests;
 
-        - list available pages;
+        + list available pages;
+
         - display an MDX page:
             - implement Russia state budget visualization;
+            - handle absent data on backend;
+        
         - user page (view / edit user settings);
         - admin page:
             - edit page settings (as admin);
@@ -171,6 +174,7 @@
         - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
 
     - add non tailwaind css classnames to components and use them in tests for more specific checks
+    - add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
 
 
 - add a scheduled job for removing expired sessions;

@@ -21,6 +21,9 @@ uv sync --all-packages
 npm install
 cp config.env.example config.env
 
+# Create backend's db
+uv run alembic -c dashboard_backend/src/db/migrations/alembic.ini upgrade head
+
 # Setup skills (optional)
 mkdir .qwen && ln -s "$PWD/.llm_utils/skills" "$PWD/.qwen/skills"
 ```
