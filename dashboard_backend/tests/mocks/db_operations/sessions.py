@@ -40,3 +40,13 @@ class SessionsDBOperations:
         if row is None:
             return None
         return Session.model_validate(row)
+
+    async def get_user_sessions(self, user_id: int) -> list[Session]:
+        """Return all sessions for *user_id* (including expired)."""
+        result = await self._conn.execute(
+            text(
+                "SELECT id, user_id, token, expires_at, created_at "
+                "FROM sessions WHERE user_id = :user_id"
+            ).bindparams(user_id=user_id)
+        )
+        return [Session.model_validate(row) for row in result.mappings().all()]

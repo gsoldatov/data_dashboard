@@ -18,7 +18,11 @@ from python_common.src.config import Config
 # ── validation ────────────────────────────────────────────────────────────
 
 
-async def test_login_validation(test_client: AsyncClient) -> None:
+async def test_login_validation(
+    test_client: AsyncClient,
+    test_config: Config,
+    db_operations: DBOperations,
+) -> None:
     invalid_cases = [
         ({"password": "pass"}, 422),
         ({"username": "user"}, 422),
@@ -32,6 +36,13 @@ async def test_login_validation(test_client: AsyncClient) -> None:
         )
         assert response.status_code == expected_status
 
+    admin = await db_operations.users.by_username(
+        test_config.backend_default_user_name
+    )
+    assert admin is not None
+    sessions = await db_operations.sessions.get_user_sessions(admin.id)
+    assert len(sessions) == 0
+
 
 # ── already authenticated ─────────────────────────────────────────────────
 
@@ -39,6 +50,8 @@ async def test_login_validation(test_client: AsyncClient) -> None:
 async def test_login_already_authenticated(
     test_client: AsyncClient,
     admin_session: dict[str, str],
+    test_config: Config,
+    db_operations: DBOperations,
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.post(
@@ -47,6 +60,14 @@ async def test_login_already_authenticated(
     )
     assert response.status_code == 403
 
+    admin = await db_operations.users.by_username(
+        test_config.backend_default_user_name
+    )
+    assert admin is not None
+    sessions = await db_operations.sessions.get_user_sessions(admin.id)
+    assert len(sessions) == 1
+    assert sessions[0].token == admin_session["session_token"]
+
 
 # ── invalid credentials ───────────────────────────────────────────────────
 
@@ -54,6 +75,7 @@ async def test_login_already_authenticated(
 async def test_login_invalid_credentials(
     test_client: AsyncClient,
     test_config: Config,
+    db_operations: DBOperations,
 ) -> None:
     response = await test_client.post(
         "/api/auth/login",
@@ -63,6 +85,13 @@ async def test_login_invalid_credentials(
         },
     )
     assert response.status_code == 401
+
+    admin = await db_operations.users.by_username(
+        test_config.backend_default_user_name
+    )
+    assert admin is not None
+    sessions = await db_operations.sessions.get_user_sessions(admin.id)
+    assert len(sessions) == 0
 
 
 # ── success ───────────────────────────────────────────────────────────────
@@ -93,6 +122,11 @@ async def test_login_success(
     assert "created_at" in body
     # Verify session_token cookie was set
     assert "session_token" in response.cookies
+
+    token = response.cookies["session_token"]
+    sessions = await db_operations.sessions.get_user_sessions(body["id"])
+    assert len(sessions) == 1
+    assert sessions[0].token == token
 
 
 if __name__ == "__main__":
