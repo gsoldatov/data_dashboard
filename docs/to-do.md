@@ -98,10 +98,10 @@
         + parse & load config.env during build;
     
     + implement testing structure:
-        - mock backend:
+        x mock backend:
             + route handler dispatching;
             + reuqest history;
-            - mock data generation & overrides;
+            x mock data generation & overrides;
         + tests directory;
         + update AGENTS.md with tests architecture, patterns & commands;
     
@@ -139,15 +139,15 @@
         + admin page:
             + edit visualization settings (as admin);
         
-        - rename feed page to index everywhere;
-        ? move visualizations list constant to backend and retrieve it where it's used;
-        
     - refactoring & fixes:
         + fix race conditions on feed & visualization pages;    // they depend on user data, yet don't wait for it or process its fetch errors
-        - fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
+        + fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
 
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
+
+        - rename feed page to index everywhere;
+        ? move visualizations list constant to backend and retrieve it where it's used;
 
         - ensure all fetches timeouts are are properly covered by error placeholders;
         - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)

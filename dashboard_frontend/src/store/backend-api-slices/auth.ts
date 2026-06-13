@@ -1,4 +1,4 @@
-import { backendAPI } from "@/store/backend-api";
+import { backendAPI, API_TAGS } from "@/store/backend-api";
 import type { LoginRequest } from "@/types/backend/requests/auth";
 import type { User } from "@/types/user";
 import { user as userSchema } from "@/types/user";
@@ -51,6 +51,12 @@ export const authApi = backendAPI.injectEndpoints({
                         "getCurrentUser",
                         undefined,
                         () => parsed.data,
+                    ),
+                );
+                // Clear cached anonymous-session data for all non-user tags.
+                api.dispatch(
+                    authApi.util.invalidateTags(
+                        API_TAGS.filter((t) => t !== "User"),
                     ),
                 );
                 return { data: parsed.data };

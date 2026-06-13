@@ -57,6 +57,7 @@ const NavbarSecondaryMenuLoggedIn = () => {
         } catch {
             // Logout should succeed regardless of server response
         }
+        // Clear all cached data from the authenticated session.
         dispatch(backendAPI.util.resetApiState());
         navigate("/");
     };

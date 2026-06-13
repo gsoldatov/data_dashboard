@@ -41,10 +41,13 @@ const customBaseQuery: BaseQueryFn = async (args, api, extraOptions) => {
     return result;
 };
 
+/** All tag types used by the RTK Query API. Used by both the API config and cache invalidation. */
+export const API_TAGS = ["User", "VisualizationSettings"] as const;
+
 /** Root RTK Query API slice shared by all endpoint injections. */
 export const backendAPI = createApi({
     reducerPath: "api",
     baseQuery: customBaseQuery,
-    tagTypes: ["User", "VisualizationSettings"],
+    tagTypes: API_TAGS,
     endpoints: () => ({}),
 });
