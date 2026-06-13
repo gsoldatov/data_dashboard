@@ -6,6 +6,7 @@ import { updateUserHandler } from "./default-handlers/users";
 import {
     batchVisualizationSettingsHandler,
     visualizationDataHandler,
+    upsertVisualizationSettingsHandler,
 } from "./default-handlers/visualizations";
 
 
@@ -44,6 +45,7 @@ export class RouteDispatcher {
         "/api/users/{id}": { PATCH: updateUserHandler },
         "/api/visualization-data/{slug}": { GET: visualizationDataHandler },
         "/api/visualization-settings/": { GET: batchVisualizationSettingsHandler },
+        "/api/visualization-settings/{slug}": { PUT: upsertVisualizationSettingsHandler },
     };
 
     /** Per-instance overrides (checked before defaults). */

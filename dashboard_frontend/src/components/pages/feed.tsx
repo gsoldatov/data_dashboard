@@ -3,12 +3,7 @@ import { VisualizationLink } from "@/components/page-parts/feed/visualization-li
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error, Info } from "@/components/common/messages";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
-import type { VisualizationInfo } from "@/types";
-
-/** Hardcoded list of visualizations known to the feed page. */
-const VISUALIZATIONS: VisualizationInfo[] = [
-    { slug: "russia_state_budget", title: "Russia State Budget" },
-];
+import { VISUALIZATIONS } from "@/util/constants";
 
 export const Feed = () => {
     const slugs = VISUALIZATIONS.map((v) => v.slug);

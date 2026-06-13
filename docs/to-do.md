@@ -135,11 +135,18 @@
         + display an MDX page;
         
         + user page (view / edit user settings);
+
+        - admin page:
+            + edit visualization settings (as admin);
+            - fix non-published visualization being invisible for admins;
+            - logging in should reset state objects, except for user data;
+        
+        - rename feed page to index everywhere;
+        ? move visualizations list constant to backend and retrieve it where it's used;
         
     - refactoring & fixes:
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
-        ? remove logout from user profile page;     // allow clearing all existing sessions
 
         - ensure all fetches timeouts are are properly covered by error placeholders;
         - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
@@ -170,7 +177,6 @@
     ? configure authentication;
 
 - admin page:   // add corresponding backend routes
-    - edit page settings (as admin);
     - view ETL jobs statuses & logs;
     ? run ETL jobs;
 
