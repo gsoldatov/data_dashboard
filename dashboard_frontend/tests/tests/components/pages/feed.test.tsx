@@ -43,7 +43,10 @@ describe("Feed", () => {
                     }),
                     {
                         status: 200,
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-is-authenticated": "true",
+                        },
                     },
                 ),
         );
@@ -87,7 +90,10 @@ describe("Feed", () => {
                     }),
                     {
                         status: 200,
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-is-authenticated": "true",
+                        },
                     },
                 ),
         );
@@ -101,7 +107,10 @@ describe("Feed", () => {
                     }),
                     {
                         status: 200,
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "x-is-authenticated": "true",
+                        },
                     },
                 ),
         );

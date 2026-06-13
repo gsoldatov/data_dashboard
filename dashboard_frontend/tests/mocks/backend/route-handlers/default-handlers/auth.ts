@@ -53,11 +53,17 @@ export const meHandler: RouteHandler = async (req: Request, _backend: MockBacken
             }),
             {
                 status: 200,
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-is-authenticated": "true",
+                },
             },
         );
     }
-    return new Response(null, { status: 404 });
+    return new Response(null, {
+        status: 404,
+        headers: { "x-is-authenticated": "false" },
+    });
 };
 
 /**
