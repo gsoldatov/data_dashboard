@@ -11,6 +11,7 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from dashboard_backend.src.util.passwords import verify_password
 from dashboard_backend.tests.mocks.data_generator import DataGenerator
 from dashboard_backend.tests.mocks.db_operations import DBOperations
 
@@ -20,6 +21,7 @@ from dashboard_backend.tests.mocks.db_operations import DBOperations
 async def test_create_user_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
+    db_operations: DBOperations,
 ) -> None:
     test_client.cookies = admin_session
     invalid_cases = [
@@ -36,11 +38,17 @@ async def test_create_user_validation(
         )
         assert response.status_code == expected_status
 
+    user = await db_operations.users.by_username("new_user")
+    assert user is None
+
 
 # ── auth failures ─────────────────────────────────────────────────────────
 
 
-async def test_create_user_no_token(test_client: AsyncClient) -> None:
+async def test_create_user_no_token(
+    test_client: AsyncClient,
+    db_operations: DBOperations,
+) -> None:
     test_client.cookies.clear()
     response = await test_client.post(
         "/api/users",
@@ -48,10 +56,14 @@ async def test_create_user_no_token(test_client: AsyncClient) -> None:
     )
     assert response.status_code == 401
 
+    user = await db_operations.users.by_username("new_user")
+    assert user is None
+
 
 async def test_create_user_viewer_token(
     test_client: AsyncClient,
     viewer_session: tuple[int, dict[str, str]],
+    db_operations: DBOperations,
 ) -> None:
     _user_id, cookies = viewer_session
     test_client.cookies = cookies
@@ -62,6 +74,9 @@ async def test_create_user_viewer_token(
     )
 
     assert response.status_code == 403
+
+    user = await db_operations.users.by_username("new_user")
+    assert user is None
 
 
 # ── duplicate ─────────────────────────────────────────────────────────────
@@ -87,6 +102,11 @@ async def test_create_user_duplicate_username(
 
     assert response.status_code == 409
 
+    result = await db_operations.users.by_username_with_hash("existing")
+    assert result is not None
+    _user, password_hash = result
+    assert verify_password("pass", password_hash)
+
 
 # ── success ───────────────────────────────────────────────────────────────
 
@@ -94,6 +114,7 @@ async def test_create_user_duplicate_username(
 async def test_create_user_success(
     test_client: AsyncClient,
     admin_session: dict[str, str],
+    db_operations: DBOperations,
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.post(
@@ -109,6 +130,12 @@ async def test_create_user_success(
     assert "created_at" in body
     assert "password" not in body
     assert "password_hash" not in body
+
+    result = await db_operations.users.by_username_with_hash("new_user")
+    assert result is not None
+    _user, password_hash = result
+    assert verify_password("pass123", password_hash)
+    assert _user.role == "viewer"
 
 
 if __name__ == "__main__":
