@@ -2,19 +2,24 @@ import { PageLayout } from "@/components/stateful/page-layout";
 import { VisualizationLink } from "@/components/page-parts/feed/visualization-link";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error, Info } from "@/components/common/messages";
+import { useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { VISUALIZATIONS } from "@/util/constants";
 
 export const Feed = () => {
     const slugs = VISUALIZATIONS.map((v) => v.slug);
 
+    const { data: currentUser } = useGetCurrentUserQuery();
+    const isAdmin = currentUser?.role === "admin";
+
     const { isLoading, error, data } = useGetIsPublishedQuery(
         { slugs, settings: ["is-published"] },
         { skip: slugs.length === 0 },
     );
 
-    const published =
-        data
+    const published = isAdmin
+        ? VISUALIZATIONS
+        : data
             ? VISUALIZATIONS.filter((v) => data[v.slug]?.is_published)
             : [];
 

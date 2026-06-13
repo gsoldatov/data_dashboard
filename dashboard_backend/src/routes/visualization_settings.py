@@ -55,15 +55,12 @@ async def read_visualization_settings_batch(
     Query parameters:
     - ``settings``: comma-separated setting names (e.g. ``is-published``).
     - ``slugs``: comma-separated visualization slugs.
-
-    Admins always receive ``is_published: true`` for every slug.
     """
     setting_names = _parse_comma_separated(settings)
     slugs_list = _parse_comma_separated(slugs)
 
     _validate_setting_names(setting_names)
 
-    current: User | None = request.state.current_user
     repo: Repository = request.state.repository
     # NOTE: add logic for returning only specified settings,
     # when there's more than one setting to return
@@ -71,11 +68,8 @@ async def read_visualization_settings_batch(
 
     result: dict[str, VisualizationSettingsValues] = {}
     for slug in slugs_list:
-        is_published = resolved[slug].is_published
-        if current is not None and current.role == "admin":
-            is_published = True
         result[slug] = VisualizationSettingsValues(
-            is_published=is_published,
+            is_published=resolved[slug].is_published,
         )
     return result
 

@@ -11,6 +11,7 @@ import { useAppDispatch } from "@/store";
 import { setRedirectOnRender } from "@/store/slices/ui";
 import { PageLayout } from "@/components/stateful/page-layout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
+import { useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
 import { VisualizationDataLoader } from "@/components/page-parts/visualizations/visualization-data-loader";
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/mdx-error-boundary";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
@@ -43,6 +44,9 @@ export const Visualization = () => {
     const { slug } = useParams<{ slug: string }>();
     const dispatch = useAppDispatch();
 
+    const { data: currentUser } = useGetCurrentUserQuery();
+    const isAdmin = currentUser?.role === "admin";
+
     // Skip the query when slug is missing, so hooks are called unconditionally.
     const {
         isLoading: isCheckingPublishedStatus,
@@ -56,8 +60,8 @@ export const Visualization = () => {
     const redirectToNotFound =
         // invalid slug
         !slug || !mdxComponents[slug] ||
-        // visualization is not published
-        (publishedStatus != null && !publishedStatus[slug]?.is_published);
+        // visualization is not published (admins can view unpublished)
+        (!isAdmin && publishedStatus != null && !publishedStatus[slug]?.is_published);
 
     // Redirect effect — dispatched after render to avoid React warning.
     useEffect(() => {

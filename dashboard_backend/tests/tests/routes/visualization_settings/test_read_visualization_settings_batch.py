@@ -149,7 +149,7 @@ async def test_batch_admin(
     data_generator: DataGenerator,
     db_operations: DBOperations,
 ) -> None:
-    """Admin: always returns is_published=True regardless of stored value."""
+    """Admin: receives actual stored values, same as other users."""
     test_client.cookies = admin_session
 
     await db_operations.visualizations_settings.insert(
@@ -172,8 +172,8 @@ async def test_batch_admin(
     data = response.json()
     assert data["default-admin"] == {"is_published": True}
     assert data["pub-admin"] == {"is_published": True}
-    # Admin sees unpublished as published
-    assert data["unpub-admin"] == {"is_published": True}
+    # Admin sees actual stored value
+    assert data["unpub-admin"] == {"is_published": False}
 
 
 if __name__ == "__main__":

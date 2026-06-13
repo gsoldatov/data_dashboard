@@ -3,6 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
 import { addNetworkErrorOverride } from "../../../mocks/backend/route-handlers/overrides";
+import { preloadedAdminState } from "../../../mocks/mock-data/store";
 import { App } from "@/components/app";
 
 
@@ -84,5 +85,51 @@ describe("Visualization", () => {
             ).toBeInTheDocument();
         });
         expect(location.current?.pathname).toBe("/not-found");
+    });
+
+    it("admins can view unpublished visualizations", async () => {
+        backend.dispatcher.addHandlerOverride(
+            "/api/auth/me",
+            "GET",
+            async () =>
+                new Response(
+                    JSON.stringify({
+                        id: 1,
+                        username: "admin",
+                        role: "admin",
+                        created_at: "2025-01-01T00:00:00Z",
+                    }),
+                    {
+                        status: 200,
+                        headers: { "Content-Type": "application/json" },
+                    },
+                ),
+        );
+        backend.dispatcher.addHandlerOverride(
+            SETTINGS_URL,
+            "GET",
+            async () =>
+                new Response(
+                    JSON.stringify({
+                        russia_state_budget: { is_published: false },
+                    }),
+                    {
+                        status: 200,
+                        headers: { "Content-Type": "application/json" },
+                    },
+                ),
+        );
+
+        const { location } = renderWithProviders(<App />, {
+            initialEntries: ["/visualizations/russia_state_budget"],
+            preloadedState: preloadedAdminState(),
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.queryByText("Page not found."),
+            ).toBeNull();
+        });
+        expect(location.current?.pathname).not.toBe("/not-found");
     });
 });
