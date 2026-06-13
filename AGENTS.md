@@ -80,7 +80,11 @@ REST API service, which:
     - mocks (test data generators, test DB operations classes, etc.) reside in `dashboard_backend/tests/mocks`;
     - each test case file is executable (when adding a new test case file, check if it can be executed directly);
     - test cases are written as functions;
-    - test case order (where applicable): validation errors, other errors (auth, incorrect data of valid format, etc.), correct execution.
+    - test case order (where applicable): validation errors, other errors (auth, incorrect data of valid format, etc.), correct execution;
+    - route test cases should both response body and database state correctness, where applicable:
+        - use db_operaitons fixture, add new methods, if required (but try to keep them generic)
+        - check only relevant db state;
+        - skip db checks, if they're not needed (e.g., for read only routes).
 
 ### CLI Commands
 ```bash
@@ -163,6 +167,7 @@ A single page app containing a set of data visualizations and related pages.
         - preloaded state & mocks for other data should be in `dashboard_backend/tests/mocks/mock-data/`;
     - test cases are written as functions (one test file per component/slice);
     - test case order (where applicable): network errors,  validation & data errors, other errors, correct execution;
+    - tes case names should match `*.test.ts(-x)` pattern;
     - mock backend route handlers validate incoming request data using Zod;
 
 
