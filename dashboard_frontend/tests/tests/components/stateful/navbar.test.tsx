@@ -88,7 +88,7 @@ describe("Navbar", () => {
             expect(screen.getByText("Admin")).toBeInTheDocument();
             const adminLinks = screen
                 .getAllByRole("link")
-                .filter((a) => a.getAttribute("href") === "/admin/visualizations");
+                .filter((a) => a.getAttribute("href") === "/admin/etl");
             expect(adminLinks).toHaveLength(1);
         });
 

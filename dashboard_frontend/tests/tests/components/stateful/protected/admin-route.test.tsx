@@ -30,7 +30,7 @@ beforeEach(() => {
 
 describe("AdminRoute", () => {
     it("extracts the expected number of admin routes", () => {
-        expect(adminPaths).toHaveLength(3);
+        expect(adminPaths).toHaveLength(2);
     });
 
     describe("Fetch error", () => {
@@ -99,11 +99,18 @@ describe("AdminRoute", () => {
                 });
 
                 expect(
-                    screen.getByRole("heading", { name: /^Admin:/ }),
-                ).toBeInTheDocument();
-                expect(
                     screen.queryByText("Failed to load the page."),
                 ).toBeNull();
+                expect(
+                    screen.getByRole("link", { name: "ETL" }),
+                ).toBeInTheDocument();
+                const links = screen.getAllByRole("link", {
+                    name: "Visualizations",
+                });
+                const adminVizLink = links.find(
+                    (l) => l.getAttribute("href") === "/admin/visualizations",
+                );
+                expect(adminVizLink).toBeInTheDocument();
             }
         });
     });

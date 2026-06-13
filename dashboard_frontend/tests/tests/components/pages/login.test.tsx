@@ -101,7 +101,7 @@ describe("Login", () => {
 
         it("redirects to the path specified in the redirect param", async () => {
             renderWithProviders(<App />, {
-                initialEntries: ["/login?redirect=/admin/users"],
+                initialEntries: ["/login?redirect=/admin/etl"],
                 preloadedState: preloadedNullUserState(),
             });
 
@@ -109,7 +109,7 @@ describe("Login", () => {
 
             await waitFor(() => {
                 expect(
-                    screen.getByRole("heading", { name: "Admin: Users" }),
+                    screen.getByRole("link", { name: "ETL" }),
                 ).toBeInTheDocument();
             });
         });

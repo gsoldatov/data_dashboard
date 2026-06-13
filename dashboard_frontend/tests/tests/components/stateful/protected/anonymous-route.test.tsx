@@ -73,12 +73,12 @@ describe("AnonymousRoute", () => {
         it("redirects to the path specified in the redirect param", async () => {
             renderWithProviders(<App />, {
                 initialEntries: [
-                    `${anonymousPaths[0]}?redirect=/admin/users`,
+                    `${anonymousPaths[0]}?redirect=/admin/etl`,
                 ],
                 preloadedState: preloadedAdminState(),
             });
 
-            await screen.findByRole("heading", { name: "Admin: Users" });
+            await screen.findByRole("link", { name: "ETL" });
         });
 
         it("falls back to / when redirect param is an external URL", async () => {

@@ -3,9 +3,8 @@ import { Feed } from "@/components/pages/feed";
 import { Login } from "@/components/pages/login";
 import { Visualization } from "@/components/pages/visualizations/visualization";
 import { UserProfile } from "@/components/pages/user-profile";
-import { AdminUsers } from "@/components/pages/admin/users";
-import { AdminVisualizationSettings } from "@/components/pages/admin/visualization-settings";
-import { AdminEtl } from "@/components/pages/admin/etl-jobs";
+import { AdminEtl } from "@/components/pages/admin/etl";
+import { AdminVisualizations } from "@/components/pages/admin/visualizations";
 import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 import { AdminRoute } from "@/components/stateful/protected/admin-route";
@@ -25,9 +24,8 @@ export const appRouteElements = (
             <Route index element={<UserProfile />} />
         </Route>
         <Route path="admin" element={<AdminRoute />}>
-            <Route path="users" element={<AdminUsers />} />
-            <Route path="visualizations" element={<AdminVisualizationSettings />} />
             <Route path="etl" element={<AdminEtl />} />
+            <Route path="visualizations" element={<AdminVisualizations />} />
         </Route>
         <Route path="not-found" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />

@@ -31,7 +31,7 @@ const NavbarMenuLinks = () => {
     return (
         <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
             <NavbarLink to="/">Visualizations</NavbarLink>
-            {isAdmin && <NavbarLink to="/admin/visualizations">Admin</NavbarLink>}
+            {isAdmin && <NavbarLink to="/admin/etl">Admin</NavbarLink>}
         </div>
     );
 };
