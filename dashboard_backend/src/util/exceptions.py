@@ -21,6 +21,10 @@ class DuplicateException(Exception):
         self.value = value
 
 
+class InvalidCredentialsException(Exception):
+    """Raised when provided credentials are invalid."""
+
+
 class InternalValidationException(Exception):
     """
     Raised instead of Pydantic `ValidationError` for internal validation failures.

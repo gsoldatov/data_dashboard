@@ -21,6 +21,9 @@ class UserCreate(BaseModel):
 
 class UserUpdate(AnyOf, BaseModel):
     """Payload for updating an existing user."""
+    __any_of_fields__ = ("username", "password", "role")
+
+    current_user_password: PasswordField
     username: UsernameField | None = None
     password: PasswordField | None = None
     role: UserRole | None = None

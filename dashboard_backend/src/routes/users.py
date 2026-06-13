@@ -43,7 +43,7 @@ async def update_user(
 ) -> User:
     """Update an existing user (admin or the user themselves)."""
     repo: Repository = request.state.repository
-    return await repo.users.update(user_id, data)
+    return await repo.users.update(user_id, data, current.id)
 
 
 @router.delete("/{user_id}", status_code=204)

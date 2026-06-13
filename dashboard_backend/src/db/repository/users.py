@@ -7,6 +7,7 @@ from dashboard_backend.src.db.models import Users as UsersModel
 from dashboard_backend.src.models.user import User, UserCreate, UserUpdate
 from dashboard_backend.src.util.exceptions import (
     DuplicateException,
+    InvalidCredentialsException,
     NotFoundException,
     internal_validation,
 )
@@ -68,15 +69,27 @@ class UsersRepository:
         return User.model_validate(sa_obj)
 
     @internal_validation
-    async def update(self, user_id: int, data: UserUpdate) -> User:
+    async def update(
+        self,
+        user_id: int,
+        data: UserUpdate,
+        current_user_id: int
+    ) -> User:
         """Update only the non-None fields of an existing user.
 
-        Raises NotFoundException if no user with *user_id* exists.
+        Raises NotFoundException if no user with *user_id* or *current_user_id* exists.
+        Raises InvalidCredentialsException if *current_user_password* is incorrect.
         Raises DuplicateException if *username* is already taken.
         """
         sa_obj = await self._session.get(UsersModel, user_id)
         if sa_obj is None:
             raise NotFoundException(f"User {user_id} not found")
+
+        current = await self._session.get(UsersModel, current_user_id)
+        if current is None:
+            raise NotFoundException(f"User {current_user_id} not found")
+        if not verify_password(data.current_user_password, current.password_hash):
+            raise InvalidCredentialsException("Incorrect current password")
 
         if data.username is not None:
             existing = await self.by_username(data.username)

@@ -11,7 +11,11 @@ from dashboard_backend.src.db.engine import close_engine, init_engine
 from dashboard_backend.src.middleware.auth import AuthMiddleware
 from dashboard_backend.src.middleware.db_repository import DBRepositoryMiddleware
 from dashboard_backend.src.routes import setup_routes
-from dashboard_backend.src.util.exceptions import DuplicateException, NotFoundException
+from dashboard_backend.src.util.exceptions import (
+    DuplicateException,
+    InvalidCredentialsException,
+    NotFoundException,
+)
 from python_common.src.config import Config, get_config
 
 
@@ -52,6 +56,12 @@ def create_app(config: Config | None = None) -> FastAPI:
         _request: Request, exc: DuplicateException
     ) -> JSONResponse:
         return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+    @app.exception_handler(InvalidCredentialsException)
+    async def invalid_credentials_handler(
+        _request: Request, exc: InvalidCredentialsException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
     
     # Middleware (last added runs first)
     app.add_middleware(AuthMiddleware)

@@ -24,11 +24,17 @@ class UsersDataGenerator:
 
     def user_update(
         self,
+        current_user_password: str = "current_pass",
         username: str | None = "updated_user",
         password: str | None = None,
         role: UserRole | None = "admin",
     ) -> UserUpdate:
-        return UserUpdate(username=username, password=password, role=role)
+        return UserUpdate(
+            current_user_password=current_user_password,
+            username=username,
+            password=password,
+            role=role,
+        )
 
     def user_response(
         self,
