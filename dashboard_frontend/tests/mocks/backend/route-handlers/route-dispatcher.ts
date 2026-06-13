@@ -2,6 +2,7 @@ import { getDocumentApp } from "@/util/document-app";
 
 import type { MockBackend } from "../mock-backend";
 import { loginHandler, meHandler, logoutHandler } from "./default-handlers/auth";
+import { updateUserHandler } from "./default-handlers/users";
 import {
     batchVisualizationSettingsHandler,
     visualizationDataHandler,
@@ -40,6 +41,7 @@ export class RouteDispatcher {
         "/api/auth/login": { POST: loginHandler },
         "/api/auth/me": { GET: meHandler },
         "/api/auth/logout": { POST: logoutHandler },
+        "/api/users/{id}": { PATCH: updateUserHandler },
         "/api/visualization-data/{slug}": { GET: visualizationDataHandler },
         "/api/visualization-settings/": { GET: batchVisualizationSettingsHandler },
     };

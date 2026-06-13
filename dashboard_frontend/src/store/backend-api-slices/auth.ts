@@ -4,7 +4,7 @@ import type { User } from "@/types/user";
 import { user as userSchema } from "@/types/user";
 
 /** Endpoints for authentication (login, logout, current user). */
-const authApi = backendAPI.injectEndpoints({
+export const authApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Fetch the currently authenticated user. 404 → not authenticated. */
         getCurrentUser: builder.query<User | null, void>({

@@ -91,7 +91,7 @@
         + page data;
 
 
-- implement basic frontend:
+- implement basic frontend functionality:
     + generate and check scaffold:
         + stack used;
         + frontend configuraiton files;
@@ -105,7 +105,7 @@
         + tests directory;
         + update AGENTS.md with tests architecture, patterns & commands;
     
-    - implement pages / functionality:
+    + implement pages / functionality:
         + login page:
             + use RTK query for current user as well;
             + credentials are validated with zod before sent to backend;
@@ -134,9 +134,9 @@
         + list available pages;
         + display an MDX page;
         
-        - user page (view / edit user settings);
+        + user page (view / edit user settings);
         
-    - refactoring:
+    - refactoring & fixes:
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
         ? remove logout from user profile page;     // allow clearing all existing sessions
@@ -151,28 +151,32 @@
         ? refactor app router:
             - history object is available in test cases after component rendering;
             - existing tests pass (render the wholee app or add support to rendering parts of it);
+        
+        - handle absent data on backend gracefully;
+        - add a scheduled job for removing expired sessions;
     
-    - utility:
-        + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
 
-- handle absent data on backend;
+
 - add pre-commit checks for frontend;
+
 - implement Russia state budget visualization;
-- add a scheduled job for removing expired sessions;
+
+- utility:
+    + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
+    ? move to llm skills;
+    - update skills in skill repo;
+
+- replace prefect with airflow:
+    ? configure authentication;
+
+- admin page:   // add corresponding backend routes
+    - edit page settings (as admin);
+    - view ETL jobs statuses & logs;
+    ? run ETL jobs;
 
 - add readme files for project initialization & startup:
     - python:
         - install dependencies;
         - pre-commit initialize;
         - setup Prefect (profile -> server);
-
-- update skills in skill repo;
-
-- replace prefect with airflow;
-- admin page:   // add corresponding backend routes
-    - edit page settings (as admin);
-    - view ETL jobs statuses & logs;
-    ? run ETL jobs;
-
-# Additional
-? add Prefect basic auth (configure PREFECT_SERVER_API_AUTH_STRING on server & add auth string when using clients);
+    ? split main AGENTS.md into skills / sub-files;

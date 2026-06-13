@@ -63,7 +63,7 @@ const NavbarSecondaryMenuLoggedIn = () => {
 
     return (
         <>
-            <NavbarLink to="/profile">
+            <NavbarLink to="/user-profile">
                 <User className="h-4 w-4" />
                 {currentUser?.username}
             </NavbarLink>

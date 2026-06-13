@@ -10,6 +10,7 @@ import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
 import { AdminRoute } from "@/components/stateful/protected/admin-route";
 import { AnonymousRoute } from "@/components/stateful/protected/anonymous-route";
+import { AuthRoute } from "@/components/stateful/protected/auth-route";
 
 
 /** Export Top-level route elements to allow introspection in tests. */
@@ -20,7 +21,9 @@ export const appRouteElements = (
             <Route index element={<Login />} />
         </Route>
         <Route path="visualizations/:slug" element={<Visualization />} />
-        <Route path="profile" element={<UserProfile />} />
+        <Route path="user-profile" element={<AuthRoute />}>
+            <Route index element={<UserProfile />} />
+        </Route>
         <Route path="admin" element={<AdminRoute />}>
             <Route path="users" element={<AdminUsers />} />
             <Route path="visualizations" element={<AdminVisualizationSettings />} />
