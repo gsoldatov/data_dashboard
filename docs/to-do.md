@@ -136,15 +136,16 @@
         
         + user page (view / edit user settings);
 
-        - admin page:
+        + admin page:
             + edit visualization settings (as admin);
-            - fix non-published visualization being invisible for admins;
-            - logging in should reset state objects, except for user data;
         
         - rename feed page to index everywhere;
         ? move visualizations list constant to backend and retrieve it where it's used;
         
     - refactoring & fixes:
+        + fix race conditions on feed & visualization pages;    // they depend on user data, yet don't wait for it or process its fetch errors
+        - fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
+
         - remove unused functions & components;
         - remove hardcoded settings & use app config instead;
 

@@ -44,12 +44,16 @@ export const Visualization = () => {
     const { slug } = useParams<{ slug: string }>();
     const dispatch = useAppDispatch();
 
-    const { data: currentUser } = useGetCurrentUserQuery();
+    const {
+        data: currentUser,
+        isFetching: isFetchingAuth,
+        error: authError,
+    } = useGetCurrentUserQuery();
     const isAdmin = currentUser?.role === "admin";
 
     // Skip the query when slug is missing, so hooks are called unconditionally.
     const {
-        isLoading: isCheckingPublishedStatus,
+        isFetching: isFetchingPublishedStatus,
         error: publishedStatusCheckError,
         data: publishedStatus,
     } = useGetIsPublishedQuery(
@@ -57,9 +61,10 @@ export const Visualization = () => {
         { skip: !slug },
     );
 
+    const isInvalidSlug = !slug || !mdxComponents[slug];
+
     const redirectToNotFound =
-        // invalid slug
-        !slug || !mdxComponents[slug] ||
+        isInvalidSlug ||
         // visualization is not published (admins can view unpublished)
         (!isAdmin && publishedStatus != null && !publishedStatus[slug]?.is_published);
 
@@ -74,8 +79,8 @@ export const Visualization = () => {
         return null;
     }
 
-    // Phase 1 — query backend to check if visualization can be displayed.
-    if (isCheckingPublishedStatus) {
+    // Phase 1 — wait for both queries to settle.
+    if (isFetchingAuth || (slug && isFetchingPublishedStatus)) {
         return (
             <PageLayout>
                 <LoadingPlaceholder />
@@ -83,7 +88,7 @@ export const Visualization = () => {
         );
     }
 
-    if (publishedStatusCheckError) {
+    if (authError != null || publishedStatusCheckError != null) {
         return (
             <PageLayout>
                 <Error message="Failed to load the page." />

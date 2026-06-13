@@ -9,10 +9,18 @@ import { VISUALIZATIONS } from "@/util/constants";
 export const Feed = () => {
     const slugs = VISUALIZATIONS.map((v) => v.slug);
 
-    const { data: currentUser } = useGetCurrentUserQuery();
+    const {
+        data: currentUser,
+        isFetching: isAuthFetching,
+        error: authError,
+    } = useGetCurrentUserQuery();
     const isAdmin = currentUser?.role === "admin";
 
-    const { isLoading, error, data } = useGetIsPublishedQuery(
+    const {
+        isFetching: isSettingsFetching,
+        error: settingsError,
+        data,
+    } = useGetIsPublishedQuery(
         { slugs, settings: ["is-published"] },
         { skip: slugs.length === 0 },
     );
@@ -23,7 +31,7 @@ export const Feed = () => {
             ? VISUALIZATIONS.filter((v) => data[v.slug]?.is_published)
             : [];
 
-    if (isLoading) {
+    if (isAuthFetching || isSettingsFetching) {
         return (
             <PageLayout>
                 <LoadingPlaceholder />
@@ -31,7 +39,7 @@ export const Feed = () => {
         );
     }
 
-    if (error != null) {
+    if (authError != null || settingsError != null) {
         return (
             <PageLayout>
                 <Error message="Failed to load the page." />
