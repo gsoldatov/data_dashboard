@@ -20,6 +20,7 @@ from dashboard_backend.tests.mocks.db_operations import DBOperations
 async def test_upsert_visualization_settings_validation(
     test_client: AsyncClient,
     admin_session: dict[str, str],
+    db_operations: DBOperations,
 ) -> None:
     test_client.cookies = admin_session
     invalid_cases = [
@@ -34,11 +35,17 @@ async def test_upsert_visualization_settings_validation(
         )
         assert response.status_code == expected_status
 
+    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    assert stored is None
+
 
 # ── auth failures ─────────────────────────────────────────────────────────
 
 
-async def test_upsert_visualization_settings_no_token(test_client: AsyncClient) -> None:
+async def test_upsert_visualization_settings_no_token(
+    test_client: AsyncClient,
+    db_operations: DBOperations,
+) -> None:
     test_client.cookies.clear()
     response = await test_client.put(
         "/api/visualization-settings/test-page",
@@ -46,10 +53,14 @@ async def test_upsert_visualization_settings_no_token(test_client: AsyncClient) 
     )
     assert response.status_code == 401
 
+    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    assert stored is None
+
 
 async def test_upsert_visualization_settings_viewer_token(
     test_client: AsyncClient,
     viewer_session: tuple[int, dict[str, str]],
+    db_operations: DBOperations,
 ) -> None:
     _user_id, cookies = viewer_session
     test_client.cookies = cookies
@@ -61,6 +72,9 @@ async def test_upsert_visualization_settings_viewer_token(
 
     assert response.status_code == 403
 
+    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    assert stored is None
+
 
 # ── success ───────────────────────────────────────────────────────────────
 
@@ -68,6 +82,7 @@ async def test_upsert_visualization_settings_viewer_token(
 async def test_upsert_visualization_settings_insert(
     test_client: AsyncClient,
     admin_session: dict[str, str],
+    db_operations: DBOperations,
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.put(
@@ -80,6 +95,10 @@ async def test_upsert_visualization_settings_insert(
     assert body["slug"] == "new-page"
     assert body["is_published"] is False
     assert "id" in body
+
+    stored = await db_operations.visualizations_settings.by_slug("new-page")
+    assert stored is not None
+    assert stored.is_published is False
 
 
 async def test_upsert_visualization_settings_update(
