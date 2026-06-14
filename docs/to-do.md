@@ -143,29 +143,24 @@
         + fix race conditions on feed & visualization pages;    // they depend on user data, yet don't wait for it or process its fetch errors
         + fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
 
-        - remove unused functions & components;
+        + remove unused functions & components;
         - remove hardcoded settings & use app config instead;
 
         - rename feed page to index everywhere;
-        ? move visualizations list constant to backend and retrieve it where it's used;
 
         - ensure all fetches timeouts are are properly covered by error placeholders;
         - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
     
         - check if dependencies are used after project is implemented:
             - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
-
-        - add non tailwaind css classnames to components and use them in tests for more specific checks
-        ? refactor app router:
-            - history object is available in test cases after component rendering;
-            - existing tests pass (render the wholee app or add support to rendering parts of it);
         
         - handle absent data on backend gracefully;
-        - add a scheduled job for removing expired sessions;
     
-
-
 - add pre-commit checks for frontend;
+- add a scheduled job for removing expired sessions;
+
+- replace prefect with airflow:
+    ? configure authentication;
 
 - implement Russia state budget visualization;
 
@@ -173,9 +168,6 @@
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
     ? move to llm skills;
     - update skills in skill repo;
-
-- replace prefect with airflow:
-    ? configure authentication;
 
 - admin page:   // add corresponding backend routes
     - view ETL jobs statuses & logs;
@@ -187,3 +179,12 @@
         - pre-commit initialize;
         - setup Prefect (profile -> server);
     ? split main AGENTS.md into skills / sub-files;
+
+
+
+# Additional
+? move visualizations list constant to backend and retrieve it where it's used;
+- add non tailwaind css classnames to components and use them in tests for more specific checks
+    ? refactor app router:
+        - history object is available in test cases after component rendering;
+        - existing tests pass (render the wholee app or add support to rendering parts of it);
