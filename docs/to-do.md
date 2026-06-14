@@ -144,9 +144,8 @@
         + fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
 
         + remove unused functions & components;
-        - remove hardcoded settings & use app config instead;
-
-        - rename feed page to index everywhere;
+        + remove hardcoded settings & use app config instead;
+        + rename feed page to index everywhere;
 
         - ensure all fetches timeouts are are properly covered by error placeholders;
         - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
@@ -154,7 +153,7 @@
         - check if dependencies are used after project is implemented:
             - class-variance-authority;     // No shadcn/ui components exist (the common/shadcn-ui/ dir is empty), no cva() calls
         
-        - handle absent data on backend gracefully;
+- handle absent data on backend gracefully;
     
 - add pre-commit checks for frontend;
 - add a scheduled job for removing expired sessions;

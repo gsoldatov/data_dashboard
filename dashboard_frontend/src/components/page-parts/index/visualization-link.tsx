@@ -7,7 +7,7 @@ interface VisualizationLinkProps {
     title: string;
 }
 
-/** Linked chart icon + title for a single visualization on the feed page. */
+/** Linked chart icon + title for a single visualization on the index page. */
 export const VisualizationLink = ({ slug, title }: VisualizationLinkProps) => (
     <Link
         to={`/visualizations/${slug}`}

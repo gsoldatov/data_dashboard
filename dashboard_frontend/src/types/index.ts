@@ -8,7 +8,7 @@ export interface VisualizationSettingsUpsert {
   is_published: boolean;
 }
 
-/** Visualizations known to the feed page (slug + title). */
+/** Visualizations known to the index page (slug + title). */
 export interface VisualizationInfo {
   slug: string;
   title: string;

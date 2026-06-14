@@ -1,12 +1,12 @@
 import { PageLayout } from "@/components/stateful/page-layout";
-import { VisualizationLink } from "@/components/page-parts/feed/visualization-link";
+import { VisualizationLink } from "@/components/page-parts/index/visualization-link";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error, Info } from "@/components/common/messages";
 import { useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { VISUALIZATIONS } from "@/util/constants";
 
-export const Feed = () => {
+export const Index = () => {
     const slugs = VISUALIZATIONS.map((v) => v.slug);
 
     const {

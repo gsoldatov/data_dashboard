@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Feed } from "@/components/pages/feed";
+import { Index } from "@/components/pages/index";
 import { Login } from "@/components/pages/login";
 import { Visualization } from "@/components/pages/visualizations/visualization";
 import { UserProfile } from "@/components/pages/user-profile";
@@ -15,7 +15,7 @@ import { AuthRoute } from "@/components/stateful/protected/auth-route";
 /** Export Top-level route elements to allow introspection in tests. */
 export const appRouteElements = (
     <>
-        <Route index element={<Feed />} />
+        <Route index element={<Index />} />
         <Route path="login" element={<AnonymousRoute />}>
             <Route index element={<Login />} />
         </Route>

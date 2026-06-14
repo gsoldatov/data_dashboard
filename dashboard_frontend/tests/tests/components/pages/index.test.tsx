@@ -6,13 +6,13 @@ import {
     addNetworkErrorOverride,
 } from "../../../mocks/backend/route-handlers/overrides";
 import { preloadedAdminState } from "../../../mocks/mock-data/store";
-import { Feed } from "@/components/pages/feed";
+import { Index } from "@/components/pages/index";
 
 
 const SETTINGS_URL = "/api/visualization-settings/";
 
 
-describe("Feed", () => {
+describe("Index", () => {
     let backend: MockBackend;
 
     beforeEach(() => {
@@ -23,7 +23,7 @@ describe("Feed", () => {
     it("shows error message when the batch settings query fails", async () => {
         addNetworkErrorOverride(backend.dispatcher, SETTINGS_URL, "GET");
 
-        renderWithProviders(<Feed />);
+        renderWithProviders(<Index />);
 
         await waitFor(() => {
             expect(
@@ -51,7 +51,7 @@ describe("Feed", () => {
                 ),
         );
 
-        renderWithProviders(<Feed />);
+        renderWithProviders(<Index />);
 
         await waitFor(() => {
             expect(
@@ -61,7 +61,7 @@ describe("Feed", () => {
     });
 
     it("renders published visualization links", async () => {
-        renderWithProviders(<Feed />);
+        renderWithProviders(<Index />);
 
         await waitFor(() => {
             expect(
@@ -115,7 +115,7 @@ describe("Feed", () => {
                 ),
         );
 
-        renderWithProviders(<Feed />, {
+        renderWithProviders(<Index />, {
             preloadedState: preloadedAdminState(),
         });
 
