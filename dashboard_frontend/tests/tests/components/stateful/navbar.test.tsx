@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../../test-utils";
 import { MockBackend } from "../../../mocks/backend/mock-backend";
 import {
@@ -148,6 +148,51 @@ describe("Navbar", () => {
             fireEvent.click(screen.getByText("Logout"));
             await screen.findByText("Login");
             expect(screen.queryByText("admin")).toBeNull();
+        });
+
+        it("shows error icon and stays authenticated when logout fails", async () => {
+            // Override the logout handler to return 500.
+            add500Override(backend.dispatcher, "/api/auth/logout", "POST");
+            // Ensure the meHandler still returns the user — in production the
+            // session cookie survives a failed logout, so auth state is maintained.
+            backend.dispatcher.addHandlerOverride(
+                "/api/auth/me",
+                "GET",
+                async () =>
+                    new Response(
+                        JSON.stringify({
+                            id: 1,
+                            username: "admin",
+                            role: "admin",
+                            created_at: "2025-01-01T00:00:00Z",
+                        }),
+                        {
+                            status: 200,
+                            headers: {
+                                "Content-Type": "application/json",
+                                "x-is-authenticated": "true",
+                            },
+                        },
+                    ),
+            );
+
+            renderWithProviders(<Navbar />, {
+                preloadedState: preloadedAdminState(),
+            });
+
+            fireEvent.click(screen.getByText("Logout"));
+
+            await waitFor(() => {
+                const btn = screen.getByText("Logout").closest("button")!;
+                expect(
+                    btn.querySelector(".lucide-triangle-alert"),
+                ).toBeInTheDocument();
+            });
+
+            expect(screen.getByText("admin")).toBeInTheDocument();
+            expect(screen.queryByText("Login")).toBeNull();
+            const btn = screen.getByText("Logout").closest("button")!;
+            expect(btn.getAttribute("title")).toBe("Failed to log out.");
         });
     });
 });

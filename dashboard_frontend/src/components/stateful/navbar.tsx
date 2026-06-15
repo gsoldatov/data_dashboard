@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store";
 import { backendAPI } from "@/store/backend-api";
 import { useGetCurrentUserQuery, useLogoutMutation } from "@/store/backend-api-slices/auth";
-import { LogIn, LogOut, LayoutDashboard, User, Menu, X } from "lucide-react";
+import { LogIn, LogOut, LayoutDashboard, User, Menu, X, Loader2, AlertTriangle } from "lucide-react";
 
 
 const NavbarLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
@@ -49,17 +49,17 @@ const NavbarSecondaryMenuLoggedIn = () => {
     const { data: currentUser } = useGetCurrentUserQuery();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [logout] = useLogoutMutation();
+    const [logout, { isLoading, isError }] = useLogoutMutation();
 
     const handleLogout = async () => {
         try {
             await logout().unwrap();
+            // Only clear session state after the server confirmed cookie deletion.
+            dispatch(backendAPI.util.resetApiState());
+            navigate("/");
         } catch {
-            // Logout should succeed regardless of server response
+            // Stay authenticated — the server did not clear the cookie.
         }
-        // Clear all cached data from the authenticated session.
-        dispatch(backendAPI.util.resetApiState());
-        navigate("/");
     };
 
     return (
@@ -70,9 +70,23 @@ const NavbarSecondaryMenuLoggedIn = () => {
             </NavbarLink>
             <button
                 onClick={handleLogout}
+                disabled={isLoading}
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                title={
+                    isLoading
+                        ? "Logging out..."
+                        : isError
+                            ? "Failed to log out."
+                            : undefined
+                }
             >
-                <LogOut className="h-4 w-4" />
+                {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                ) : isError ? (
+                    <AlertTriangle className="h-4 w-4" />
+                ) : (
+                    <LogOut className="h-4 w-4" />
+                )}
                 Logout
             </button>
         </>
