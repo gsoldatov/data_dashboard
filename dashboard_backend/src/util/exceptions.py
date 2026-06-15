@@ -12,6 +12,10 @@ class NotFoundException(Exception):
     """
 
 
+class VisualizationDataNotFoundException(Exception):
+    """Raised when a visualization's data file cannot be read."""
+
+
 class DuplicateException(Exception):
     """Raised when a uniqueness constraint would be violated."""
 

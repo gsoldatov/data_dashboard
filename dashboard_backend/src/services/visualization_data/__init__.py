@@ -8,14 +8,17 @@ from typing import Any
 from fastapi import Request
 
 from dashboard_backend.src.services.visualization_data.russia_state_budget import (
-    get_data,
+    get_russia_state_budget_data,
 )
-from dashboard_backend.src.util.exceptions import NotFoundException
+from dashboard_backend.src.util.exceptions import (
+    NotFoundException,
+    VisualizationDataNotFoundException,
+)
 
 # Each key maps a visualization slug to a list of sync data-getter callables.
 # Each getter receives the data directory and returns a dict.
 _REGISTRY: dict[str, list[Callable[[Path], dict[str, Any]]]] = {
-    "russia_state_budget": [get_data],
+    "russia_state_budget": [get_russia_state_budget_data],
 }
 
 
@@ -35,7 +38,15 @@ class VisualizationDataService:
             raise NotFoundException(f"No data getter for slug: {slug}")
 
         def _call_all() -> list[dict[str, Any]]:
-            return [g(self._data_directory) for g in getters]
+            results: list[dict[str, Any]] = []
+            for g in getters:
+                try:
+                    results.append(g(self._data_directory))
+                except FileNotFoundError as e:
+                    raise VisualizationDataNotFoundException(
+                        f"Data file not found for slug: {slug}"
+                    ) from e
+            return results
 
         return await asyncio.to_thread(_call_all)
 

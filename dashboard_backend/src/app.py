@@ -15,6 +15,7 @@ from dashboard_backend.src.util.exceptions import (
     DuplicateException,
     InvalidCredentialsException,
     NotFoundException,
+    VisualizationDataNotFoundException,
 )
 from python_common.src.config import Config, get_config
 
@@ -48,6 +49,12 @@ def create_app(config: Config | None = None) -> FastAPI:
     @app.exception_handler(NotFoundException)
     async def not_found_handler(
         _request: Request, exc: NotFoundException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=404, content={"detail": str(exc)})
+
+    @app.exception_handler(VisualizationDataNotFoundException)
+    async def visualization_data_not_found_handler(
+        _request: Request, exc: VisualizationDataNotFoundException
     ) -> JSONResponse:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
 

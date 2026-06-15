@@ -13,6 +13,7 @@ if __name__ == "__main__":
 
 from dashboard_backend.tests.mocks.data_generator import DataGenerator
 from dashboard_backend.tests.mocks.db_operations import DBOperations
+from python_common.src.config import Config
 
 # ── error handling ───────────────────────────────────────────────────────
 
@@ -67,6 +68,21 @@ async def test_read_visualization_data_admin_no_getter(
     test_client.cookies = admin_session
     response = await test_client.get(
         "/api/visualization-data/nonexistent",
+    )
+    assert response.status_code == 404
+
+
+async def test_read_visualization_data_admin_missing_file(
+    test_client: AsyncClient,
+    test_config: Config,
+    temp_directory: Path,
+    admin_session: dict[str, str],
+) -> None:
+    """Admin gets 404 when the data file for a registered slug is missing."""
+    test_config.data_directory = temp_directory
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/visualization-data/russia_state_budget",
     )
     assert response.status_code == 404
 
