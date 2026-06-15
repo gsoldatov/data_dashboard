@@ -1,15 +1,19 @@
 import { backendAPI, API_TAGS } from "@/store/backend-api";
 import type { LoginRequest } from "@/types/backend/requests/auth";
-import type { User } from "@/types/user";
-import { user as userSchema } from "@/types/user";
+import {
+    userResponseSchema,
+    type UserResponse,
+} from "@/types/backend/responses/auth";
+import { validateResponseData } from "@/store/util";
 
 /** Endpoints for authentication (login, logout, current user). */
 export const authApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
         /** Fetch the currently authenticated user. 404 → not authenticated. */
-        getCurrentUser: builder.query<User | null, void>({
+        getCurrentUser: builder.query<UserResponse | null, void>({
             queryFn: async (_arg, _api, _extraOptions, baseQuery) => {
-                const result = await baseQuery("/api/auth/me");
+                const url = "/api/auth/me";
+                const result = await baseQuery(url);
                 const meta = result.meta as { response?: { status?: number } } | undefined;
                 if (meta?.response?.status === 404) {
                     return { data: null };
@@ -17,13 +21,19 @@ export const authApi = backendAPI.injectEndpoints({
                 if (result.error) {
                     return { error: result.error };
                 }
-                return { data: result.data as User };
+                const parsed = validateResponseData(
+                    result.data,
+                    userResponseSchema,
+                    url,
+                );
+                if ("error" in parsed) return parsed;
+                return { data: parsed.data };
             },
             providesTags: ["User"],
         }),
 
         /** Authenticate with username and password, returns the user. */
-        login: builder.mutation<User, LoginRequest>({
+        login: builder.mutation<UserResponse, LoginRequest>({
             queryFn: async (body, api, _extraOptions, baseQuery) => {
                 const result = await baseQuery({
                     url: "/api/auth/login",
@@ -33,19 +43,12 @@ export const authApi = backendAPI.injectEndpoints({
                 if (result.error) {
                     return { error: result.error };
                 }
-                const parsed = userSchema.safeParse(result.data);
-                if (!parsed.success) {
-                    console.error(
-                        "[auth] login response validation failed:",
-                        parsed.error,
-                    );
-                    return {
-                        error: {
-                            status: "CUSTOM_ERROR",
-                            error: "Failed to log in.",
-                        },
-                    };
-                }
+                const parsed = validateResponseData(
+                    result.data,
+                    userResponseSchema,
+                    "/api/auth/login",
+                );
+                if ("error" in parsed) return parsed;
                 api.dispatch(
                     authApi.util.updateQueryData(
                         "getCurrentUser",

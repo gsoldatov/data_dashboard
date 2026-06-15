@@ -11,7 +11,7 @@ import {
 } from "@/components/common/shadcn-ui/table";
 import { Input } from "@/components/common/shadcn-ui/input";
 import type { VisualizationInfo } from "@/types";
-import type { BatchVisualizationSettingsResponse } from "@/types";
+import type { BatchVisualizationSettingsResponse } from "@/types/backend/responses/visualization-settings";
 
 
 interface PublishedToggleProps {

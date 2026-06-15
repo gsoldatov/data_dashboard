@@ -1,10 +1,14 @@
 import { backendAPI } from "@/store/backend-api";
 import type {
-    BatchVisualizationSettingsResponse,
     VisualizationSettingsResponse,
     VisualizationSettingsUpsert,
 } from "@/types";
+import {
+    batchVisualizationSettingsSchema,
+    type BatchVisualizationSettingsResponse,
+} from "@/types/backend/responses/visualization-settings";
 import { VISUALIZATIONS } from "@/util/constants";
+import { validateResponseData } from "@/store/util";
 
 /** Endpoints for reading and updating visualization settings. */
 const visualizationSettingsApi = backendAPI.injectEndpoints({
@@ -42,13 +46,26 @@ const visualizationSettingsApi = backendAPI.injectEndpoints({
             BatchVisualizationSettingsResponse,
             { slugs: string[]; settings: string[] }
         >({
-            query: ({ slugs, settings }) => ({
-                url: "/api/visualization-settings/",
-                params: {
-                    settings: settings.join(","),
-                    slugs: slugs.join(","),
-                },
-            }),
+            queryFn: async ({ slugs, settings }, _api, _extraOptions, baseQuery) => {
+                const url = "/api/visualization-settings/";
+                const result = await baseQuery({
+                    url,
+                    params: {
+                        settings: settings.join(","),
+                        slugs: slugs.join(","),
+                    },
+                });
+                if (result.error) {
+                    return { error: result.error };
+                }
+                const parsed = validateResponseData(
+                    result.data,
+                    batchVisualizationSettingsSchema,
+                    url,
+                );
+                if ("error" in parsed) return parsed;
+                return { data: parsed.data };
+            },
         }),
     }),
 });

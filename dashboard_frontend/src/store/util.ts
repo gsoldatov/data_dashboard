@@ -1,9 +1,33 @@
+import { type ZodSchema } from "zod";
+
+/**
+ * Validate response data against a Zod schema.
+ * Returns parsed data on success, or a CUSTOM_ERROR on failure.
+ */
+export function validateResponseData<T>(
+    data: unknown,
+    schema: ZodSchema<T>,
+    url: string,
+): { data: T } | { error: { status: "CUSTOM_ERROR"; error: string } } {
+    const parsed = schema.safeParse(data);
+    if (!parsed.success) {
+        console.error(`Response validation failed for ${url}:`, parsed.error);
+        return {
+            error: {
+                status: "CUSTOM_ERROR",
+                error: "Response data validation failed.",
+            },
+        };
+    }
+    return { data: parsed.data };
+}
+
 /**
  * Parse an RTK Query error object into structured fields.
  *
  * If RTK Query error was provided with a zod error (status === "ZOD_VALIDATION_ERROR"),
  * returns `validation` object, containing zod field (`fieldErrors` map) & schema (`formErrors` list) errors.
- * 
+ *
  * Otherwise, returns response `status` and `message` provided by RTK Query .
  */
 export function parseRTKQError(error: unknown): {

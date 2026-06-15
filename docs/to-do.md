@@ -91,7 +91,7 @@
         + page data;
 
 
-- implement basic frontend functionality:
++ implement basic frontend functionality:
     + generate and check scaffold:
         + stack used;
         + frontend configuraiton files;
@@ -139,7 +139,7 @@
         + admin page:
             + edit visualization settings (as admin);
         
-    - refactoring & fixes:
+    + refactoring & fixes:
         + fix race conditions on feed & visualization pages;    // they depend on user data, yet don't wait for it or process its fetch errors
         + fix non-published visualization being invisible for admins after logging in; // logging in should reset state objects, except for user data;
 
@@ -149,7 +149,7 @@
         + rename feed page to index everywhere;
 
         + ensure all fetches timeouts are are properly covered by error placeholders;
-        - all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
+        + all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
         
 - handle absent data on backend gracefully;
     

@@ -13,10 +13,3 @@ export interface VisualizationInfo {
   slug: string;
   title: string;
 }
-
-/** Response from GET /api/visualization-settings/?settings=...&slugs=... */
-export interface BatchVisualizationSettingsResponse {
-  [slug: string]: {
-    is_published: boolean;
-  };
-}
