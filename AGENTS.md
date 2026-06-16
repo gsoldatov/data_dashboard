@@ -69,6 +69,7 @@ REST API service, which:
 - `dashboard_backend/src/services`:
     - API authentication & session checks (`auth.py`);
     - visualization data retrieval (`visualization_data`);
+- `dashboard_backend/src/scheduled`: subpackage with periodic scheduled jobs;
 - `dashboard_backend/src/util`: miscellaneous utility functions & objects (password hashing, exceptions, etc.);
 - `dashboard_backend/tests`: test cases & test utilities for `dashboard_backend` subproject.
 
@@ -180,7 +181,8 @@ A single page app containing a set of data visualizations and related pages.
 - httpx for performing HTTP requests;
 - BeautifulSoup v4 for parsing HTML files;
 - Pydantic v2 & Pydantic Settings for validation;
-- FastAPI as dashboard backend's API Framework; 
+- FastAPI as dashboard backend's API Framework;
+- APScheduler v3 for running scheduled jobs alongside to backend;
 - SQLite as dashboard backend's database & SQLAlchemy 2 for accessing DB from Python;
 - Alembic for managing DB migrations;
 - Pytest for running tests.

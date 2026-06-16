@@ -57,6 +57,7 @@ def test_config(temp_directory: Path) -> Config:
     # config.backend_default_user_name = "test_admin"
     # config.backend_default_user_password = "test_admin_pass"
     # config.backend_session_ttl_seconds = 3600
+    config.backend_expired_sessions_cleanup_interval = 0.1
     config.backend_cors_origins = "*"
     return config
 

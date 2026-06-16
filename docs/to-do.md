@@ -154,7 +154,7 @@
 + handle absent data on backend gracefully;
 + add pre-commit checks for frontend;
 
-- add a scheduled job for removing expired sessions;
++ add a scheduled job for removing expired sessions;
 
 - replace prefect with airflow:
     ? configure authentication;

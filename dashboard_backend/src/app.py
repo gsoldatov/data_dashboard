@@ -11,6 +11,7 @@ from dashboard_backend.src.db.engine import close_engine, init_engine
 from dashboard_backend.src.middleware.auth import AuthMiddleware
 from dashboard_backend.src.middleware.db_repository import DBRepositoryMiddleware
 from dashboard_backend.src.routes import setup_routes
+from dashboard_backend.src.scheduled import setup_scheduler
 from dashboard_backend.src.util.exceptions import (
     DuplicateException,
     InvalidCredentialsException,
@@ -22,10 +23,13 @@ from python_common.src.config import Config, get_config
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    """Tear down database connections on shutdown."""
+    # Scheduler for periodic jobs
+    scheduler = setup_scheduler(app)
+    app.state.scheduler = scheduler
     try:
         yield
     finally:
+        scheduler.shutdown(wait=True)
         await close_engine(app)
 
 

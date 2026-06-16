@@ -70,3 +70,7 @@ files = [
     "dashboard_backend/",
     "python_common/"
 ]
+
+[[tool.mypy.overrides]]
+module = "apscheduler.*"
+ignore_missing_imports = true

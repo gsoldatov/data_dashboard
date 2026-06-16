@@ -25,6 +25,7 @@ class Config(BaseSettings):
     backend_default_user_name: str
     backend_default_user_password: str
     backend_session_ttl_seconds: int
+    backend_expired_sessions_cleanup_interval: float
     backend_cors_origins: str
 
     @computed_field  # type: ignore[prop-decorator]
