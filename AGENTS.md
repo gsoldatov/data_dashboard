@@ -232,4 +232,10 @@ npm test
 
 # Build frontend for production
 npm run build
+
+# Run pre-commit checks (linting & type checking)
+pre-commit run
+
+# Run linter only
+npx eslint
 ```
