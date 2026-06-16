@@ -152,8 +152,8 @@
         + all RTKQ fetches validate response data with zod and propagate validation errors in a uniform way (console.error + undetailed error message to use in components)
         
 + handle absent data on backend gracefully;
-    
-- add pre-commit checks for frontend;
++ add pre-commit checks for frontend;
+
 - add a scheduled job for removing expired sessions;
 
 - replace prefect with airflow:

@@ -9,7 +9,6 @@ interface DocumentApp {
 }
 
 declare global {
-    // eslint-disable-next-line no-var
     interface Document {
         app: DocumentApp;
     }

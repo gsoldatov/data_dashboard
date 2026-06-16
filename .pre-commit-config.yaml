@@ -33,7 +33,7 @@ repos:
       - id: check-types
         name: TS type check
         # entry: npm run check-types
-        entry: tsc --noEmit
+        entry: npx tsc --noEmit
         language: system
         pass_filenames: false
         files: \.(ts|tsx)$

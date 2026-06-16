@@ -7,6 +7,7 @@ import type { MockBackend } from "../../mock-backend";
  * Parses ``slugs`` from the query string and returns
  * ``{ [slug]: { is_published: true } }`` for each slug.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const batchVisualizationSettingsHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const url = new URL(req.url);
     const slugs = url.searchParams.get("slugs")?.split(",").filter(Boolean) ?? [];
@@ -27,6 +28,7 @@ export const batchVisualizationSettingsHandler: RouteHandler = async (req: Reque
  *
  * Accepts ``{ is_published: boolean }`` body and echoes it back.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const upsertVisualizationSettingsHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const body = (await req.json()) as { is_published: boolean };
     const slug = req.url.split("/").pop()?.split("?")[0] ?? "";
@@ -45,6 +47,7 @@ export const upsertVisualizationSettingsHandler: RouteHandler = async (req: Requ
  *
  * Returns an empty JSON array.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const visualizationDataHandler: RouteHandler = async (_req: Request, _backend: MockBackend) => {
     return new Response(JSON.stringify([]), {
         status: 200,

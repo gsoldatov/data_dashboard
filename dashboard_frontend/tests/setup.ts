@@ -15,14 +15,12 @@ import "@/util/config";
 // https://github.com/reduxjs/redux-toolkit/issues/4966
 import fetchPolyfill, { Request as RequestPolyfill } from 'node-fetch';
 
-//@ts-ignore
 Object.defineProperty(global, 'fetch', {
   // MSW will overwrite this to intercept requests
   writable: true,
   value: fetchPolyfill,
 });
 
-//@ts-ignore
 Object.defineProperty(global, 'Request', {
   writable: false,
   value: RequestPolyfill,

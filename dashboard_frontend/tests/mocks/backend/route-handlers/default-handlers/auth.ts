@@ -8,6 +8,7 @@ import { loginRequestSchema } from "@/types/backend/requests/auth";
  * Accepts `{ username: "admin", password: "admin" }` and returns a
  * `User` object.  Sets a `session_token` cookie.  Rejects everything else with 401.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const loginHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const body: unknown = await req.json();
     const { username, password } = loginRequestSchema.parse(body);
@@ -41,6 +42,7 @@ export const loginHandler: RouteHandler = async (req: Request, _backend: MockBac
  *
  * Returns the user if a ``session_token`` cookie is present, 404 otherwise.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const meHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const cookie = req.headers.get("cookie") ?? "";
     if (cookie.includes("session_token=")) {
@@ -71,6 +73,7 @@ export const meHandler: RouteHandler = async (req: Request, _backend: MockBacken
  *
  * Always returns 204 and clears the session cookie.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const logoutHandler: RouteHandler = async (_req: Request, _backend: MockBackend) => {
     return new Response(null, {
         status: 204,

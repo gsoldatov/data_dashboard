@@ -11,6 +11,7 @@ const knownPasswords: Record<string, string> = {
  * Validates ``current_user_password`` against known passwords and returns
  * an updated ``User`` object.  Tests override this handler for error cases.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const updateUserHandler: RouteHandler = async (req: Request, _backend) => {
     const url = new URL(req.url);
     const userId = url.pathname.split("/").pop() ?? "";
