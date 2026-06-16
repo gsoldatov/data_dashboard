@@ -1,5 +1,6 @@
 repos:
   - repo: local
+    # Python (imports fix, linting, type checking)
     hooks:
       - id: ruff-fix-imports
         name: ruff fix imports
@@ -21,3 +22,18 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+    
+      # TypeScript (linting, type checking)
+      - id: eslint
+        name: ESLint
+        entry: npx eslint
+        language: system
+        files: \.(js|jsx|ts|tsx)$
+
+      - id: check-types
+        name: TS type check
+        # entry: npm run check-types
+        entry: tsc --noEmit
+        language: system
+        pass_filenames: false
+        files: \.(ts|tsx)$
