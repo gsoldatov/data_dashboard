@@ -10,8 +10,8 @@ _PROJECT_ROOT = Path(__file__).parents[2]
 class Config(BaseSettings):
     model_config = SettingsConfigDict(extra="ignore")
 
-    data_directory: Path
-    logs_directory: Path
+    assets_directory: Path
+
     data_loading_log_mode: Literal["stderr", "file"]
 
     prefect_profile: str
@@ -19,7 +19,6 @@ class Config(BaseSettings):
     prefect_server_api_port: int
     prefect_api_url: str
 
-    backend_database_path: Path
     backend_host: str
     backend_port: int
     backend_default_user_name: str
@@ -34,9 +33,35 @@ class Config(BaseSettings):
         """SQLAlchemy async connection URL derived from backend_database_path."""
         return f"sqlite+aiosqlite:///{self.backend_database_path}"
 
-    @field_validator(
-        "data_directory", "logs_directory", "backend_database_path", mode="plain"
-    )
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def visualization_data_directory(self) -> Path:
+        p = self.assets_directory / "visualization_data"
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def logs_directory(self) -> Path:
+        p = self.assets_directory / "logs"
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def backend_database_path(self) -> Path:
+        p = self.assets_directory / "dashboard_backend.db"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        return p
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def prefect_directory(self) -> Path:
+        p = self.assets_directory / "prefect"
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    @field_validator("assets_directory", mode="plain")
     @classmethod
     def validate_paths(cls, v: Any) -> Path:
         if not isinstance(v, (str, Path)):

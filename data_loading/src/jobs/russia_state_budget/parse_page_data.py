@@ -28,8 +28,9 @@ def russia_state_budget_parse_page_data(
     """
     config = config or get_config()
     logger = logger or get_logger(config, "russia_state_budget_parse_page_data")
-    page_path = config.data_directory / "russia_state_budget" / "budget.html"
-    json_path = config.data_directory / "russia_state_budget" / "budget.json"
+    data_dir = config.visualization_data_directory
+    page_path = data_dir / "russia_state_budget" / "budget.html"
+    json_path = data_dir / "russia_state_budget" / "budget.json"
 
     logger.info("Started Russia state budget parsing")
 

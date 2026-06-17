@@ -55,4 +55,6 @@ def get_visualization_data_service(
     request: Request,
 ) -> VisualizationDataService:
     """FastAPI dependency: build a ``VisualizationDataService`` from the app config."""
-    return VisualizationDataService(request.app.state.config.data_directory)
+    return VisualizationDataService(
+        request.app.state.config.visualization_data_directory
+    )

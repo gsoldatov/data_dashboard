@@ -21,7 +21,7 @@ def main() -> None:
     # Configure Prefect profile
     profiles = load_profiles()
 
-    db_location = config.data_directory / ".prefect" / "db.sqlite"
+    db_location = config.prefect_directory / "db.sqlite"
     db_location.parent.mkdir(parents=True, exist_ok=True)
     prefect_db_uri = f"sqlite+aiosqlite:////{str(db_location)}"
 

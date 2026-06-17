@@ -33,7 +33,8 @@ def russia_state_budget_fetch_page(
     # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
 
     # Ensure save directory
-    save_path = config.data_directory / "russia_state_budget" / "budget.html"
+    data_dir = config.visualization_data_directory
+    save_path = data_dir / "russia_state_budget" / "budget.html"
     save_path.parent.mkdir(parents=True, exist_ok=True)
 
     loader = HTTPLoader(url=url, save_path=save_path)

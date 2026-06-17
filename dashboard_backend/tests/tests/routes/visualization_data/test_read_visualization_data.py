@@ -79,7 +79,9 @@ async def test_read_visualization_data_admin_missing_file(
     admin_session: dict[str, str],
 ) -> None:
     """Admin gets 404 when the data file for a registered slug is missing."""
-    test_config.data_directory = temp_directory
+    empty_dir = temp_directory / "empty"
+    empty_dir.mkdir(exist_ok=True)
+    test_config.assets_directory = empty_dir
     test_client.cookies = admin_session
     response = await test_client.get(
         "/api/visualization-data/russia_state_budget",
