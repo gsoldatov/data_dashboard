@@ -50,19 +50,10 @@ def test_config(temp_directory: Path) -> Config:
 
     Database and data/log directories are redirected into *temp_directory*.
     """
-    import shutil
-
     config = get_config("config.env.example")
     config.assets_directory = temp_directory
     config.backend_expired_sessions_cleanup_interval = 0.1
     config.backend_cors_origins = "*"
-
-    # Copy mock visualization data into the computed data directory
-    mock_data_src = _TESTS_DIR / "mocks" / "visualization_data"
-    shutil.copytree(
-        mock_data_src, config.visualization_data_directory, dirs_exist_ok=True
-    )
-
     return config
 
 

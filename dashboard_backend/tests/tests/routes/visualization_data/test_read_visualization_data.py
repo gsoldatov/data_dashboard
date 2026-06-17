@@ -13,7 +13,10 @@ if __name__ == "__main__":
 
 from dashboard_backend.tests.mocks.data_generator import DataGenerator
 from dashboard_backend.tests.mocks.db_operations import DBOperations
+from dashboard_backend.tests.mocks.setup_data import copy_test_directories
 from python_common.src.config import Config
+
+_TESTS_DIR = Path(__file__).parents[3]
 
 # ── error handling ───────────────────────────────────────────────────────
 
@@ -94,11 +97,17 @@ async def test_read_visualization_data_admin_missing_file(
 
 async def test_read_visualization_data_success(
     test_client: AsyncClient,
+    test_config: Config,
     admin_session: dict[str, str],
 ) -> None:
     """Valid slugs return the data read by their registered getter."""
-    test_client.cookies = admin_session
     slugs = ["russia_state_budget"]
+    copy_test_directories(
+        test_config.visualization_data_directory,
+        slugs,
+        _TESTS_DIR / "mocks" / "visualization_data",
+    )
+    test_client.cookies = admin_session
     for slug in slugs:
         response = await test_client.get(
             f"/api/visualization-data/{slug}",
