@@ -33,6 +33,7 @@ A set of ETL jobs with orchestration.
 uv run data_loading/src/airflow/setup.py
 
 # Run local Airflow deployment (API server, scheduler, dag-processor)
+# NOTE: new dags are disabled by default and must be manually enabled via dashboard
 uv run data_loading/src/airflow/local/server.py
 
 # Create or update Airflow config with values from project config

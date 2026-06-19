@@ -23,6 +23,9 @@ DAG_ID = "russia_state_budget"
     dag_id=DAG_ID,
     schedule="@weekly",
     start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
+    # auto-enabling tasks results in a timeout of the first scheduled run
+    # due to local executor being unable to connect with the api in time
+    # is_paused_upon_creation=False,
     catchup=False,
     tags=["russia_state_budget"],
 )
