@@ -158,19 +158,18 @@
 
 - replace prefect with airflow:
     + move all files, produced by the project, into a single dir (databases, logs, etl data, etc.);
-    - install & add automatic configuration:
+    + install & add automatic configuration:
         + default config => override with project settings;
-        - configure auth:
+        + configure auth:
             + user + password;
             + jwt secret;
-            - 2026-06-19T12:35:45.486836Z [warning  ] The HMAC key is 22 bytes long, which is below the minimum recommended length of 64 bytes for SHA512. See RFC 7518 Section
-            ? configure login rate limiting;
-        - optimize memory consumption:
-            - webserver: 1 worker, periodic resets, sync worker class, worker refresh;
-            - scheduler: decrease heartbeat & DAG scan intervals, reduce parallel tasks, dags & historice runs;
+            x configure login rate limiting;
+        + optimize memory consumption:
+            + webserver: 1 worker, periodic resets, sync worker class, worker refresh;
+            + scheduler: decrease heartbeat & DAG scan intervals, reduce parallel tasks, dags & historic runs;
             + code: imports and calculations are done inside tasks;
     - update existing etl jobs:
-        - update logging logic;
+        - update logging logic;     // use task logger, rotate task logs
 
 - implement Russia state budget visualization;
 

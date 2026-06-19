@@ -56,7 +56,7 @@ def configure_airflow(config: Config) -> None:
     # Set dag discovery settings
     parser.set("core", "load_examples", "False")
 
-    # Set auth settings
+    # Set auth & security settings
     parser.set(
         "core",
         "auth_manager",
@@ -70,13 +70,24 @@ def configure_airflow(config: Config) -> None:
     parser.set("api_auth", "jwt_secret", config.airflow_jwt_secret)
     parser.set("api", "secret_key", config.airflow_jwt_secret)
 
-    # Set memory optimization settings
+    parser.set("api", "expose_config", "True")
+
+    # Set memory & performance optimization settings
+    # # Number of running tasks (per scheduler & dag)
     parser.set("core", "parallelism", "1")
     parser.set("core", "max_active_tasks_per_dag", "1")
     parser.set("core", "max_active_runs_per_dag", "1")
+
+    # # API workers (number & rolling restart)
     parser.set("api", "workers", "1")
-    parser.set("api", "worker_refresh_interval", "86400")
-    parser.set("api", "expose_config", "True")
+    # # # Works only if server_type = gunicorn, which is not the default
+    # parser.set("api", "worker_refresh_interval", "86400")
+
+    # # Scheduler (task trigger interval)
+    parser.set("scheduler", "scheduler_heartbeat_sec", "10")
+
+    # # DAG processing (interval between DAG file parses)
+    parser.set("dag_processor", "min_file_process_interval", "60")
 
     # Write config file back to disk
     with open(cfg_path, "w") as f:
