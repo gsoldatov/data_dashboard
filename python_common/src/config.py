@@ -14,6 +14,9 @@ class Config(BaseSettings):
 
     airflow_host: str
     airflow_port: int
+    airflow_admin_username: str
+    airflow_admin_password: str
+    airflow_jwt_secret: str
 
     backend_host: str
     backend_port: int

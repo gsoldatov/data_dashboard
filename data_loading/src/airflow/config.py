@@ -53,6 +53,20 @@ def configure_airflow(config: Config) -> None:
         f"http://127.0.0.1:{config.airflow_port}/execution/"
     )
 
+    # Set auth settings
+    parser.set(
+        "core",
+        "auth_manager",
+        "airflow.providers.fab.auth_manager.fab_auth_manager.FabAuthManager",
+    )
+    parser.set(
+        "fab",
+        "config_file",
+        str((Path(__file__).parent / "webserver_config.py").resolve()),
+    )
+    parser.set("api_auth", "jwt_secret", config.airflow_jwt_secret)
+    parser.set("api", "secret_key", config.airflow_jwt_secret)
+
     # Set memory optimization settings
     parser.set("core", "parallelism", "1")
     parser.set("core", "max_active_tasks_per_dag", "1")

@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "apache-airflow==3.2.2",
+    "apache-airflow-providers-fab>=3.6.5",
     "beautifulsoup4==4.14.3",
     "httpx==0.28.1",
 ]
