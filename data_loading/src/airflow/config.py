@@ -53,6 +53,9 @@ def configure_airflow(config: Config) -> None:
         f"http://127.0.0.1:{config.airflow_port}/execution/"
     )
 
+    # Set dag discovery settings
+    parser.set("core", "load_examples", "False")
+
     # Set auth settings
     parser.set(
         "core",
