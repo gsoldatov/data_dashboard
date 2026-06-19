@@ -27,15 +27,24 @@ if __name__ == "__main__":
         "uv", "run", "airflow", "scheduler",
     ])
 
+    # Start DAG processor
+    dag_processor_process = subprocess.Popen([
+        "uv", "run", "airflow", "dag-processor",
+    ])
+
     print(f"Airflow API server: http://{config.airflow_host}:{config.airflow_port}")
     print("Airflow scheduler started.")
+    print("Airflow DAG processor started.")
 
     try:
         api_process.wait()
         scheduler_process.wait()
+        dag_processor_process.wait()
     except KeyboardInterrupt:
         print("\nShutting down Airflow...")
         api_process.terminate()
         scheduler_process.terminate()
+        dag_processor_process.terminate()
         api_process.wait()
         scheduler_process.wait()
+        dag_processor_process.wait()

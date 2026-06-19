@@ -32,7 +32,7 @@ A set of ETL jobs with orchestration.
 # Initialize Airflow config & metadata database
 uv run data_loading/src/airflow/setup.py
 
-# Run local Airflow deployment (API server + scheduler)
+# Run local Airflow deployment (API server, scheduler, dag-processor)
 uv run data_loading/src/airflow/local/server.py
 
 # Create or update Airflow config with values from project config
