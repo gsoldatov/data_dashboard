@@ -31,7 +31,7 @@
 
 # Project Stack
 + data etl:
-    + prefect for managing etl jobs;
+    + airflow for managing etl jobs;
     + pandas / json for storing data;
     + pytest for testing;
 + dashboard backend:
@@ -157,7 +157,19 @@
 + add a scheduled job for removing expired sessions;
 
 - replace prefect with airflow:
-    ? configure authentication;
+    + move all files, produced by the project, into a single dir (databases, logs, etl data, etc.);
+    - install & add automatic configuration:
+        + default config => override with project settings;
+        - configure auth:
+            - user + password;
+            - jwt secret;
+            - 2026-06-19T12:35:45.486836Z [warning  ] The HMAC key is 22 bytes long, which is below the minimum recommended length of 64 bytes for SHA512. See RFC 7518 Section
+        - optimize memory consumption:
+            - webserver: 1 worker, periodic resets, sync worker class, worker refresh;
+            - scheduler: decrease heartbeat & DAG scan intervals, reduce parallel tasks, dags & historice runs;
+            + code: imports and calculations are done inside tasks;
+    - update existing etl jobs:
+        - update logging logic;
 
 - implement Russia state budget visualization;
 
@@ -174,12 +186,14 @@
     - python:
         - install dependencies;
         - pre-commit initialize;
-        - setup Prefect (profile -> server);
+        - setup Airflow (config -> db migrate);
     ? split main AGENTS.md into skills / sub-files;
 
 
 
 # Additional
+- allow reloading configuration in data_loading & dashboard_backend;
+? migrate airflow & backend to PostgreSQL;
 ? move visualizations list constant to backend and retrieve it where it's used;
 - add non tailwaind css classnames to components and use them in tests for more specific checks
     ? refactor app router:

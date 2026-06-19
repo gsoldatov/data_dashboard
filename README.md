@@ -4,7 +4,7 @@ A set of packages for fetching and visualizing data from various sources. Curren
 Includes the following subpackages:
 - `data_loading`:
     - a set of ETL jobs with orchestration:
-    - Python / Prefect / httpx / BeautifulSoup / Pytest;
+    - Python / Airflow / httpx / BeautifulSoup / Pytest;
 
 - `dashboard_backend`:
     - REST API for serving visualization data, managing visualization settings and monitoring ETL jobs;

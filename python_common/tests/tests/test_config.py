@@ -51,8 +51,8 @@ def test_computed_directories_derive_from_assets_directory(
     assert config.backend_database_path == assets / "dashboard_backend.db"
     assert assets.is_dir()
 
-    assert config.prefect_directory == assets / "prefect"
-    assert (assets / "prefect").is_dir()
+    assert config.airflow_directory == assets / "airflow"
+    assert (assets / "airflow").is_dir()
 
 
 if __name__ == "__main__":

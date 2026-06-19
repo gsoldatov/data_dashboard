@@ -1,11 +1,9 @@
 import json
-import logging
 import traceback
-from pathlib import Path
 from typing import Any
 
+from airflow.sdk import task
 from bs4 import BeautifulSoup
-from prefect import flow
 
 if __name__ == "__main__":
     import sys
@@ -14,31 +12,26 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.helpers import get_logger
 from python_common.src import Config, get_config
 
 
-@flow(name="Russia state budget parse page data")
-def russia_state_budget_parse_page_data(
-    config: Config | None = None,
-    logger: logging.LoggerAdapter[logging.Logger] | None = None
-) -> None:
+@task
+def parse_page_data_task(config: Config | None = None) -> None:
     """
     Parses an HTML page with Russia's state budget into JSON
     """
     config = config or get_config()
-    logger = logger or get_logger(config, "russia_state_budget_parse_page_data")
     data_dir = config.visualization_data_directory
     page_path = data_dir / "russia_state_budget" / "budget.html"
     json_path = data_dir / "russia_state_budget" / "budget.json"
 
-    logger.info("Started Russia state budget parsing")
+    print("Started Russia state budget parsing")
 
     try:
         # Load HTML file
         if not page_path.is_file():
             raise RuntimeError("Russia state budget HTML file does not exist")
-        
+
         with open(page_path, encoding="utf-8") as f:
             html_content = f.read()
 
@@ -49,12 +42,10 @@ def russia_state_budget_parse_page_data(
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        logger.info(f"Successfully saved budget data to {json_path}")
+        print(f"Successfully saved budget data to {json_path}")
     except Exception as e:
         traceback.print_exc()
-        logger.error(
-            f"An exception occured during file parsing: {str(e)}"
-        )
+        print(f"An exception occured during file parsing: {str(e)}")
 
 
 def _parse(html_content: str) -> dict[str, Any]:
@@ -149,11 +140,11 @@ def _parse(html_content: str) -> dict[str, Any]:
                 }
                 # Add to the correct parent in the hierarchy
                 _add_to_hierarchy(data, subsection_num, subsection)
-        
+
         # Save the number of the previous section
         # (to reuse for sections without numbers)
         prev_section_num = section_num
-    
+
     return data
 
 
@@ -187,4 +178,4 @@ def _add_to_hierarchy(
 
 
 if __name__ == "__main__":
-    russia_state_budget_parse_page_data.fn()
+    parse_page_data_task.function()

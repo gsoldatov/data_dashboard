@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any
 
 from pydantic import computed_field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,12 +12,8 @@ class Config(BaseSettings):
 
     assets_directory: Path
 
-    data_loading_log_mode: Literal["stderr", "file"]
-
-    prefect_profile: str
-    prefect_server_api_host: str
-    prefect_server_api_port: int
-    prefect_api_url: str
+    airflow_host: str
+    airflow_port: int
 
     backend_host: str
     backend_port: int
@@ -56,8 +52,8 @@ class Config(BaseSettings):
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def prefect_directory(self) -> Path:
-        p = self.assets_directory / "prefect"
+    def airflow_directory(self) -> Path:
+        p = self.assets_directory / "airflow"
         p.mkdir(parents=True, exist_ok=True)
         return p
 

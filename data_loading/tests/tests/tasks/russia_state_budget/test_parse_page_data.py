@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.jobs.russia_state_budget.parse_page_data import _parse
+from data_loading.src.tasks.russia_state_budget.parse_page_data import _parse
 
 
 @pytest.fixture(scope="module")

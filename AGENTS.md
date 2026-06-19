@@ -8,16 +8,17 @@ Current project implements a set of packages for fetching and visualizing data f
 A set of ETL jobs with orchestration.
 
 ### Subproject Structure
-- `data_loading/src/jobs`: ETL jobs definitions;
-- `data_loading/src/helpers`: common functionality, which is shared among multiple jobs;
-- `data_loading/src/prefect`: collection of scripts for running & configuring Prefect;
+- `data_loading/src/dags`: Airflow DAG definitions;
+- `data_loading/src/tasks`: Airflow task functions (ETL logic);
+- `data_loading/src/airflow`: collection of scripts for running & configuring Airflow;
+- `data_loading/src/helpers`: common functionality, which is shared among multiple ETL tasks;
 - `data_loading/tests`: test cases & test utilities for `data_loading` subproject.
 
 ### Architecture Decisions
-- Prefect uses a server & local process worker running on a single machine;
-- a separate Prefect profile is used for the subproject;
-- jobs can be executed by Prefect or as standalone scripts (without invoking Prefect worker);
-- jobs are synchronous;
+- Airflow 3 uses a webserver (API server) & scheduler running on a single machine with SQLite metadata DB;
+- Airflow is configured programmatically via `airflow.configuration.conf` from the project's `Config`;
+- tasks can be executed by Airflow or as standalone scripts (via `task_fn.function()`);
+- tasks are synchronous;
 - data is stored in JSON and other formats;
 - tests:
     - test cases are located in `data_loading/tests/tests` and follow the structure of `src` directory;
@@ -28,17 +29,20 @@ A set of ETL jobs with orchestration.
 
 ### CLI Commands
 ```bash
-# Run ETL job (faster and preferred way, unless Prefect integration checks are needed)
-uv run data_loading/src/jobs/russia_state_budget/fetch_page.py
+# Initialize Airflow config & metadata database
+uv run data_loading/src/airflow/setup.py
 
-# Configure Prefect profile for this project, if it's not done yet
-uv run data_loading/src/prefect/configuration/profiles.py
+# Run local Airflow deployment (API server + scheduler)
+uv run data_loading/src/airflow/local/server.py
 
-# Start local Prefect server
-uv run data_loading/src/prefect/local/server.py
+# Create or update Airflow config with values from project config
+uv run data_loading/src/airflow/config.py
 
-# Start local Prefect worker
-uv run data_loading/src/prefect/local/client.py
+# Run a dag manually (via airflow dags test)
+uv run data_loading/src/dags/russia_state_budget.py
+
+# Run an ETL task manually (without Airflow)
+uv run data_loading/src/tasks/russia_state_budget/fetch_page.py
 ```
 
 
@@ -177,7 +181,7 @@ A single page app containing a set of data visualizations and related pages.
 ## Python Subprojects
 - python 3.13;
 - uv for managing dependencies & environment;
-- Prefect v3 for scheduling and executing data loading jobs;
+- Apache Airflow v3 for scheduling and executing data loading jobs;
 - httpx for performing HTTP requests;
 - BeautifulSoup v4 for parsing HTML files;
 - Pydantic v2 & Pydantic Settings for validation;

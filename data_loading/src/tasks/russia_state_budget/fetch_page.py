@@ -1,7 +1,6 @@
-import logging
 import traceback
 
-from prefect import flow
+from airflow.sdk import task
 
 if __name__ == "__main__":
     import sys
@@ -10,22 +9,17 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.helpers import HTTPLoader, get_logger
+from data_loading.src.helpers import HTTPLoader
 from python_common.src import Config, get_config
 
 
-@flow(name="Russia state budget fetch page")
-def russia_state_budget_fetch_page(
-    config: Config | None = None,
-    logger: logging.LoggerAdapter[logging.Logger] | None = None
-) -> None:
+@task
+def fetch_page_task(config: Config | None = None) -> None:
     """
     Fetches an HTML page with Russia's state budget
     """
     config = config or get_config()
-    logger = logger or get_logger(config, "russia_state_budget_fetch_page")
-
-    logger.info("Started Russia state budget download")
+    print("Started Russia state budget download")
 
     # state budget url
     url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
@@ -41,13 +35,11 @@ def russia_state_budget_fetch_page(
 
     try:
         loader.load_file()
-        logger.info(f"Saved {url} to {str(save_path)}")
+        print(f"Saved {url} to {str(save_path)}")
     except Exception as e:
         traceback.print_exc()
-        logger.error(
-            f"An exception occured during file fetch: {str(e)}"
-        )
+        print(f"An exception occured during file fetch: {str(e)}")
 
 
 if __name__ == "__main__":
-    russia_state_budget_fetch_page.fn()
+    fetch_page_task.function()

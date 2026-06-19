@@ -1,8 +1,7 @@
 # Project general
 config.env
 dashboard_frontend/.env
-data/
-logs/
+assets/
 */tests/temp/
 *.db
 *.db-wal
