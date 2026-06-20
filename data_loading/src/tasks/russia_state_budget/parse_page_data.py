@@ -1,5 +1,5 @@
 import json
-import traceback
+import logging
 from typing import Any
 
 from airflow.sdk import task
@@ -20,32 +20,33 @@ def parse_page_data_task(config: Config | None = None) -> None:
     """
     Parses an HTML page with Russia's state budget into JSON
     """
+    logger = logging.getLogger("airflow.task")
+    
     config = config or get_config()
     data_dir = config.visualization_data_directory
     page_path = data_dir / "russia_state_budget" / "budget.html"
     json_path = data_dir / "russia_state_budget" / "budget.json"
 
-    print("Started Russia state budget parsing")
+    logger.info("Parsing Russia state budget HTML page")
 
     try:
-        # Load HTML file
         if not page_path.is_file():
             raise RuntimeError("Russia state budget HTML file does not exist")
 
+        logger.debug("Reading HTML from %s", page_path)
         with open(page_path, encoding="utf-8") as f:
             html_content = f.read()
 
-        # Parse HTML data
         data = _parse(html_content)
 
-        # Save to JSON
+        logger.debug("Writing JSON output to %s", json_path)
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-        print(f"Successfully saved budget data to {json_path}")
-    except Exception as e:
-        traceback.print_exc()
-        print(f"An exception occured during file parsing: {str(e)}")
+        logger.info("Saved budget data to %s", json_path)
+    except Exception:
+        logger.exception("Failed to parse HTML page")
+        raise
 
 
 def _parse(html_content: str) -> dict[str, Any]:

@@ -169,7 +169,8 @@
             + scheduler: decrease heartbeat & DAG scan intervals, reduce parallel tasks, dags & historic runs;
             + code: imports and calculations are done inside tasks;
     - update existing etl jobs:
-        - update logging logic;     // use task logger, rotate task logs
+        + use task logger;
+        + rotate task logs;
 
 - implement Russia state budget visualization;
 
