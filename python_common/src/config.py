@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Any
 
-from pydantic import computed_field, field_validator
+from pydantic import Field, computed_field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _PROJECT_ROOT = Path(__file__).parents[2]
@@ -17,6 +17,8 @@ class Config(BaseSettings):
     airflow_admin_username: str
     airflow_admin_password: str
     airflow_jwt_secret: str
+    airflow_logging_number_of_dag_runs_kept: int = Field(ge=1)
+    airflow_logging_number_of_dag_processor_days_kept: int = Field(ge=1)
 
     backend_host: str
     backend_port: int

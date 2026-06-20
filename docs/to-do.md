@@ -171,6 +171,7 @@
     - update existing etl jobs:
         + use task logger;
         + rotate task logs;
+        - remove separate logging dir;
 
 - implement Russia state budget visualization;
 
