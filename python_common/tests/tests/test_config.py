@@ -45,9 +45,6 @@ def test_computed_directories_derive_from_assets_directory(
     assert config.visualization_data_directory == assets / "visualization_data"
     assert (assets / "visualization_data").is_dir()
 
-    assert config.logs_directory == assets / "logs"
-    assert (assets / "logs").is_dir()
-
     assert config.backend_database_path == assets / "dashboard_backend.db"
     assert assets.is_dir()
 

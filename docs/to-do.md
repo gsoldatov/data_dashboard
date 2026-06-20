@@ -156,7 +156,7 @@
 
 + add a scheduled job for removing expired sessions;
 
-- replace prefect with airflow:
++ replace prefect with airflow:
     + move all files, produced by the project, into a single dir (databases, logs, etl data, etc.);
     + install & add automatic configuration:
         + default config => override with project settings;
@@ -168,10 +168,10 @@
             + webserver: 1 worker, periodic resets, sync worker class, worker refresh;
             + scheduler: decrease heartbeat & DAG scan intervals, reduce parallel tasks, dags & historic runs;
             + code: imports and calculations are done inside tasks;
-    - update existing etl jobs:
+    + update existing etl jobs:
         + use task logger;
         + rotate task logs;
-        - remove separate logging dir;
+        + remove separate logging dir;
 
 - implement Russia state budget visualization;
 

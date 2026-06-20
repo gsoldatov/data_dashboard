@@ -43,13 +43,6 @@ class Config(BaseSettings):
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def logs_directory(self) -> Path:
-        p = self.assets_directory / "logs"
-        p.mkdir(parents=True, exist_ok=True)
-        return p
-
-    @computed_field  # type: ignore[prop-decorator]
-    @property
     def backend_database_path(self) -> Path:
         p = self.assets_directory / "dashboard_backend.db"
         p.parent.mkdir(parents=True, exist_ok=True)
