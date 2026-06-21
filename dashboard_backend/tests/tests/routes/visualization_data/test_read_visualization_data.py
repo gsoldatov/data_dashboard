@@ -113,7 +113,7 @@ async def test_read_visualization_data_success(
             f"/api/visualization-data/{slug}",
         )
         assert response.status_code == 200
-        assert response.json() == [{slug: True}]
+        assert response.json() == [[{slug: True}]]
 
 
 if __name__ == "__main__":

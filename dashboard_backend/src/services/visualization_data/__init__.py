@@ -15,9 +15,11 @@ from dashboard_backend.src.util.exceptions import (
     VisualizationDataNotFoundException,
 )
 
+type VisualizationDataset = dict[str, Any] | list[dict[str, Any]]
+""" Union of possible visualization dataset types. """
+
 # Each key maps a visualization slug to a list of sync data-getter callables.
-# Each getter receives the data directory and returns a dict.
-_REGISTRY: dict[str, list[Callable[[Path], dict[str, Any]]]] = {
+_REGISTRY: dict[str, list[Callable[[Path], VisualizationDataset]]] = {
     "russia_state_budget": [get_russia_state_budget_data],
 }
 
@@ -29,16 +31,17 @@ class VisualizationDataService:
         self._data_directory = data_directory
         self._registry = _REGISTRY
 
-    async def get(self, slug: str) -> list[dict[str, Any]]:
+    async def get(self, slug: str) -> list[VisualizationDataset]:
         """Run all registered getters for *slug* in a thread, returning their
-        dict results as a list.  Raises ``NotFoundException`` when no getter
-        is registered for the slug."""
+        results as a list.  Each getter may return data
+        in one of VisualizationDataset formats.
+        Raises ``NotFoundException`` when no getter is registered for the slug."""
         getters = self._registry.get(slug)
         if not getters:
             raise NotFoundException(f"No data getter for slug: {slug}")
 
-        def _call_all() -> list[dict[str, Any]]:
-            results: list[dict[str, Any]] = []
+        def _call_all() -> list[VisualizationDataset]:
+            results: list[VisualizationDataset] = []
             for g in getters:
                 try:
                     results.append(g(self._data_directory))

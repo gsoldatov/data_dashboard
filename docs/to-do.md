@@ -173,7 +173,45 @@
         + rotate task logs;
         + remove separate logging dir;
 
-- implement Russia state budget visualization;
+- implement Russia state budget visualization:
+    + update parsed data formats in data loading:
+        x refactor existing hierarchy in nested treemap format;
+        x refactor existing hierarchy in flat treemap format;
+        + add a flat table format;
+            [{"year": ..., "number": ..., "name": ..., "value": ...}, ...]
+
+    - layout:
+        - grid / flex container for multiple rows;
+        - row types:
+            - 1 element only, aligned left, takes required width only;
+            - 1 element only, aligned center, takes 50% width when fullscreen / 100% when stacked;
+            - 2 elements, each take 50% width when fullscreen / 100% when stacked (each element moves on its own row);
+
+    - general:      // display all data
+        - barchart - yearly income vs expenses diff;
+
+    - selectable categories & years:    // separate chart groups for income & expenses
+        - category selection:
+            - one category = drilldown;
+            - multiple categories = filter current level without drilling down;
+            - selections are shared across the chart group;
+        
+        - years selector:
+            - can select any amount, if none is selected, all years are displayed;
+            - selections are shared across the chart group;
+        
+        - line charts with categories of current drilldown layer:
+        - stacked bar chart, which displays selected categories shares & total values
+    
+    - single year:      // separate chart groups for income & expenses
+        - year selector:
+            - defaults to last year, one year always selected;
+            - selections are shared across the chart group;
+        
+        - drillable categories treemap;     // display absolute values & share in total
+        - categories diff vs prev year:
+            - absolute values;
+            - share in total %;
 
 - utility:
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
@@ -190,6 +228,8 @@
         - pre-commit initialize;
         - setup Airflow (config -> db migrate);
     ? split main AGENTS.md into skills / sub-files;
+
+- add deployment via docker compose;
 
 
 
