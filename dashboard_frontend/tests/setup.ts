@@ -33,3 +33,14 @@ import { vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
+
+// jsdom does not implement ResizeObserver (required by recharts).
+// The mock fires the size callback synchronously on `observe` so charts
+// render their content immediately in tests.
+global.ResizeObserver = vi.fn().mockImplementation((callback) => ({
+    observe: vi.fn().mockImplementation(() => {
+        callback([{ contentRect: { width: 800, height: 400 } }]);
+    }),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+}));

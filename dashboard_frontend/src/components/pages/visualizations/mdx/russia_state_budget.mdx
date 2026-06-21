@@ -1,16 +1,12 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
-import { Error } from "@/components/common/messages";
+import { IncomeExpensesLineChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/income-expenses-line-chart";
+import { BudgetBalanceBarChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/budget-balance-bar-chart";
 
-# Russia State Budget
+<h1 className="font-bold text-3xl">Russia State Budget</h1>
 
-Budget execution data for the Russian Federation.
+Budget plan & execution data for Russian Federation.
 
-## Data
+<h2 className="font-bold text-2xl mt-8">General</h2>
 
-{(() => {
-    const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    if (!data) {
-        return <Error message="Failed to load the page." />;
-    }
-    return <pre>{JSON.stringify(data, null, 2)}</pre>;
-})()}
+<IncomeExpensesLineChart />
+
+<BudgetBalanceBarChart />

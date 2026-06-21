@@ -17,35 +17,79 @@ describe("Russia State Budget visualization", () => {
         backend.setup();
     });
 
-    it("shows error when visualization data fetch fails", async () => {
-        addNetworkErrorOverride(backend.dispatcher, DATA_URL, "GET");
+    describe("Placeholders & title", () => {
+        it("shows error when visualization data fetch fails", async () => {
+            addNetworkErrorOverride(backend.dispatcher, DATA_URL, "GET");
 
-        renderWithProviders(<App />, {
-            initialEntries: ["/visualizations/russia_state_budget"],
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+
+            await waitFor(() => {
+                expect(
+                    screen.getByText("Failed to load the page."),
+                ).toBeInTheDocument();
+            });
         });
 
-        await waitFor(() => {
+        it("renders page title and description", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+
+            await waitFor(() => {
+                expect(
+                    screen.getByText("Russia State Budget"),
+                ).toBeInTheDocument();
+            });
+
             expect(
-                screen.getByText("Failed to load the page."),
+                screen.getByText(
+                    "Budget plan & execution data for Russian Federation.",
+                ),
             ).toBeInTheDocument();
         });
     });
 
-    it("renders the MDX content with visualization data", async () => {
-        renderWithProviders(<App />, {
-            initialEntries: ["/visualizations/russia_state_budget"],
+    describe("General", () => {
+        it("renders the income & expenses line chart with correct data", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+
+            await waitFor(() => {
+                expect(screen.getByText("Income")).toBeInTheDocument();
+            });
+            expect(screen.getByText("Expenses")).toBeInTheDocument();
+
+            // Year labels from mock data visible on X axis
+            for (const year of [2022, 2023, 2024]) {
+                expect(
+                    screen.getAllByText(String(year)),
+                ).toHaveLength(2);
+            }
+
+            // Two line paths rendered (income + expenses)
+            const curves = document.querySelectorAll(
+                ".recharts-line-curve",
+            );
+            expect(curves).toHaveLength(2);
         });
 
-        await waitFor(() => {
-            expect(
-                screen.getByText("Russia State Budget"),
-            ).toBeInTheDocument();
-        });
+        it("renders the budget balance bar chart with correct data", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
 
-        expect(
-            screen.getByText(
-                "Budget execution data for the Russian Federation.",
-            ),
-        ).toBeInTheDocument();
+            await waitFor(() => {
+                expect(
+                    screen.getByText("Profit (+) / Deficit (-)"),
+                ).toBeInTheDocument();
+            });
+
+            // Bars rendered (3 years × 1 series)
+            const bars = document.querySelectorAll(".recharts-bar-rectangle");
+            expect(bars).toHaveLength(3);
+        });
     });
 });

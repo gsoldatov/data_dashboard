@@ -187,8 +187,9 @@
             - 1 element only, aligned center, takes 50% width when fullscreen / 100% when stacked;
             - 2 elements, each take 50% width when fullscreen / 100% when stacked (each element moves on its own row);
 
-    - general:      // display all data
-        - barchart - yearly income vs expenses diff;
+    + general:      // display all data
+        + line chart, total income & total expenses;
+        + barchart - yearly income vs expenses diff;
 
     - selectable categories & years:    // separate chart groups for income & expenses
         - category selection:
@@ -217,6 +218,8 @@
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
     ? move to llm skills;
     - update skills in skill repo;
+
+- add a favicon;
 
 - admin page:   // add corresponding backend routes
     - view ETL jobs statuses & logs;

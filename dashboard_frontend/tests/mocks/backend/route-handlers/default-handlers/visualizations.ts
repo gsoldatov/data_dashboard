@@ -1,5 +1,6 @@
 import type { RouteHandler } from "../route-dispatcher";
 import type { MockBackend } from "../../mock-backend";
+import { slugToVisualizationData } from "../../../mock-data/visualizations";
 
 /**
  * Default handler for `GET /api/visualization-settings/`.
@@ -42,14 +43,19 @@ export const upsertVisualizationSettingsHandler: RouteHandler = async (req: Requ
     );
 };
 
+
 /**
  * Default handler for `GET /api/visualization-data/{slug}`.
  *
- * Returns an empty JSON array.
+ * Returns mock data for known slugs, or an empty array as fallback.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const visualizationDataHandler: RouteHandler = async (_req: Request, _backend: MockBackend) => {
-    return new Response(JSON.stringify([]), {
+export const visualizationDataHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
+    const url = new URL(req.url);
+    const slug = url.pathname.split("/").pop() ?? "";
+    const data = slugToVisualizationData[slug] ?? [];
+
+    return new Response(JSON.stringify(data), {
         status: 200,
         headers: { "Content-Type": "application/json" },
     });
