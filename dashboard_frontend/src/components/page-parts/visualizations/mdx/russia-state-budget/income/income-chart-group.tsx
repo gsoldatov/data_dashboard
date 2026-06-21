@@ -1,31 +1,23 @@
-import { useState, useMemo, useCallback, Fragment } from "react";
-import { Eraser } from "lucide-react";
+import { useState, useMemo, useCallback } from "react";
 
 import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
-import { Badge } from "@/components/common/shadcn-ui/badge";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbList,
-    BreadcrumbSeparator,
-} from "@/components/common/shadcn-ui/breadcrumb";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuCheckboxItem,
-} from "@/components/common/shadcn-ui/dropdown-menu";
 import {
     getIncomeCategories,
     getDepth,
     getDescendantCodes,
     groupByDepth,
 } from "./category-hierarchy";
+import { YearDropdown } from "./year-dropdown";
+import { YearSelections } from "./year-selections";
+import { CategoryBreadcrumb } from "./category-breadcrumb";
+import { CategorySelections } from "./category-selections";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { CategoryInfo } from "./category-hierarchy";
+import type { BreadcrumbLevel } from "./category-breadcrumb";
 
-/** Parent component for income chart group — manages shared year/category selections. */
+/** Parent component for income chart group — manages shared year/category selections.
+ *  Empty selection arrays mean "all items shown" for both years and categories. */
 export const IncomeChartGroup = () => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
     const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
@@ -39,15 +31,18 @@ export const IncomeChartGroup = () => {
     );
     const allCategories = useMemo(() => getIncomeCategories(items), [items]);
 
-    const effectiveYears =
-        selectedYears.length === 0
-            ? allYears
-            : allYears.filter((y) => !selectedYears.includes(y)).sort((a, b) => a - b);
+    // ── Derived data ─────────────────────────────────────────────────────
 
-    // ── Breadcrumb computation ───────────────────────────────────────────
+    const effectiveYears = useMemo(
+        () =>
+            selectedYears.length === 0
+                ? allYears
+                : [...selectedYears].sort((a, b) => a - b),
+        [allYears, selectedYears],
+    );
 
-    const breadcrumbLevels = useMemo(() => {
-        const levels: { label: string; depth: number; categories: CategoryInfo[] }[] = [];
+    const breadcrumbLevels: BreadcrumbLevel[] = useMemo(() => {
+        const levels: BreadcrumbLevel[] = [];
 
         // Level 0: top-level income ("1.x")
         const topLevel: CategoryInfo[] = [];
@@ -65,7 +60,6 @@ export const IncomeChartGroup = () => {
             const deepest = selectedCategories.filter((c) => getDepth(c) === maxDepth);
 
             if (deepest.length === 1) {
-                // Walk down from depth 3, adding levels while children exist
                 const parts = deepest[0].split(".");
                 for (let childDepth = 3; childDepth <= parts.length + 1; childDepth++) {
                     const parentCode = parts.slice(0, childDepth - 1).join(".");
@@ -91,25 +85,51 @@ export const IncomeChartGroup = () => {
         return levels;
     }, [allCategories, selectedCategories]);
 
-    // ── Year helpers ─────────────────────────────────────────────────────
+    const badgeGroups = useMemo(() => {
+        if (selectedCategories.length === 0) return [];
+        const groups = groupByDepth(selectedCategories);
+        const result: { depth: number; categories: CategoryInfo[] }[] = [];
+        for (const [depth, infos] of groups) {
+            const named = infos.map((info) => ({
+                code: info.code,
+                name: allCategories.get(info.code) ?? info.code,
+            }));
+            named.sort((a, b) => a.code.localeCompare(b.code));
+            result.push({ depth, categories: named });
+        }
+        result.sort((a, b) => a.depth - b.depth);
+        return result;
+    }, [selectedCategories, allCategories]);
+
+    // ── Callbacks ─────────────────────────────────────────────────────────
 
     const toggleYear = useCallback((year: number) => {
-        setSelectedYears((prev) =>
-            prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year],
-        );
+        setSelectedYears((prev) => {
+            if (prev.length === 0) {
+                // Transition from "all" to explicit selection:
+                // select everything except the clicked year
+                return prev.includes(year) ? prev : [year];
+            }
+            return prev.includes(year)
+                ? prev.filter((y) => y !== year)
+                : [...prev, year];
+        });
     }, []);
 
-    const clearYears = useCallback(() => setSelectedYears([]), []);
-
-    // ── Category helpers ─────────────────────────────────────────────────
+    const clearYears = useCallback(() => {
+        setSelectedYears([]);
+    }, []);
 
     const toggleCategory = useCallback(
         (code: string) => {
-            setSelectedCategories((prev) =>
-                prev.includes(code)
+            setSelectedCategories((prev) => {
+                if (prev.length === 0) {
+                    return [code];
+                }
+                return prev.includes(code)
                     ? prev.filter((c) => c !== code)
-                    : [...prev, code],
-            );
+                    : [...prev, code];
+            });
         },
         [],
     );
@@ -133,136 +153,36 @@ export const IncomeChartGroup = () => {
         [allCategories],
     );
 
-    // ── Badge groups ─────────────────────────────────────────────────────
-
-    const badgeGroups = useMemo(() => {
-        if (selectedCategories.length === 0) return [];
-        const groups = groupByDepth(selectedCategories);
-        const result: { depth: number; categories: CategoryInfo[] }[] = [];
-        for (const [depth, infos] of groups) {
-            const named = infos.map((info) => ({
-                code: info.code,
-                name: allCategories.get(info.code) ?? info.code,
-            }));
-            named.sort((a, b) => a.code.localeCompare(b.code));
-            result.push({ depth, categories: named });
-        }
-        result.sort((a, b) => a.depth - b.depth);
-        return result;
-    }, [selectedCategories, allCategories]);
-
     // ── Render ───────────────────────────────────────────────────────────
 
     return (
         <div className="space-y-4">
-            {/* ── Year selector ─────────────────── */}
             <div className="flex items-center gap-2">
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
-                        Years
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="max-h-56">
-                        {allYears.map((year) => (
-                            <DropdownMenuCheckboxItem
-                                key={year}
-                                checked={!selectedYears.includes(year)}
-                                onCheckedChange={() => toggleYear(year)}
-                                onSelect={(e) => e.preventDefault()}
-                            >
-                                {year}
-                            </DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-                {selectedYears.length > 0 && (
-                    <>
-                        <button
-                            type="button"
-                            onClick={clearYears}
-                            className="text-muted-foreground hover:text-foreground"
-                            aria-label="Clear all years"
-                        >
-                            <Eraser className="h-4 w-4" />
-                        </button>
-                        <div className="flex flex-wrap gap-1.5">
-                            {effectiveYears.map((year) => (
-                                <Badge
-                                    key={year}
-                                    variant="secondary"
-                                    className="cursor-pointer"
-                                    onClick={() => toggleYear(year)}
-                                >
-                                    {year}
-                                </Badge>
-                            ))}
-                        </div>
-                    </>
-                )}
+                <YearDropdown
+                    allYears={allYears}
+                    selectedYears={selectedYears}
+                    onToggle={toggleYear}
+                />
+                <YearSelections
+                    selectedYears={selectedYears}
+                    effectiveYears={effectiveYears}
+                    onToggle={toggleYear}
+                    onClear={clearYears}
+                />
             </div>
 
-            {/* ── Category breadcrumb ───────────── */}
-            <Breadcrumb>
-                <BreadcrumbList>
-                    {breadcrumbLevels.map((level, i) => (
-                        <Fragment key={level.depth}>
-                            {i > 0 && <BreadcrumbSeparator />}
-                            <BreadcrumbItem>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
-                                        {level.label}
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="start" className="max-h-56">
-                                        {level.categories.map((cat) => {
-                                            const checked =
-                                                selectedCategories.includes(cat.code) ||
-                                                selectedCategories.length === 0;
-                                            return (
-                                                <DropdownMenuCheckboxItem
-                                                    key={cat.code}
-                                                    checked={checked}
-                                                    onCheckedChange={() => toggleCategory(cat.code)}
-                                                    onSelect={(e) => e.preventDefault()}
-                                                >
-                                                    {cat.code} {cat.name}
-                                                </DropdownMenuCheckboxItem>
-                                            );
-                                        })}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </BreadcrumbItem>
-                        </Fragment>
-                    ))}
-                </BreadcrumbList>
-            </Breadcrumb>
+            <CategoryBreadcrumb
+                levels={breadcrumbLevels}
+                selectedCategories={selectedCategories}
+                onToggle={toggleCategory}
+            />
 
-            {/* ── Category badge rows ───────────── */}
-            {badgeGroups.map(({ depth, categories }) => (
-                <div key={depth} className="flex items-center gap-2">
-                    <button
-                        type="button"
-                        onClick={() => clearLevel(depth)}
-                        className="text-muted-foreground hover:text-foreground"
-                        aria-label={`Clear level ${depth} categories`}
-                    >
-                        <Eraser className="h-4 w-4" />
-                    </button>
-                    <div className="flex flex-wrap gap-1.5">
-                        {categories.map((cat) => (
-                            <Badge
-                                key={cat.code}
-                                variant="secondary"
-                                className="cursor-pointer"
-                                onClick={() => deselectCategory(cat.code)}
-                            >
-                                {cat.code} {cat.name}
-                            </Badge>
-                        ))}
-                    </div>
-                </div>
-            ))}
+            <CategorySelections
+                badgeGroups={badgeGroups}
+                onClearLevel={clearLevel}
+                onDeselect={deselectCategory}
+            />
 
-            {/* ── Charts placeholder ────────────── */}
             <div className="border rounded-md p-6 text-center text-muted-foreground text-sm mt-6">
                 Charts will be added here
             </div>

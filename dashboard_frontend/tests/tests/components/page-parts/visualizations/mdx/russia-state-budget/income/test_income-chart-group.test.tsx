@@ -27,9 +27,7 @@ describe("IncomeChartGroup", () => {
     ) => {
         await user.click(trigger());
         await user.click(screen.getByRole("menuitemcheckbox", { name: checkboxLabel }));
-        // Close dropdown via Escape
         await user.keyboard("{Escape}");
-        // Wait for the dropdown portal to close and aria-hidden to be removed
         await waitFor(() => {
             expect(screen.queryByRole("menu")).not.toBeInTheDocument();
         });
@@ -76,7 +74,7 @@ describe("IncomeChartGroup", () => {
         ).not.toBeInTheDocument();
     });
 
-    it("toggling a year off shows badge row with remaining years", async () => {
+    it("selecting a year shows badge row with only that year", async () => {
         const user = userEvent.setup();
         const { scope } = render();
 
@@ -87,9 +85,30 @@ describe("IncomeChartGroup", () => {
         const trigger = () => scope.getByText("Years");
         await selectInDropdown(user, trigger, "2024");
 
+        // Only 2024 badge shown
+        expect(scope.getByText("2024")).toBeInTheDocument();
+        expect(scope.queryByText("2022")).not.toBeInTheDocument();
+        expect(scope.queryByText("2023")).not.toBeInTheDocument();
+    });
+
+    it("selecting multiple years shows all selected as badges", async () => {
+        const user = userEvent.setup();
+        const { scope } = render();
+
+        await waitFor(() => {
+            expect(scope.getByText("Years")).toBeInTheDocument();
+        });
+
+        // Select 2024 (first from "all" state)
+        const trigger = () => scope.getByText("Years");
+        await selectInDropdown(user, trigger, "2024");
+
+        // Now add 2022
+        await selectInDropdown(user, trigger, "2022");
+
         expect(scope.getByText("2022")).toBeInTheDocument();
-        expect(scope.getByText("2023")).toBeInTheDocument();
-        expect(scope.queryByText("2024")).not.toBeInTheDocument();
+        expect(scope.getByText("2024")).toBeInTheDocument();
+        expect(scope.queryByText("2023")).not.toBeInTheDocument();
     });
 
     it("clicking a year badge removes that year from selection", async () => {
@@ -100,12 +119,12 @@ describe("IncomeChartGroup", () => {
             expect(scope.getByText("Years")).toBeInTheDocument();
         });
 
+        // Select 2024 and 2022
         const trigger = () => scope.getByText("Years");
         await selectInDropdown(user, trigger, "2024");
+        await selectInDropdown(user, trigger, "2022");
 
-        // Now 2022 and 2023 badges visible
         expect(scope.getByText("2022")).toBeInTheDocument();
-        expect(scope.getByText("2023")).toBeInTheDocument();
 
         // Click 2022 badge to remove it
         await user.click(scope.getByText("2022"));
@@ -113,7 +132,31 @@ describe("IncomeChartGroup", () => {
         await waitFor(() => {
             expect(scope.queryByText("2022")).not.toBeInTheDocument();
         });
+        expect(scope.getByText("2024")).toBeInTheDocument();
+    });
+
+    it("removing the last selected year goes back to all", async () => {
+        const user = userEvent.setup();
+        const { scope } = render();
+
+        await waitFor(() => {
+            expect(scope.getByText("Years")).toBeInTheDocument();
+        });
+
+        const trigger = () => scope.getByText("Years");
+        await selectInDropdown(user, trigger, "2023");
+
         expect(scope.getByText("2023")).toBeInTheDocument();
+
+        // Click the 2023 badge → back to empty selection (all years)
+        await user.click(scope.getByText("2023"));
+
+        await waitFor(() => {
+            expect(scope.queryByText("2023")).not.toBeInTheDocument();
+        });
+        expect(
+            scope.queryByRole("button", { name: "Clear all years" }),
+        ).not.toBeInTheDocument();
     });
 
     it("clear all years button removes all year badges", async () => {
@@ -125,7 +168,8 @@ describe("IncomeChartGroup", () => {
         });
 
         const trigger = () => scope.getByText("Years");
-        await selectInDropdown(user, trigger, "2023");
+        await selectInDropdown(user, trigger, "2022");
+        await selectInDropdown(user, trigger, "2024");
 
         expect(scope.getByText("2022")).toBeInTheDocument();
         expect(scope.getByText("2024")).toBeInTheDocument();
