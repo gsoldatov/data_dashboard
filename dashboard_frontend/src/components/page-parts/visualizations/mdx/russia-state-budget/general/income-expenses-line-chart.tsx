@@ -41,7 +41,7 @@ export const IncomeExpensesLineChart = () => {
     }
 
     return (
-        <>
+        <div>
             <ChartTitle>Income &amp; Expenses</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
@@ -73,7 +73,7 @@ export const IncomeExpensesLineChart = () => {
                     />
                 </LineChart>
             </ResponsiveContainer>
-        </>
+        </div>
     );
 };
 

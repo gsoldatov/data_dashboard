@@ -1,5 +1,6 @@
 import { IncomeExpensesLineChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/general/income-expenses-line-chart";
 import { BudgetBalanceBarChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/general/budget-balance-bar-chart";
+import { ChartsContainer } from "@/components/page-parts/visualizations/charts-container";
 
 
 # Russia State Budget
@@ -7,6 +8,7 @@ Budget plan & execution data for Russian Federation.
 
 
 ## General
-<IncomeExpensesLineChart />
-<BudgetBalanceBarChart />
-
+<ChartsContainer>
+    <IncomeExpensesLineChart />
+    <BudgetBalanceBarChart />
+</ChartsContainer>

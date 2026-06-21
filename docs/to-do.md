@@ -180,12 +180,9 @@
         + add a flat table format;
             [{"year": ..., "number": ..., "name": ..., "value": ...}, ...]
 
-    - layout:
-        - grid / flex container for multiple rows;
-        - row types:
-            - 1 element only, aligned left, takes required width only;
-            - 1 element only, aligned center, takes 50% width when fullscreen / 100% when stacked;
-            - 2 elements, each take 50% width when fullscreen / 100% when stacked (each element moves on its own row);
+    + layout:
+        + row types:
+            + 2 elements, each take 50% width when fullscreen / 100% when stacked (each element moves on its own row);
 
     + general:      // display all data
         + line chart, total income & total expenses;

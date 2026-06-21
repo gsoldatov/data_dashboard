@@ -42,7 +42,7 @@ export const BudgetBalanceBarChart = () => {
     }));
 
     return (
-        <>
+        <div>
             <ChartTitle>Budget Balance</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
@@ -75,6 +75,6 @@ export const BudgetBalanceBarChart = () => {
                     </Bar>
                 </BarChart>
             </ResponsiveContainer>
-        </>
+        </div>
     );
 };
