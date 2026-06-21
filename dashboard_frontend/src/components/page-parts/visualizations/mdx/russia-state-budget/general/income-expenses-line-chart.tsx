@@ -10,6 +10,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { NoDataPlaceholder } from "@/components/page-parts/visualizations/common/no-data-placeholder";
+import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -41,7 +42,7 @@ export const IncomeExpensesLineChart = () => {
 
     return (
         <>
-            <h3 className="font-bold text-xl mt-6">Income &amp; Expenses</h3>
+            <ChartTitle>Income &amp; Expenses</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid strokeDasharray="3 3" />

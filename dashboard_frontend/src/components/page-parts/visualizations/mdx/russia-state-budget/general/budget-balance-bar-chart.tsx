@@ -11,6 +11,7 @@ import {
     Cell,
 } from "recharts";
 import { NoDataPlaceholder } from "@/components/page-parts/visualizations/common/no-data-placeholder";
+import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -42,7 +43,7 @@ export const BudgetBalanceBarChart = () => {
 
     return (
         <>
-            <h3 className="font-bold text-xl mt-6">Budget Balance</h3>
+            <ChartTitle>Budget Balance</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid strokeDasharray="3 3" />
