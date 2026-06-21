@@ -18,7 +18,7 @@ import {
     POSITIVE_COLOR,
     NEGATIVE_COLOR,
     tooltipFormatter,
-} from "../../util";
+} from "@/components/page-parts/visualizations/util";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 
