@@ -49,10 +49,10 @@ def parse_page_data_task(config: Config | None = None) -> None:
         raise
 
 
-def _parse(html_content: str) -> dict[str, Any]:
+def _parse(html_content: str) -> list[dict[str, Any]]:
     """
     Parses a string containing an HTML document
-    and forms a hierarchical data structure containing budget table data.
+    and forms a flat data structure containing budget table data.
     """
     # Parse HTML with BeautifulSoup
     soup = BeautifulSoup(html_content, "html.parser")
@@ -67,13 +67,15 @@ def _parse(html_content: str) -> dict[str, Any]:
     if header_row is None:
         raise ValueError("Russia state budget HTML table does not contain a header")
     header_cells = header_row.find_all("th")
-    years = [cell.get_text(strip=True).rstrip(" *\xa0") for cell in header_cells[2:]]
+    years = [
+        int(cell.get_text(strip=True).rstrip(" *\xa0"))
+        for cell in header_cells[2:]
+    ]
 
-    # Initialize hierarchical data structure
-    data = {}
+    # Initialize flat result list
+    result: list[dict[str, Any]] = []
 
     # Process table rows
-    current_section = None
     prev_section_num = None
 
     tbody = table.find("tbody")
@@ -115,67 +117,21 @@ def _parse(html_content: str) -> dict[str, Any]:
                 value = None
             values.append(value)
 
-        # Create hierarchical structure
-        if section_num and section_num.isdigit():
-            # Main section
-            current_section = {
-                "name": section_name,
-                "data": {
-                    years[i]: values[i] for i in range(len(years))
-                    if values[i] is not None
-                },
-                "children": {}
-            }
-            data[section_num] = current_section
-        elif section_num and "." in section_num:
-            # Subsection
-            if current_section is not None:
-                subsection_num = section_num
-                subsection = {
+        # Emit flat entries for each non-None year value
+        for i in range(len(years)):
+            if values[i] is not None:
+                result.append({
+                    "year": years[i],
+                    "number": section_num,
                     "name": section_name,
-                    "data": {
-                        years[i]: values[i] for i in range(len(years))
-                        if values[i] is not None
-                    },
-                    "children": {}
-                }
-                # Add to the correct parent in the hierarchy
-                _add_to_hierarchy(data, subsection_num, subsection)
+                    "value": values[i],
+                })
 
         # Save the number of the previous section
         # (to reuse for sections without numbers)
         prev_section_num = section_num
 
-    return data
-
-
-def _add_to_hierarchy(
-    data: dict[str, Any],
-    subsection_num: str,
-    subsection: dict[str, Any]
-) -> None:
-    """Helper method to add subsection to the correct parent in hierarchy."""
-    parts = subsection_num.split(".")
-    if len(parts) == 2:
-        parent_num = parts[0]
-        if parent_num in data:
-            data[parent_num]["children"][subsection_num] = subsection
-    elif len(parts) > 2:
-        # Find the correct parent by traversing the hierarchy
-        # Build parent keys progressively: for "1.1.1", check "1", then "1.1"
-        # and finally add to 1.1's children
-        current = data
-        parent_key = parts[0]
-        for i in range(1, len(parts)):
-            if parent_key in current:
-                current = current[parent_key]["children"]
-                if i < len(parts) - 1:
-                    parent_key = ".".join(parts[:i + 1])
-            else:
-                break
-        else:
-            # Successfully traversed to the parent, add the subsection
-            current[subsection_num] = subsection
+    return result
 
 
 if __name__ == "__main__":
