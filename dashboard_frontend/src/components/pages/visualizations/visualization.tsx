@@ -16,6 +16,7 @@ import { VisualizationDataLoader } from "@/components/page-parts/visualizations/
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/common/mdx-error-boundary";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error } from "@/components/common/messages";
+import { mdxComponents as mdxComponentMap } from "@/components/common/mdx";
 
 
 const mdxGlob = import.meta.glob("./mdx/*.mdx");
@@ -104,7 +105,7 @@ export const Visualization = () => {
             <MDXErrorBoundary>
                 <Suspense fallback={<LoadingPlaceholder />}>
                     <VisualizationDataLoader slug={slug}>
-                        <MdxComponent />
+                        <MdxComponent components={mdxComponentMap} />
                     </VisualizationDataLoader>
                 </Suspense>
             </MDXErrorBoundary>
