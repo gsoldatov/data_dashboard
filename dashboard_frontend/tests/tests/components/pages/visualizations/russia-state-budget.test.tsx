@@ -58,9 +58,10 @@ describe("Russia State Budget visualization", () => {
             });
 
             await waitFor(() => {
-                expect(screen.getByText("Income")).toBeInTheDocument();
+                expect(screen.getByText("Expenses")).toBeInTheDocument();
             });
-            expect(screen.getByText("Expenses")).toBeInTheDocument();
+            // "Income" appears in chart legend, section heading, and breadcrumb
+            expect(screen.getAllByText("Income").length).toBeGreaterThanOrEqual(1);
 
             // Year labels from mock data visible on X axis
             for (const year of [2022, 2023, 2024]) {
@@ -90,6 +91,21 @@ describe("Russia State Budget visualization", () => {
             // Bars rendered (3 years × 1 series)
             const bars = document.querySelectorAll(".recharts-bar-rectangle");
             expect(bars).toHaveLength(3);
+        });
+    });
+
+    describe("Income", () => {
+        it("renders the Income section heading", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+
+            await waitFor(() => {
+                expect(screen.getByRole("heading", { name: "Income" })).toBeInTheDocument();
+            });
+
+            // The year dropdown trigger should be visible
+            expect(screen.getByText("Years")).toBeInTheDocument();
         });
     });
 });

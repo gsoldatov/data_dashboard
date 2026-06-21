@@ -16,6 +16,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --radius: 0.5rem;
 }
 
@@ -35,6 +37,8 @@
   --border: #e5e5e5;
   --input: #e5e5e5;
   --ring: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -54,6 +58,8 @@
     --border: #262626;
     --input: #262626;
     --ring: #d4d4d4;
+    --popover: #171717;
+    --popover-foreground: #fafafa;
   }
 }
 
