@@ -12,8 +12,8 @@ import { setRedirectOnRender } from "@/store/slices/ui";
 import { PageLayout } from "@/components/stateful/page-layout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
-import { VisualizationDataLoader } from "@/components/page-parts/visualizations/visualization-data-loader";
-import { MDXErrorBoundary } from "@/components/page-parts/visualizations/mdx-error-boundary";
+import { VisualizationDataLoader } from "@/components/page-parts/visualizations/common/visualization-data-loader";
+import { MDXErrorBoundary } from "@/components/page-parts/visualizations/common/mdx-error-boundary";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error } from "@/components/common/messages";
 

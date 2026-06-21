@@ -9,7 +9,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { NoDataPlaceholder } from "@/components/page-parts/visualizations/no-data-placeholder";
+import { NoDataPlaceholder } from "@/components/page-parts/visualizations/common/no-data-placeholder";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
