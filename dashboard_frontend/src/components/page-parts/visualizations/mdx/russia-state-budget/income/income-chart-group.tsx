@@ -156,7 +156,7 @@ export const IncomeChartGroup = () => {
     // ── Render ───────────────────────────────────────────────────────────
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" data-testid="income-chart-group">
             <div className="flex items-center gap-2">
                 <YearDropdown
                     allYears={allYears}
