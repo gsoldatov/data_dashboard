@@ -19,7 +19,7 @@ import {
 } from "@/components/page-parts/visualizations/util";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "../category-hierarchy";
+import type { CategoryInfo } from "../selectors/category-hierarchy";
 
 interface CategoryLineChartProps {
     items: RussiaStateBudgetItem[];

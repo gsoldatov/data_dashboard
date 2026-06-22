@@ -6,11 +6,11 @@ import {
     getDepth,
     getDescendantCodes,
     groupByDepth,
-} from "./category-hierarchy";
-import { YearDropdown } from "./year-dropdown";
-import { YearSelections } from "./year-selections";
-import { CategoryBreadcrumb } from "./category-breadcrumb";
-import { CategorySelections } from "./category-selections";
+} from "./selectors/category-hierarchy";
+import { YearDropdown } from "./selectors/year-dropdown";
+import { YearSelections } from "./selectors/year-selections";
+import { CategoryBreadcrumb } from "./selectors/category-breadcrumb";
+import { CategorySelections } from "./selectors/category-selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
 import { CategoryTreemap } from "./charts/category-treemap";
@@ -18,8 +18,8 @@ import { CategoryDiffTable } from "./charts/category-diff-table";
 import { ChartsContainer } from "../../../charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "./category-hierarchy";
-import type { BreadcrumbLevel } from "./category-breadcrumb";
+import type { CategoryInfo } from "./selectors/category-hierarchy";
+import type { BreadcrumbLevel } from "./selectors/category-breadcrumb";
 
 export interface CategoryChartGroupProps {
     rootPrefix: string;

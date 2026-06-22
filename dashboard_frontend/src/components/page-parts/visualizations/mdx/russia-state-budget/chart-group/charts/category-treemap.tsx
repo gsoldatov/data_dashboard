@@ -10,7 +10,7 @@ import {
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { TreemapNode } from "recharts/types/util/types";
-import type { CategoryInfo } from "../category-hierarchy";
+import type { CategoryInfo } from "../selectors/category-hierarchy";
 
 /** Node props Recharts passes to the Treemap content component. */
 interface TreemapContentProps extends TreemapNode {
