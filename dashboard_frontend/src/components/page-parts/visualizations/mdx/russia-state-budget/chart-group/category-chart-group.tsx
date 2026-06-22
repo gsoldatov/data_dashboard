@@ -13,6 +13,7 @@ import { CategoryBreadcrumb } from "./category-breadcrumb";
 import { CategorySelections } from "./category-selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
+import { ChartsContainer } from "../../../charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { CategoryInfo } from "./category-hierarchy";
@@ -265,19 +266,21 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                 onDeselect={deselectCategory}
             />
 
-            <CategoryLineChart
-                items={items}
-                displayedYears={displayedYears}
-                displayedCategories={displayedCategories}
-                title={`${section} Categories`}
-            />
-            <CategoryShareStackedBarChart
-                items={items}
-                displayedYears={displayedYears}
-                displayedCategories={displayedCategories}
-                rootPrefix={rootPrefix}
-                title={`${section} Category Shares`}
-            />
+            <ChartsContainer>
+                <CategoryLineChart
+                    items={items}
+                    displayedYears={displayedYears}
+                    displayedCategories={displayedCategories}
+                    title={`${section} Categories`}
+                />
+                <CategoryShareStackedBarChart
+                    items={items}
+                    displayedYears={displayedYears}
+                    displayedCategories={displayedCategories}
+                    rootPrefix={rootPrefix}
+                    title={`${section} Category Shares`}
+                />
+            </ChartsContainer>
         </div>
     );
 };
