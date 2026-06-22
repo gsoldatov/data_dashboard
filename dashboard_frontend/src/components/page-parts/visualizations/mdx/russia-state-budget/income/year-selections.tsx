@@ -22,7 +22,7 @@ export const YearSelections = ({
             <button
                 type="button"
                 onClick={onClear}
-                className="text-muted-foreground hover:text-foreground"
+                className="cursor-pointer text-muted-foreground hover:text-foreground"
                 aria-label="Clear all years"
             >
                 <Eraser className="h-4 w-4" />

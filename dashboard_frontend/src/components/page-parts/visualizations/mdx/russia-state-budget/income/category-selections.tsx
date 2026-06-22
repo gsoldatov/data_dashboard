@@ -21,7 +21,7 @@ export const CategorySelections = ({
                 <button
                     type="button"
                     onClick={() => onClearLevel(depth)}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="cursor-pointer text-muted-foreground hover:text-foreground"
                     aria-label={`Clear level ${depth} categories`}
                 >
                     <Eraser className="h-4 w-4" />
