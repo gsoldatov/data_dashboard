@@ -10,7 +10,7 @@ import {
     ResponsiveContainer,
     Cell,
 } from "recharts";
-import { NoDataPlaceholder } from "@/components/page-parts/visualizations/common/no-data-placeholder";
+import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
 import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
 import {
     CHART_HEIGHT,
@@ -33,7 +33,7 @@ export const BudgetBalanceBarChart = () => {
         .sort((a, b) => a.year - b.year);
 
     if (balanceItems.length === 0) {
-        return <NoDataPlaceholder height={CHART_HEIGHT} />;
+        return <ChartPlaceholder height={CHART_HEIGHT} />;
     }
 
     const chartData = balanceItems.map((d) => ({

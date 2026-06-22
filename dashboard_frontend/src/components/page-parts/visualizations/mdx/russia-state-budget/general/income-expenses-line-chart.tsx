@@ -9,7 +9,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { NoDataPlaceholder } from "@/components/page-parts/visualizations/common/no-data-placeholder";
+import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
 import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
 import {
     CHART_HEIGHT,
@@ -37,7 +37,7 @@ export const IncomeExpensesLineChart = () => {
     }));
 
     if (chartData.length === 0) {
-        return <NoDataPlaceholder height={CHART_HEIGHT} />;
+        return <ChartPlaceholder height={CHART_HEIGHT} />;
     }
 
     return (
