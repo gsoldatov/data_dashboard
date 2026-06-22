@@ -61,7 +61,7 @@ describe("Russia State Budget visualization", () => {
             });
 
             const scope = await incomeScope();
-            expect(scope.getByText("Years")).toBeInTheDocument();
+            expect(scope.getByText("Select years")).toBeInTheDocument();
         });
 
         // ── Year selector ────────────────────────────────────────────────
@@ -71,7 +71,7 @@ describe("Russia State Budget visualization", () => {
                 initialEntries: ["/visualizations/russia_state_budget"],
             });
             const scope = await incomeScope();
-            expect(scope.getByText("Years")).toBeInTheDocument();
+            expect(scope.getByText("Select years")).toBeInTheDocument();
         });
 
         it("shows all available years in the dropdown", async () => {
@@ -81,7 +81,7 @@ describe("Russia State Budget visualization", () => {
             });
             const scope = await incomeScope();
 
-            await user.click(scope.getByText("Years"));
+            await user.click(scope.getByText("Select years"));
 
             expect(
                 screen.getByRole("menuitemcheckbox", { name: "2022" }),
@@ -112,7 +112,7 @@ describe("Russia State Budget visualization", () => {
             });
             const scope = await incomeScope();
 
-            const trigger = () => scope.getByText("Years");
+            const trigger = () => scope.getByText("Select years");
             await selectInDropdown(user, trigger, "2024");
 
             // Only 2024 badge shown
@@ -129,7 +129,7 @@ describe("Russia State Budget visualization", () => {
             const scope = await incomeScope();
 
             // Select 2024 (first from "all" state)
-            const trigger = () => scope.getByText("Years");
+            const trigger = () => scope.getByText("Select years");
             await selectInDropdown(user, trigger, "2024");
 
             // Now add 2022
@@ -148,7 +148,7 @@ describe("Russia State Budget visualization", () => {
             const scope = await incomeScope();
 
             // Select 2024 and 2022
-            const trigger = () => scope.getByText("Years");
+            const trigger = () => scope.getByText("Select years");
             await selectInDropdown(user, trigger, "2024");
             await selectInDropdown(user, trigger, "2022");
 
@@ -170,7 +170,7 @@ describe("Russia State Budget visualization", () => {
             });
             const scope = await incomeScope();
 
-            const trigger = () => scope.getByText("Years");
+            const trigger = () => scope.getByText("Select years");
             await selectInDropdown(user, trigger, "2023");
 
             expect(scope.getByText("2023")).toBeInTheDocument();
@@ -193,7 +193,7 @@ describe("Russia State Budget visualization", () => {
             });
             const scope = await incomeScope();
 
-            const trigger = () => scope.getByText("Years");
+            const trigger = () => scope.getByText("Select years");
             await selectInDropdown(user, trigger, "2022");
             await selectInDropdown(user, trigger, "2024");
 
@@ -400,7 +400,7 @@ describe("Russia State Budget visualization", () => {
                 initialEntries: ["/visualizations/russia_state_budget"],
             });
             const scope = await incomeScope();
-            expect(scope.getByText("Years")).toBeInTheDocument();
+            expect(scope.getByText("Select years")).toBeInTheDocument();
         });
     });
 });
