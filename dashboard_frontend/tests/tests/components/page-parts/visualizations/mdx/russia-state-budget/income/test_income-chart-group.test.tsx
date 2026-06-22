@@ -22,10 +22,10 @@ describe("IncomeChartGroup", () => {
     /** Open a dropdown, click a checkbox item, then press Escape to close. */
     const selectInDropdown = async (
         user: ReturnType<typeof userEvent.setup>,
-        trigger: () => HTMLElement,
+        trigger: () => HTMLElement | Promise<HTMLElement>,
         checkboxLabel: string | RegExp,
     ) => {
-        await user.click(trigger());
+        await user.click(await trigger());
         await user.click(screen.getByRole("menuitemcheckbox", { name: checkboxLabel }));
         await user.keyboard("{Escape}");
         await waitFor(() => {
@@ -185,6 +185,16 @@ describe("IncomeChartGroup", () => {
 
     // ── Category breadcrumb ──────────────────────────────────────────────
 
+    /** Returns a trigger lambda that waits for the Income breadcrumb button to exist. */
+    const incomeTrigger = (scope: ReturnType<typeof within>) => async (): Promise<HTMLElement> => {
+        await waitFor(() => {
+            expect(
+                scope.getByRole("button", { name: "Income" }),
+            ).toBeInTheDocument();
+        });
+        return scope.getByRole("button", { name: "Income" });
+    };
+
     it("renders the Income breadcrumb segment", async () => {
         const { scope } = render();
         await waitFor(() => {
@@ -196,11 +206,7 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
-        await user.click(scope.getByText("Income"));
+        await user.click(await incomeTrigger(scope)());
 
         await waitFor(() => {
             expect(
@@ -233,12 +239,7 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
-        const trigger = () => scope.getByText("Income");
-        await selectInDropdown(user, trigger, /1\.1 Oil & Gas/);
+        await selectInDropdown(user, incomeTrigger(scope), /1\.1 Oil & Gas/);
 
         expect(scope.getByText(/1\.1 Oil & Gas/)).toBeInTheDocument();
     });
@@ -247,12 +248,7 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
-        const trigger = () => scope.getByText("Income");
-        await selectInDropdown(user, trigger, /1\.1 Oil & Gas/);
+        await selectInDropdown(user, incomeTrigger(scope), /1\.1 Oil & Gas/);
 
         // After selecting "1.1", breadcrumb shows "Oil & Gas" segment
         expect(scope.getByText("Oil & Gas")).toBeInTheDocument();
@@ -265,13 +261,8 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
         // Select "1.1" first
-        const incomeTrigger = () => scope.getByText("Income");
-        await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
+        await selectInDropdown(user, incomeTrigger(scope), /1\.1 Oil & Gas/);
 
         // Click the "Oil & Gas" breadcrumb to open its dropdown
         await user.click(scope.getByText("Oil & Gas"));
@@ -292,13 +283,8 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
         // Select "1.1"
-        const incomeTrigger = () => scope.getByText("Income");
-        await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
+        await selectInDropdown(user, incomeTrigger(scope), /1\.1 Oil & Gas/);
 
         // Select "1.1.1" via the Oil & Gas dropdown
         const ogTrigger = () => scope.getByText("Oil & Gas");
@@ -321,13 +307,8 @@ describe("IncomeChartGroup", () => {
         const user = userEvent.setup();
         const { scope } = render();
 
-        await waitFor(() => {
-            expect(scope.getByText("Income")).toBeInTheDocument();
-        });
-
         // Select two depth-2 categories in the same dropdown session
-        const incomeTrigger = () => scope.getByText("Income");
-        await user.click(incomeTrigger());
+        await user.click(await incomeTrigger(scope)());
         await user.click(
             screen.getByRole("menuitemcheckbox", { name: /1\.1 Oil & Gas/ }),
         );

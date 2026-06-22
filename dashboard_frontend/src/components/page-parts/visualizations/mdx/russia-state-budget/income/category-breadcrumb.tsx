@@ -3,6 +3,7 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbList,
+    BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/common/shadcn-ui/breadcrumb";
 import {
@@ -38,28 +39,32 @@ export const CategoryBreadcrumb = ({
                 <Fragment key={level.depth}>
                     {i > 0 && <BreadcrumbSeparator />}
                     <BreadcrumbItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
-                                {level.label}
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="max-h-56">
-                                {level.categories.map((cat) => {
-                                    const checked =
-                                        selectedCategories.length === 0 ||
-                                        selectedCategories.includes(cat.code);
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={cat.code}
-                                            checked={checked}
-                                            onCheckedChange={() => onToggle(cat.code)}
-                                            onSelect={(e) => e.preventDefault()}
-                                        >
-                                            {cat.code} {cat.name}
-                                        </DropdownMenuCheckboxItem>
-                                    );
-                                })}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {level.categories.length === 0 ? (
+                            <BreadcrumbPage>{level.label}</BreadcrumbPage>
+                        ) : (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
+                                    {level.label}
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="max-h-56">
+                                    {level.categories.map((cat) => {
+                                        const checked =
+                                            selectedCategories.length === 0 ||
+                                            selectedCategories.includes(cat.code);
+                                        return (
+                                            <DropdownMenuCheckboxItem
+                                                key={cat.code}
+                                                checked={checked}
+                                                onCheckedChange={() => onToggle(cat.code)}
+                                                onSelect={(e) => e.preventDefault()}
+                                            >
+                                                {cat.code} {cat.name}
+                                            </DropdownMenuCheckboxItem>
+                                        );
+                                    })}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
                     </BreadcrumbItem>
                 </Fragment>
             ))}
