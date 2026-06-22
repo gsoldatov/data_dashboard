@@ -211,35 +211,59 @@ describe("Russia State Budget visualization", () => {
 
         // ── Category breadcrumb ──────────────────────────────────────────
 
-        /** Returns a trigger lambda for the Income breadcrumb button. */
-        const incomeTrigger = async (): Promise<HTMLElement> => {
-            const scope = within(screen.getByTestId("income-chart-group"));
-            await waitFor(() => {
-                expect(
-                    scope.getByRole("button", { name: "Income" }),
-                ).toBeInTheDocument();
+        it("renders the 'Select categories' label", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
             });
-            return scope.getByRole("button", { name: "Income" });
-        };
+            const scope = await incomeScope();
+            expect(scope.getByText("Select categories")).toBeInTheDocument();
+        });
 
-        it("renders the Income breadcrumb segment", async () => {
+        it("renders the '1.x' breadcrumb segment", async () => {
             renderWithProviders(<App />, {
                 initialEntries: ["/visualizations/russia_state_budget"],
             });
             const scope = await incomeScope();
             await waitFor(() => {
-                expect(scope.getByRole("button", { name: "Income" })).toBeInTheDocument();
+                expect(
+                    scope.getByRole("button", { name: "1.x" }),
+                ).toBeInTheDocument();
             });
         });
 
-        it("clicking Income opens dropdown with top-level income categories", async () => {
+        it("does not show '1.x.x' when no categories selected", async () => {
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+            const scope = await incomeScope();
+            expect(
+                scope.queryByRole("button", { name: "1.x.x" }),
+            ).not.toBeInTheDocument();
+        });
+
+        it("checkboxes are unchecked when no categories selected", async () => {
             const user = userEvent.setup();
             renderWithProviders(<App />, {
                 initialEntries: ["/visualizations/russia_state_budget"],
             });
-            await incomeScope();
+            const scope = await incomeScope();
 
-            await user.click(await incomeTrigger());
+            await user.click(scope.getByRole("button", { name: "1.x" }));
+
+            // All should appear unchecked (not checked)
+            const item = screen.getByRole("menuitemcheckbox", { name: /1\.1/ });
+            expect(item).toHaveAttribute("aria-checked", "false");
+            await user.keyboard("{Escape}");
+        });
+
+        it("clicking '1.x' opens dropdown with all top-level income categories", async () => {
+            const user = userEvent.setup();
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+            const scope = await incomeScope();
+
+            await user.click(scope.getByRole("button", { name: "1.x" }));
 
             await waitFor(() => {
                 expect(
@@ -266,6 +290,28 @@ describe("Russia State Budget visualization", () => {
             ).toBeInTheDocument();
         });
 
+        /** Returns a trigger lambda for the '1.x' breadcrumb button. */
+        const trigger1x = async (): Promise<HTMLElement> => {
+            const scope = within(screen.getByTestId("income-chart-group"));
+            await waitFor(() => {
+                expect(
+                    scope.getByRole("button", { name: "1.x" }),
+                ).toBeInTheDocument();
+            });
+            return scope.getByRole("button", { name: "1.x" });
+        };
+
+        /** Returns a trigger lambda for the '1.x.x' breadcrumb button. */
+        const trigger1xx = async (): Promise<HTMLElement> => {
+            const scope = within(screen.getByTestId("income-chart-group"));
+            await waitFor(() => {
+                expect(
+                    scope.getByRole("button", { name: "1.x.x" }),
+                ).toBeInTheDocument();
+            });
+            return scope.getByRole("button", { name: "1.x.x" });
+        };
+
         // ── Category selection → badges ───────────────────────────────────
 
         it("selecting a top-level category shows it as a badge", async () => {
@@ -275,28 +321,12 @@ describe("Russia State Budget visualization", () => {
             });
             const scope = await incomeScope();
 
-            await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
+            await selectInDropdown(user, trigger1x, /1\.1 Oil & Gas/);
 
             expect(scope.getByText(/1\.1 Oil & Gas/)).toBeInTheDocument();
         });
 
-        it("selecting a single category with children drills down", async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
-            });
-            const scope = await incomeScope();
-
-            await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
-
-            // After selecting "1.1", breadcrumb shows "Oil & Gas" segment
-            expect(scope.getByText("Oil & Gas")).toBeInTheDocument();
-
-            // "1.1 Oil & Gas" badge visible
-            expect(scope.getByText(/1\.1 Oil & Gas/)).toBeInTheDocument();
-        });
-
-        it("clicking the child-level breadcrumb shows child categories", async () => {
+        it("selecting a parent shows '1.x.x' with its children", async () => {
             const user = userEvent.setup();
             renderWithProviders(<App />, {
                 initialEntries: ["/visualizations/russia_state_budget"],
@@ -304,10 +334,10 @@ describe("Russia State Budget visualization", () => {
             const scope = await incomeScope();
 
             // Select "1.1" first
-            await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
+            await selectInDropdown(user, trigger1x, /1\.1 Oil & Gas/);
 
-            // Click the "Oil & Gas" breadcrumb to open its dropdown
-            await user.click(scope.getByText("Oil & Gas"));
+            // "1.x.x" should now be visible
+            await user.click(scope.getByRole("button", { name: "1.x.x" }));
 
             await waitFor(() => {
                 expect(
@@ -316,6 +346,52 @@ describe("Russia State Budget visualization", () => {
             });
             expect(
                 screen.getByRole("menuitemcheckbox", { name: /1\.1\.2 Gas/ }),
+            ).toBeInTheDocument();
+            // 1.2.1 Domestic VAT is not a child of 1.1
+            expect(
+                screen.queryByRole("menuitemcheckbox", {
+                    name: /1\.2\.1 Domestic VAT/,
+                }),
+            ).not.toBeInTheDocument();
+        });
+
+        it("selecting a leaf category hides '1.x.x'", async () => {
+            const user = userEvent.setup();
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+            const scope = await incomeScope();
+
+            // "1.5 Other Income" has no children
+            await selectInDropdown(user, trigger1x, /1\.5 Other Income/);
+
+            await waitFor(() => {
+                expect(
+                    scope.queryByRole("button", { name: "1.x.x" }),
+                ).not.toBeInTheDocument();
+            });
+        });
+
+        it("selecting both a leaf and a parent keeps '1.x.x' visible", async () => {
+            const user = userEvent.setup();
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+            const scope = await incomeScope();
+
+            // Select "1.1" (has children) and "1.5" (leaf) in the same dropdown
+            await user.click(await trigger1x());
+            await user.click(
+                screen.getByRole("menuitemcheckbox", { name: /1\.1 Oil & Gas/ }),
+            );
+            await user.click(
+                screen.getByRole("menuitemcheckbox", { name: /1\.5 Other Income/ }),
+            );
+            await user.keyboard("{Escape}");
+
+            // "1.x.x" should still be visible (1.1 has children)
+            expect(
+                scope.getByRole("button", { name: "1.x.x" }),
             ).toBeInTheDocument();
         });
 
@@ -329,11 +405,10 @@ describe("Russia State Budget visualization", () => {
             const scope = await incomeScope();
 
             // Select "1.1"
-            await selectInDropdown(user, incomeTrigger, /1\.1 Oil & Gas/);
+            await selectInDropdown(user, trigger1x, /1\.1 Oil & Gas/);
 
-            // Select "1.1.1" via the Oil & Gas dropdown
-            const ogTrigger = () => scope.getByText("Oil & Gas");
-            await selectInDropdown(user, ogTrigger, /1\.1\.1 Oil/);
+            // Select "1.1.1" via the "1.x.x" dropdown
+            await selectInDropdown(user, trigger1xx, /1\.1\.1 Oil/);
 
             expect(scope.getByText(/1\.1\.1 Oil/)).toBeInTheDocument();
 
@@ -346,17 +421,42 @@ describe("Russia State Budget visualization", () => {
             expect(scope.queryByText(/1\.1 Oil & Gas/)).not.toBeInTheDocument();
         });
 
-        // ── Level clear button ────────────────────────────────────────────
+        // ── Dropdown toggle-off cascades ──────────────────────────────────
 
-        it("clicking level clear button removes all categories at that depth", async () => {
+        it("unchecking a parent in dropdown also removes its children", async () => {
             const user = userEvent.setup();
             renderWithProviders(<App />, {
                 initialEntries: ["/visualizations/russia_state_budget"],
             });
             const scope = await incomeScope();
 
-            // Select two depth-2 categories in the same dropdown session
-            await user.click(await incomeTrigger());
+            // Select "1.1" and "1.1.1"
+            await selectInDropdown(user, trigger1x, /1\.1 Oil & Gas/);
+            await selectInDropdown(user, trigger1xx, /1\.1\.1 Oil/);
+
+            expect(scope.getByText(/1\.1 Oil & Gas/)).toBeInTheDocument();
+            expect(scope.getByText(/1\.1\.1 Oil/)).toBeInTheDocument();
+
+            // Uncheck "1.1" in the dropdown
+            await selectInDropdown(user, trigger1x, /1\.1 Oil & Gas/);
+
+            await waitFor(() => {
+                expect(scope.queryByText(/1\.1 Oil & Gas/)).not.toBeInTheDocument();
+            });
+            expect(scope.queryByText(/1\.1\.1 Oil/)).not.toBeInTheDocument();
+        });
+
+        // ── Level clear button ────────────────────────────────────────────
+
+        it("clicking level clear button removes all categories at that depth and their children", async () => {
+            const user = userEvent.setup();
+            renderWithProviders(<App />, {
+                initialEntries: ["/visualizations/russia_state_budget"],
+            });
+            const scope = await incomeScope();
+
+            // Select two depth-2 categories
+            await user.click(await trigger1x());
             await user.click(
                 screen.getByRole("menuitemcheckbox", { name: /1\.1 Oil & Gas/ }),
             );
@@ -365,9 +465,14 @@ describe("Russia State Budget visualization", () => {
             );
             await user.keyboard("{Escape}");
 
+            // Also select a child of "1.1"
+            await selectInDropdown(user, trigger1xx, /1\.1\.1 Oil/);
+
             expect(scope.getByText(/1\.1 Oil & Gas/)).toBeInTheDocument();
             expect(scope.getByText(/1\.2 VAT/)).toBeInTheDocument();
+            expect(scope.getByText(/1\.1\.1 Oil/)).toBeInTheDocument();
 
+            // Clear level 2 — should remove both depth-2 items AND 1.1.1 (child of 1.1)
             await user.click(
                 scope.getByRole("button", { name: "Clear level 2 categories" }),
             );
@@ -376,6 +481,7 @@ describe("Russia State Budget visualization", () => {
                 expect(scope.queryByText(/1\.1 Oil & Gas/)).not.toBeInTheDocument();
             });
             expect(scope.queryByText(/1\.2 VAT/)).not.toBeInTheDocument();
+            expect(scope.queryByText(/1\.1\.1 Oil/)).not.toBeInTheDocument();
         });
 
         // ── Empty data ────────────────────────────────────────────────────

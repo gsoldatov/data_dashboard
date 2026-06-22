@@ -42,43 +42,47 @@ export const IncomeChartGroup = () => {
     );
 
     const breadcrumbLevels: BreadcrumbLevel[] = useMemo(() => {
+        if (allCategories.size === 0) return [];
+
+        const maxDepth = Math.max(
+            ...[...allCategories.keys()].map(getDepth),
+        );
         const levels: BreadcrumbLevel[] = [];
 
-        // Level 0: top-level income ("1.x")
-        const topLevel: CategoryInfo[] = [];
-        for (const [code, name] of allCategories) {
-            if (getDepth(code) === 2) {
-                topLevel.push({ code, name });
-            }
-        }
-        topLevel.sort((a, b) => a.code.localeCompare(b.code));
-        levels.push({ label: "Income", depth: 2, categories: topLevel });
-
-        // Additional levels: follow drilldown path
-        if (selectedCategories.length > 0) {
-            const maxDepth = Math.max(...selectedCategories.map(getDepth));
-            const deepest = selectedCategories.filter((c) => getDepth(c) === maxDepth);
-
-            if (deepest.length === 1) {
-                const parts = deepest[0].split(".");
-                for (let childDepth = 3; childDepth <= parts.length + 1; childDepth++) {
-                    const parentCode = parts.slice(0, childDepth - 1).join(".");
-                    if (!allCategories.has(parentCode)) break;
-
-                    const parentName = allCategories.get(parentCode) ?? parentCode;
-                    const prefix = parentCode + ".";
-                    const children: CategoryInfo[] = [];
-                    for (const [code, name] of allCategories) {
-                        if (
-                            code.startsWith(prefix) &&
-                            !code.slice(prefix.length).includes(".")
-                        ) {
-                            children.push({ code, name });
-                        }
-                    }
-                    children.sort((a, b) => a.code.localeCompare(b.code));
-                    levels.push({ label: parentName, depth: childDepth + 1, categories: children });
+        for (let depth = 2; depth <= maxDepth; depth++) {
+            // All categories at this depth
+            const allAtDepth: CategoryInfo[] = [];
+            for (const [code, name] of allCategories) {
+                if (getDepth(code) === depth) {
+                    allAtDepth.push({ code, name });
                 }
+            }
+            allAtDepth.sort((a, b) => a.code.localeCompare(b.code));
+
+            // Filter by selected parents at the previous depth
+            let filtered: CategoryInfo[];
+            if (depth === 2) {
+                filtered = allAtDepth;
+            } else if (selectedCategories.length === 0) {
+                break;
+            } else {
+                const selectedParents = selectedCategories.filter(
+                    (c) => getDepth(c) === depth - 1,
+                );
+                if (selectedParents.length === 0) {
+                    break;
+                } else {
+                    filtered = allAtDepth.filter((cat) => {
+                        const parts = cat.code.split(".");
+                        parts.pop();
+                        return selectedParents.includes(parts.join("."));
+                    });
+                }
+            }
+
+            if (filtered.length > 0) {
+                const label = "1" + ".x".repeat(depth - 1);
+                levels.push({ label, depth, categories: filtered });
             }
         }
 
@@ -101,13 +105,22 @@ export const IncomeChartGroup = () => {
         return result;
     }, [selectedCategories, allCategories]);
 
+    // ── Helpers ──────────────────────────────────────────────────────────
+
+    /** Remove `code` and all its descendants from a selection array. */
+    const withoutDescendants = useCallback(
+        (code: string, selection: string[]): string[] => {
+            const descendants = getDescendantCodes(code, allCategories);
+            return selection.filter((c) => !descendants.includes(c));
+        },
+        [allCategories],
+    );
+
     // ── Callbacks ─────────────────────────────────────────────────────────
 
     const toggleYear = useCallback((year: number) => {
         setSelectedYears((prev) => {
             if (prev.length === 0) {
-                // Transition from "all" to explicit selection:
-                // select everything except the clicked year
                 return prev.includes(year) ? prev : [year];
             }
             return prev.includes(year)
@@ -127,30 +140,32 @@ export const IncomeChartGroup = () => {
                     return [code];
                 }
                 return prev.includes(code)
-                    ? prev.filter((c) => c !== code)
+                    ? withoutDescendants(code, prev)
                     : [...prev, code];
             });
         },
-        [],
+        [withoutDescendants],
     );
 
     const clearLevel = useCallback(
         (depth: number) => {
-            setSelectedCategories((prev) =>
-                prev.filter((c) => getDepth(c) !== depth),
-            );
+            setSelectedCategories((prev) => {
+                const toClear = prev.filter((c) => getDepth(c) === depth);
+                let result = prev;
+                for (const code of toClear) {
+                    result = withoutDescendants(code, result);
+                }
+                return result;
+            });
         },
-        [],
+        [withoutDescendants],
     );
 
     const deselectCategory = useCallback(
         (code: string) => {
-            const descendants = getDescendantCodes(code, allCategories);
-            setSelectedCategories((prev) =>
-                prev.filter((c) => !descendants.includes(c)),
-            );
+            setSelectedCategories((prev) => withoutDescendants(code, prev));
         },
-        [allCategories],
+        [withoutDescendants],
     );
 
     // ── Render ───────────────────────────────────────────────────────────
@@ -171,11 +186,14 @@ export const IncomeChartGroup = () => {
                 />
             </div>
 
-            <CategoryBreadcrumb
-                levels={breadcrumbLevels}
-                selectedCategories={selectedCategories}
-                onToggle={toggleCategory}
-            />
+            <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Select categories</span>
+                <CategoryBreadcrumb
+                    levels={breadcrumbLevels}
+                    selectedCategories={selectedCategories}
+                    onToggle={toggleCategory}
+                />
+            </div>
 
             <CategorySelections
                 badgeGroups={badgeGroups}

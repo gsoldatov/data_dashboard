@@ -3,7 +3,6 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     BreadcrumbList,
-    BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/common/shadcn-ui/breadcrumb";
 import {
@@ -27,7 +26,7 @@ export interface CategoryBreadcrumbProps {
     onToggle: (code: string) => void;
 }
 
-/** Breadcrumb with one dropdown trigger per hierarchy level. Empty selection = all at that level. */
+/** Breadcrumb with one dropdown trigger per hierarchy level. Empty selection = all. */
 export const CategoryBreadcrumb = ({
     levels,
     selectedCategories,
@@ -39,32 +38,23 @@ export const CategoryBreadcrumb = ({
                 <Fragment key={level.depth}>
                     {i > 0 && <BreadcrumbSeparator />}
                     <BreadcrumbItem>
-                        {level.categories.length === 0 ? (
-                            <BreadcrumbPage>{level.label}</BreadcrumbPage>
-                        ) : (
-                            <DropdownMenu>
-                                <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
-                                    {level.label}
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="start" className="max-h-56">
-                                    {level.categories.map((cat) => {
-                                        const checked =
-                                            selectedCategories.length === 0 ||
-                                            selectedCategories.includes(cat.code);
-                                        return (
-                                            <DropdownMenuCheckboxItem
-                                                key={cat.code}
-                                                checked={checked}
-                                                onCheckedChange={() => onToggle(cat.code)}
-                                                onSelect={(e) => e.preventDefault()}
-                                            >
-                                                {cat.code} {cat.name}
-                                            </DropdownMenuCheckboxItem>
-                                        );
-                                    })}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
+                                {level.label}
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent side="bottom" align="start" className="max-h-56">
+                                {level.categories.map((cat) => (
+                                    <DropdownMenuCheckboxItem
+                                        key={cat.code}
+                                        checked={selectedCategories.includes(cat.code)}
+                                        onCheckedChange={() => onToggle(cat.code)}
+                                        onSelect={(e) => e.preventDefault()}
+                                    >
+                                        {cat.code} {cat.name}
+                                    </DropdownMenuCheckboxItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </BreadcrumbItem>
                 </Fragment>
             ))}
