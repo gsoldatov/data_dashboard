@@ -463,7 +463,7 @@ describe("Russia State Budget visualization", () => {
         });
 
         describe("charts", () => {
-            it("renders line chart and stacked bar chart inside ChartsContainer", async () => {
+            it("renders all four chart titles and treemap/diff placeholders", async () => {
                 renderWithProviders(<App />, {
                     initialEntries: ["/visualizations/russia_state_budget"],
                 });
@@ -477,9 +477,15 @@ describe("Russia State Budget visualization", () => {
                 expect(
                     scope.getByText("Income Category Shares"),
                 ).toBeInTheDocument();
+                expect(
+                    scope.getByText("Income Category Treemap"),
+                ).toBeInTheDocument();
+                expect(
+                    scope.getByText("Income Category Changes"),
+                ).toBeInTheDocument();
             });
 
-            it("shows NoDataPlaceholder when there are no income categories", async () => {
+            it("shows placeholders when there are no income categories", async () => {
                 backend.dispatcher.addHandlerOverride(
                     "/api/visualization-data/russia_state_budget",
                     "GET",

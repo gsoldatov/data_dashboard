@@ -13,6 +13,8 @@ import { CategoryBreadcrumb } from "./category-breadcrumb";
 import { CategorySelections } from "./category-selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
+import { CategoryTreemap } from "./charts/category-treemap";
+import { CategoryDiffTable } from "./charts/category-diff-table";
 import { ChartsContainer } from "../../../charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
@@ -279,6 +281,25 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                     displayedCategories={displayedCategories}
                     rootPrefix={rootPrefix}
                     title={`${section} Category Shares`}
+                />
+            </ChartsContainer>
+            
+            <ChartsContainer>
+                <CategoryTreemap
+                    items={items}
+                    displayedYears={displayedYears}
+                    displayedCategories={displayedCategories}
+                    rootPrefix={rootPrefix}
+                    title={`${section} Category Treemap`}
+                    onToggleCategory={toggleCategory}
+                />
+                <CategoryDiffTable
+                    items={items}
+                    displayedYears={displayedYears}
+                    displayedCategories={displayedCategories}
+                    rootPrefix={rootPrefix}
+                    allYears={allYears}
+                    title={`${section} Category Changes`}
                 />
             </ChartsContainer>
         </div>

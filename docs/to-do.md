@@ -173,7 +173,7 @@
         + rotate task logs;
         + remove separate logging dir;
 
-- implement Russia state budget visualization:
++ implement Russia state budget visualization:
     + update parsed data formats in data loading:
         x refactor existing hierarchy in nested treemap format;
         x refactor existing hierarchy in flat treemap format;
@@ -188,7 +188,7 @@
         + line chart, total income & total expenses;
         + barchart - yearly income vs expenses diff;
 
-    - by category and year:    // separate chart groups for income & expenses
+    + by category and year:    // separate chart groups for income & expenses
         + category selection:
             + if no categories are selected, then topmost level is considered active;
             + if a single bottom-most category is selected, consider all of its children (or itself, if leaf) active;
@@ -206,13 +206,11 @@
         + line chart with categories of current drilldown layer:
         + stacked bar chart, which displays selected categories shares & total values
         
-        - when exactly one year is selected:    // or display a chart placeholder, if condition is not met
-            - drillable categories treemap;     // display absolute values & share in total
-            - categories diff vs prev year:
-                - absolute values;
-                - share in total %;
-        
-        TODO check active categories and years logic for all cases
+        + when exactly one year is selected:    // or display a chart placeholder, if condition is not met
+            + drillable categories treemap;     // display absolute values & share in total
+            + categories diff vs prev year:
+                + absolute values;
+                + share in total %;
 
 - utility:
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
