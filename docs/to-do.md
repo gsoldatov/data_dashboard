@@ -212,10 +212,6 @@
                 + absolute values;
                 + share in total %;
 
-- utility:
-    + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
-    ? move to llm skills;
-
 - add a favicon;
 
 - admin page:   // add corresponding backend routes
