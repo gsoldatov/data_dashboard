@@ -3,7 +3,7 @@ import { Badge } from "@/components/common/shadcn-ui/badge";
 
 export interface YearSelectionsProps {
     selectedYears: number[];
-    effectiveYears: number[];
+    displayedYears: number[];
     onToggle: (year: number) => void;
     onClear: () => void;
 }
@@ -11,7 +11,7 @@ export interface YearSelectionsProps {
 /** Badge row of selected years with a clear-all eraser button. Hidden when no explicit selection. */
 export const YearSelections = ({
     selectedYears,
-    effectiveYears,
+    displayedYears,
     onToggle,
     onClear,
 }: YearSelectionsProps) => {
@@ -27,8 +27,8 @@ export const YearSelections = ({
             >
                 <Eraser className="h-4 w-4" />
             </button>
-            <div className="flex flex-wrap gap-1.5">
-                {effectiveYears.map((year) => (
+            <div className="flex flex-wrap gap-1.5" data-testid="year-badges">
+                {displayedYears.map((year) => (
                     <Badge
                         key={year}
                         variant="secondary"

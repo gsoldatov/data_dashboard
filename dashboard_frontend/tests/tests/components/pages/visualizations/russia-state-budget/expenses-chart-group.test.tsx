@@ -42,6 +42,17 @@ describe("Russia State Budget visualization", () => {
         });
     };
 
+    /** Returns a trigger lambda for the '2.x' breadcrumb button. */
+    const trigger2x = async (): Promise<HTMLElement> => {
+        const scope = within(screen.getByTestId("expenses-chart-group"));
+        await waitFor(() => {
+            expect(
+                scope.getByRole("button", { name: "2.x" }),
+            ).toBeInTheDocument();
+        });
+        return scope.getByRole("button", { name: "2.x" });
+    };
+
     // ── Section heading ──────────────────────────────────────────────────
 
     describe("Expenses", () => {
@@ -58,163 +69,194 @@ describe("Russia State Budget visualization", () => {
             expect(scope.getByText("Select years")).toBeInTheDocument();
         });
 
-        // ── Year selector ────────────────────────────────────────────────
+        describe("year selection", () => {
+            it("shows all available years in the dropdown", async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
 
-        it("shows all available years in the dropdown", async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
-            });
-            const scope = await expensesScope();
+                await user.click(scope.getByText("Select years"));
 
-            await user.click(scope.getByText("Select years"));
-
-            expect(
-                screen.getByRole("menuitemcheckbox", { name: "2022" }),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("menuitemcheckbox", { name: "2023" }),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("menuitemcheckbox", { name: "2024" }),
-            ).toBeInTheDocument();
-        });
-
-        // ── Category breadcrumb ──────────────────────────────────────────
-
-        it("renders the '2.x' breadcrumb segment", async () => {
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
-            });
-            const scope = await expensesScope();
-            await waitFor(() => {
                 expect(
-                    scope.getByRole("button", { name: "2.x" }),
+                    screen.getByRole("menuitemcheckbox", { name: "2022" }),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByRole("menuitemcheckbox", { name: "2023" }),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByRole("menuitemcheckbox", { name: "2024" }),
                 ).toBeInTheDocument();
             });
         });
 
-        it("does not show '2.x.x' when no categories selected", async () => {
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
+        describe("category selection", () => {
+            it("renders the '2.x' breadcrumb segment", async () => {
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
+                await waitFor(() => {
+                    expect(
+                        scope.getByRole("button", { name: "2.x" }),
+                    ).toBeInTheDocument();
+                });
             });
-            const scope = await expensesScope();
-            expect(
-                scope.queryByRole("button", { name: "2.x.x" }),
-            ).not.toBeInTheDocument();
-        });
 
-        it("'2.x' dropdown shows all top-level expenses categories", async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
+            it("does not show '2.x.x' when no categories selected", async () => {
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
+                expect(
+                    scope.queryByRole("button", { name: "2.x.x" }),
+                ).not.toBeInTheDocument();
             });
-            const scope = await expensesScope();
 
-            await user.click(scope.getByRole("button", { name: "2.x" }));
+            it("'2.x' dropdown shows all top-level expenses categories", async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
 
-            await waitFor(() => {
+                await user.click(scope.getByRole("button", { name: "2.x" }));
+
+                await waitFor(() => {
+                    expect(
+                        screen.getByRole("menuitemcheckbox", {
+                            name: /2\.1 Social Policy/,
+                        }),
+                    ).toBeInTheDocument();
+                });
                 expect(
                     screen.getByRole("menuitemcheckbox", {
-                        name: /2\.1 Social Policy/,
+                        name: /2\.2 National Defense/,
+                    }),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByRole("menuitemcheckbox", {
+                        name: /2\.3 National Economy/,
+                    }),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByRole("menuitemcheckbox", { name: /2\.4 Healthcare/ }),
+                ).toBeInTheDocument();
+                expect(
+                    screen.getByRole("menuitemcheckbox", {
+                        name: /2\.5 Other Expenses/,
                     }),
                 ).toBeInTheDocument();
             });
-            expect(
-                screen.getByRole("menuitemcheckbox", {
-                    name: /2\.2 National Defense/,
-                }),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("menuitemcheckbox", {
-                    name: /2\.3 National Economy/,
-                }),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("menuitemcheckbox", { name: /2\.4 Healthcare/ }),
-            ).toBeInTheDocument();
-            expect(
-                screen.getByRole("menuitemcheckbox", {
-                    name: /2\.5 Other Expenses/,
-                }),
-            ).toBeInTheDocument();
         });
 
-        /** Returns a trigger lambda for the '2.x' breadcrumb button. */
-        const trigger2x = async (): Promise<HTMLElement> => {
-            const scope = within(screen.getByTestId("expenses-chart-group"));
-            await waitFor(() => {
-                expect(
-                    scope.getByRole("button", { name: "2.x" }),
-                ).toBeInTheDocument();
+        describe("category badges", () => {
+            it("selecting a top-level category shows it as a badge", async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
+
+                await selectInDropdown(user, trigger2x, /2\.1 Social Policy/);
+
+                expect(scope.getByText(/2\.1 Social Policy/)).toBeInTheDocument();
             });
-            return scope.getByRole("button", { name: "2.x" });
-        };
 
-        // ── Category selection ────────────────────────────────────────────
+            it("selecting a parent shows '2.x.x' with its children", async () => {
+                const user = userEvent.setup();
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
 
-        it("selecting a top-level category shows it as a badge", async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
-            });
-            const scope = await expensesScope();
+                await selectInDropdown(user, trigger2x, /2\.1 Social Policy/);
 
-            await selectInDropdown(user, trigger2x, /2\.1 Social Policy/);
+                await user.click(scope.getByRole("button", { name: "2.x.x" }));
 
-            expect(scope.getByText(/2\.1 Social Policy/)).toBeInTheDocument();
-        });
-
-        it("selecting a parent shows '2.x.x' with its children", async () => {
-            const user = userEvent.setup();
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
-            });
-            const scope = await expensesScope();
-
-            // Select "2.1" first
-            await selectInDropdown(user, trigger2x, /2\.1 Social Policy/);
-
-            // "2.x.x" should now be visible
-            await user.click(scope.getByRole("button", { name: "2.x.x" }));
-
-            await waitFor(() => {
+                await waitFor(() => {
+                    expect(
+                        screen.getByRole("menuitemcheckbox", {
+                            name: /2\.1\.1 Pensions/,
+                        }),
+                    ).toBeInTheDocument();
+                });
                 expect(
                     screen.getByRole("menuitemcheckbox", {
-                        name: /2\.1\.1 Pensions/,
+                        name: /2\.1\.2 Social Benefits/,
                     }),
                 ).toBeInTheDocument();
             });
-            expect(
-                screen.getByRole("menuitemcheckbox", {
-                    name: /2\.1\.2 Social Benefits/,
-                }),
-            ).toBeInTheDocument();
         });
 
-        // ── Empty data ────────────────────────────────────────────────────
+        describe("charts", () => {
+            it("renders line chart and stacked bar chart inside ChartsContainer", async () => {
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
 
-        it("renders without crashing when no expenses items in data", async () => {
-            backend.dispatcher.addHandlerOverride(
-                "/api/visualization-data/russia_state_budget",
-                "GET",
-                async () =>
-                    new Response(
-                        JSON.stringify([
-                            [{ year: 2022, number: "3", name: "Balance", value: 0 }],
-                        ]),
-                        {
-                            status: 200,
-                            headers: { "Content-Type": "application/json" },
-                        },
-                    ),
-            );
-
-            renderWithProviders(<App />, {
-                initialEntries: ["/visualizations/russia_state_budget"],
+                await waitFor(() => {
+                    expect(
+                        scope.getByText("Expenses Categories"),
+                    ).toBeInTheDocument();
+                });
+                expect(
+                    scope.getByText("Expenses Category Shares"),
+                ).toBeInTheDocument();
             });
-            const scope = await expensesScope();
-            expect(scope.getByText("Select years")).toBeInTheDocument();
+
+            it("shows NoDataPlaceholder when there are no expenses categories", async () => {
+                backend.dispatcher.addHandlerOverride(
+                    "/api/visualization-data/russia_state_budget",
+                    "GET",
+                    async () =>
+                        new Response(
+                            JSON.stringify([
+                                [
+                                    { year: 2022, number: "1", name: "Income, total", value: 27824.4 },
+                                ],
+                            ]),
+                            {
+                                status: 200,
+                                headers: { "Content-Type": "application/json" },
+                            },
+                        ),
+                );
+
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
+
+                await waitFor(() => {
+                    expect(scope.getAllByText("No data available").length).toBe(2);
+                });
+            });
+
+            it("renders without crashing when no expenses items in data", async () => {
+                backend.dispatcher.addHandlerOverride(
+                    "/api/visualization-data/russia_state_budget",
+                    "GET",
+                    async () =>
+                        new Response(
+                            JSON.stringify([
+                                [{ year: 2022, number: "3", name: "Balance", value: 0 }],
+                            ]),
+                            {
+                                status: 200,
+                                headers: { "Content-Type": "application/json" },
+                            },
+                        ),
+                );
+
+                renderWithProviders(<App />, {
+                    initialEntries: ["/visualizations/russia_state_budget"],
+                });
+                const scope = await expensesScope();
+                expect(scope.getByText("Select years")).toBeInTheDocument();
+            });
         });
     });
 });

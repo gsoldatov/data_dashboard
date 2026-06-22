@@ -203,16 +203,16 @@
             + current selections are displayed as a list of items and can be deselected;
             + selections are shared across the chart group;
         
-        - line chart with categories of current drilldown layer:
-        - stacked bar chart, which displays selected categories shares & total values
-
-        TODO check active categories and years logic for all cases
+        + line chart with categories of current drilldown layer:
+        + stacked bar chart, which displays selected categories shares & total values
         
         - when exactly one year is selected:    // or display a chart placeholder, if condition is not met
             - drillable categories treemap;     // display absolute values & share in total
             - categories diff vs prev year:
                 - absolute values;
                 - share in total %;
+        
+        TODO check active categories and years logic for all cases
 
 - utility:
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
@@ -238,6 +238,7 @@
 
 
 # Additional
+- custom chart tooltip component with styling;
 - allow reloading configuration in data_loading & dashboard_backend;
 ? migrate airflow & backend to PostgreSQL;
 ? move visualizations list constant to backend and retrieve it where it's used;

@@ -11,6 +11,11 @@ export function getDepth(code: string): number {
     return code.split(".").length;
 }
 
+/** Categories, which are excluded from display */
+const EXCLUDED_CODES = new Set([
+    "2.1*"  // child of 2.1, which overlaps with it
+]);
+
 /** Extract unique (code, name) pairs from flat items, filtered to the given root prefix. */
 export function getCategories(
     items: RussiaStateBudgetItem[],
@@ -20,7 +25,7 @@ export function getCategories(
     for (const item of items) {
         if (item.number.startsWith(rootPrefix) && !map.has(item.number)) {
             // Skip the root itself — only subcategories
-            if (item.number !== rootPrefix) {
+            if (item.number !== rootPrefix && !EXCLUDED_CODES.has(item.number)) {
                 map.set(item.number, item.name);
             }
         }

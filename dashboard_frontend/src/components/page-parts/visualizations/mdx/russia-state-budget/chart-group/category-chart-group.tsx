@@ -11,6 +11,8 @@ import { YearDropdown } from "./year-dropdown";
 import { YearSelections } from "./year-selections";
 import { CategoryBreadcrumb } from "./category-breadcrumb";
 import { CategorySelections } from "./category-selections";
+import { CategoryLineChart } from "./charts/category-line-chart";
+import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { CategoryInfo } from "./category-hierarchy";
@@ -26,7 +28,9 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
     const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
 
+    /** Raw user selection: years explicitly picked (empty = all years). */
     const [selectedYears, setSelectedYears] = useState<number[]>([]);
+    /** Raw user selection: category codes explicitly picked (empty = top-level). */
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
     const allYears = useMemo(
@@ -40,13 +44,57 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
     // ── Derived data ─────────────────────────────────────────────────────
 
-    const effectiveYears = useMemo(
+    /** Years actually shown in charts: all years when nothing selected, selected years otherwise. */
+    const displayedYears = useMemo(
         () =>
             selectedYears.length === 0
                 ? allYears
                 : [...selectedYears].sort((a, b) => a - b),
         [allYears, selectedYears],
     );
+
+    /** Categories actually shown in charts, derived from selection state.
+     *  - Empty selection → all top-level (depth-2) categories.
+     *  - Single bottom-most selected → its children, or itself if leaf.
+     *  - Multiple bottom-most selected → use them directly. */
+    const displayedCategories: CategoryInfo[] = useMemo(() => {
+        if (allCategories.size === 0) return [];
+
+        if (selectedCategories.length === 0) {
+            const top: CategoryInfo[] = [];
+            for (const [code, name] of allCategories) {
+                if (getDepth(code) === 2) top.push({ code, name });
+            }
+            top.sort((a, b) => a.code.localeCompare(b.code));
+            return top;
+        }
+
+        const maxDepth = Math.max(
+            ...selectedCategories.map((c) => getDepth(c)),
+        );
+        const bottomMost = selectedCategories.filter(
+            (c) => getDepth(c) === maxDepth,
+        );
+
+        if (bottomMost.length > 1) {
+            return bottomMost.map((code) => ({
+                code,
+                name: allCategories.get(code) ?? code,
+            }));
+        }
+
+        const code = bottomMost[0];
+        const targetDepth = getDepth(code) + 1;
+        const children: CategoryInfo[] = [];
+        for (const [c, n] of allCategories) {
+            if (c.startsWith(code + ".") && getDepth(c) === targetDepth) children.push({ code: c, name: n });
+        }
+        if (children.length > 0) {
+            children.sort((a, b) => a.code.localeCompare(b.code));
+            return children;
+        }
+        return [{ code, name: allCategories.get(code) ?? code }];
+    }, [allCategories, selectedCategories]);
 
     const breadcrumbLevels: BreadcrumbLevel[] = useMemo(() => {
         if (allCategories.size === 0) return [];
@@ -125,6 +173,8 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
     // ── Callbacks ─────────────────────────────────────────────────────────
 
+    /** Add/remove a year from the selection. First selection from "all" state picks
+     *  that single year; subsequent toggles behave additively. */
     const toggleYear = useCallback((year: number) => {
         setSelectedYears((prev) => {
             if (prev.length === 0) {
@@ -136,10 +186,13 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         });
     }, []);
 
+    /** Reset year selection to "all". */
     const clearYears = useCallback(() => {
         setSelectedYears([]);
     }, []);
 
+    /** Add/remove a category code. First selection from "all" state switches
+     *  to single-selection mode; toggling a parent also removes its descendants. */
     const toggleCategory = useCallback(
         (code: string) => {
             setSelectedCategories((prev) => {
@@ -154,6 +207,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         [withoutDescendants],
     );
 
+    /** Remove all selected categories at a given depth (and their descendants). */
     const clearLevel = useCallback(
         (depth: number) => {
             setSelectedCategories((prev) => {
@@ -168,6 +222,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         [withoutDescendants],
     );
 
+    /** Remove a single category code and all its descendants from the selection. */
     const deselectCategory = useCallback(
         (code: string) => {
             setSelectedCategories((prev) => withoutDescendants(code, prev));
@@ -176,6 +231,8 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     );
 
     // ── Render ───────────────────────────────────────────────────────────
+
+    const section = rootPrefix === "1" ? "Income" : "Expenses";
 
     return (
         <div className="space-y-4" data-testid={dataTestID}>
@@ -187,7 +244,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                 />
                 <YearSelections
                     selectedYears={selectedYears}
-                    effectiveYears={effectiveYears}
+                    displayedYears={displayedYears}
                     onToggle={toggleYear}
                     onClear={clearYears}
                 />
@@ -208,9 +265,19 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                 onDeselect={deselectCategory}
             />
 
-            <div className="border rounded-md p-6 text-center text-muted-foreground text-sm mt-6">
-                Charts will be added here
-            </div>
+            <CategoryLineChart
+                items={items}
+                displayedYears={displayedYears}
+                displayedCategories={displayedCategories}
+                title={`${section} Categories`}
+            />
+            <CategoryShareStackedBarChart
+                items={items}
+                displayedYears={displayedYears}
+                displayedCategories={displayedCategories}
+                rootPrefix={rootPrefix}
+                title={`${section} Category Shares`}
+            />
         </div>
     );
 };
