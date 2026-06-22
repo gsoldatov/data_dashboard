@@ -173,6 +173,7 @@ A single page app containing a set of data visualizations and related pages.
         - preloaded state & mocks for other data should be in `dashboard_backend/tests/mocks/mock-data/`;
     - test cases are written as functions (one test file per component/slice);
     - test case order (where applicable): network errors,  validation & data errors, other errors, correct execution;
+    - when testing components, rendering the whole <App /> component is preferred over rendering the tested component only, unless it is strictly isolated from other parts of the app;
     - tes case names should match `*.test.ts(-x)` pattern;
     - mock backend route handlers validate incoming request data using Zod;
 
