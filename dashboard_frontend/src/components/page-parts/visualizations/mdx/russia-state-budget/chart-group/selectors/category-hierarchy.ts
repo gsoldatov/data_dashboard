@@ -48,6 +48,26 @@ export function getDescendantCodes(
     return descendants;
 }
 
+/** Compare category codes numerically by segment (e.g. 2.1 < 2.2 < 2.11 < 2.100),
+ *  with codes ending in * sorting after their plain counterpart (2.14 < 2.14* < 2.15). */
+export function compareCodes(a: string, b: string): number {
+    const aParts = a.split(".");
+    const bParts = b.split(".");
+    const len = Math.max(aParts.length, bParts.length);
+    for (let i = 0; i < len; i++) {
+        const aRaw = aParts[i] ?? "";
+        const bRaw = bParts[i] ?? "";
+        const aStar = aRaw.endsWith("*");
+        const bStar = bRaw.endsWith("*");
+        const aNum = parseInt(aRaw, 10);
+        const bNum = parseInt(bRaw, 10);
+        if (aNum !== bNum) return aNum - bNum;
+        // Plain sorts before starred when numeric parts are equal
+        if (aStar !== bStar) return aStar ? 1 : -1;
+    }
+    return 0;
+}
+
 /** Group selected codes by their hierarchy depth. */
 export function groupByDepth(
     codes: string[],
@@ -59,7 +79,7 @@ export function groupByDepth(
         groups.get(depth)!.push({ code, name: code });
     }
     for (const infos of groups.values()) {
-        infos.sort((a, b) => a.code.localeCompare(b.code));
+        infos.sort((a, b) => compareCodes(a.code, b.code));
     }
     return groups;
 }

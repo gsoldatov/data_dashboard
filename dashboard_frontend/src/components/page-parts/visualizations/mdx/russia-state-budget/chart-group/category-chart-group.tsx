@@ -6,6 +6,7 @@ import {
     getDepth,
     getDescendantCodes,
     groupByDepth,
+    compareCodes,
 } from "./selectors/category-hierarchy";
 import { YearDropdown } from "./selectors/year-dropdown";
 import { YearSelections } from "./selectors/year-selections";
@@ -68,7 +69,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
             for (const [code, name] of allCategories) {
                 if (getDepth(code) === 2) top.push({ code, name });
             }
-            top.sort((a, b) => a.code.localeCompare(b.code));
+            top.sort((a, b) => compareCodes(a.code, b.code));
             return top;
         }
 
@@ -93,7 +94,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
             if (c.startsWith(code + ".") && getDepth(c) === targetDepth) children.push({ code: c, name: n });
         }
         if (children.length > 0) {
-            children.sort((a, b) => a.code.localeCompare(b.code));
+            children.sort((a, b) => compareCodes(a.code, b.code));
             return children;
         }
         return [{ code, name: allCategories.get(code) ?? code }];
@@ -115,7 +116,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                     allAtDepth.push({ code, name });
                 }
             }
-            allAtDepth.sort((a, b) => a.code.localeCompare(b.code));
+            allAtDepth.sort((a, b) => compareCodes(a.code, b.code));
 
             // Filter by selected parents at the previous depth
             let filtered: CategoryInfo[];
@@ -156,7 +157,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                 code: info.code,
                 name: allCategories.get(info.code) ?? info.code,
             }));
-            named.sort((a, b) => a.code.localeCompare(b.code));
+            named.sort((a, b) => compareCodes(a.code, b.code));
             result.push({ depth, categories: named });
         }
         result.sort((a, b) => a.depth - b.depth);
