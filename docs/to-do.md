@@ -188,33 +188,35 @@
         + line chart, total income & total expenses;
         + barchart - yearly income vs expenses diff;
 
-    - selectable categories & years:    // separate chart groups for income & expenses
-        - category selection:
-            - one category = drilldown;
-            - multiple categories = filter current level without drilling down;
-            - selections are shared across the chart group;
+    - by category and year:    // separate chart groups for income & expenses
+        + category selection:
+            + if no categories are selected, then topmost level is considered active;
+            + if a single bottom-most category is selected, consider all of its children (or itself, if leaf) active;
+            + if multiple bottom-most categories are selected, consider them active;
+            + drill down, if there are child categories for selections;
+            + current selections are displayed as a list of items and can be deselected:
+                + deselecting a parent also deselects all of its children;
+            + selections are shared across the chart group;
         
-        - years selector:
-            - can select any amount, if none is selected, all years are displayed;
-            - selections are shared across the chart group;
+        + years selector:
+            + can select any amount, if none is selected, all years are displayed;
+            + current selections are displayed as a list of items and can be deselected;
+            + selections are shared across the chart group;
         
-        - line charts with categories of current drilldown layer:
+        - line chart with categories of current drilldown layer:
         - stacked bar chart, which displays selected categories shares & total values
-    
-    - single year:      // separate chart groups for income & expenses
-        - year selector:
-            - defaults to last year, one year always selected;
-            - selections are shared across the chart group;
+
+        TODO check active categories and years logic for all cases
         
-        - drillable categories treemap;     // display absolute values & share in total
-        - categories diff vs prev year:
-            - absolute values;
-            - share in total %;
+        - when exactly one year is selected:    // or display a chart placeholder, if condition is not met
+            - drillable categories treemap;     // display absolute values & share in total
+            - categories diff vs prev year:
+                - absolute values;
+                - share in total %;
 
 - utility:
     + add a rebase script (one-liner to rebase wt1 / wt2 on main - and switch branches to do that)
     ? move to llm skills;
-    - update skills in skill repo;
 
 - add a favicon;
 
@@ -230,6 +232,8 @@
     ? split main AGENTS.md into skills / sub-files;
 
 - add deployment via docker compose;
+- update skills in skill repo;
+
 
 
 

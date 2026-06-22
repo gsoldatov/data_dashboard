@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 
 import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
 import {
-    getIncomeCategories,
+    getCategories,
     getDepth,
     getDescendantCodes,
     groupByDepth,
@@ -16,9 +16,13 @@ import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-st
 import type { CategoryInfo } from "./category-hierarchy";
 import type { BreadcrumbLevel } from "./category-breadcrumb";
 
-/** Parent component for income chart group — manages shared year/category selections.
- *  Empty selection arrays mean "all items shown" for both years and categories. */
-export const IncomeChartGroup = () => {
+export interface CategoryChartGroupProps {
+    rootPrefix: string;
+    dataTestID: string;
+}
+
+/** Generic chart group managing shared year/category selections for a data section. */
+export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGroupProps) => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
     const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
 
@@ -29,7 +33,10 @@ export const IncomeChartGroup = () => {
         () => [...new Set(items.map((d) => d.year))].sort((a, b) => a - b),
         [items],
     );
-    const allCategories = useMemo(() => getIncomeCategories(items), [items]);
+    const allCategories = useMemo(
+        () => getCategories(items, rootPrefix),
+        [items, rootPrefix],
+    );
 
     // ── Derived data ─────────────────────────────────────────────────────
 
@@ -81,13 +88,13 @@ export const IncomeChartGroup = () => {
             }
 
             if (filtered.length > 0) {
-                const label = "1" + ".x".repeat(depth - 1);
+                const label = rootPrefix + ".x".repeat(depth - 1);
                 levels.push({ label, depth, categories: filtered });
             }
         }
 
         return levels;
-    }, [allCategories, selectedCategories]);
+    }, [allCategories, selectedCategories, rootPrefix]);
 
     const badgeGroups = useMemo(() => {
         if (selectedCategories.length === 0) return [];
@@ -171,7 +178,7 @@ export const IncomeChartGroup = () => {
     // ── Render ───────────────────────────────────────────────────────────
 
     return (
-        <div className="space-y-4" data-testid="income-chart-group">
+        <div className="space-y-4" data-testid={dataTestID}>
             <div className="flex items-center gap-2">
                 <YearDropdown
                     allYears={allYears}

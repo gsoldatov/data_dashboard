@@ -6,22 +6,21 @@ export interface CategoryInfo {
     name: string;
 }
 
-const INCOME_ROOT = "1";
-
 /** Number of hierarchy levels in a category code. */
 export function getDepth(code: string): number {
     return code.split(".").length;
 }
 
-/** Extract unique (code, name) pairs from flat items, filtered to income categories. */
-export function getIncomeCategories(
+/** Extract unique (code, name) pairs from flat items, filtered to the given root prefix. */
+export function getCategories(
     items: RussiaStateBudgetItem[],
+    rootPrefix: string,
 ): Map<string, string> {
     const map = new Map<string, string>();
     for (const item of items) {
-        if (item.number.startsWith(INCOME_ROOT) && !map.has(item.number)) {
-            // Skip the root "1" itself — only subcategories
-            if (item.number !== INCOME_ROOT) {
+        if (item.number.startsWith(rootPrefix) && !map.has(item.number)) {
+            // Skip the root itself — only subcategories
+            if (item.number !== rootPrefix) {
                 map.set(item.number, item.name);
             }
         }

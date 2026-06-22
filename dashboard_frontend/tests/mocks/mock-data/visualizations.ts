@@ -40,6 +40,31 @@ const russiaStateBudgetData = [
         { year: 2022, number: "1.2.1", name: "Domestic VAT", value: 4523.0 },
         { year: 2023, number: "1.2.1", name: "Domestic VAT", value: 4789.0 },
         { year: 2024, number: "1.2.1", name: "Domestic VAT", value: 6123.0 },
+
+        // Expenses subcategories (aggregated under "2")
+        { year: 2022, number: "2.1", name: "Social Policy", value: 12987.0 },
+        { year: 2023, number: "2.1", name: "Social Policy", value: 13234.0 },
+        { year: 2024, number: "2.1", name: "Social Policy", value: 15432.0 },
+        { year: 2022, number: "2.2", name: "National Defense", value: 4672.0 },
+        { year: 2023, number: "2.2", name: "National Defense", value: 5123.0 },
+        { year: 2024, number: "2.2", name: "National Defense", value: 6456.0 },
+        { year: 2022, number: "2.3", name: "National Economy", value: 3987.0 },
+        { year: 2023, number: "2.3", name: "National Economy", value: 4210.0 },
+        { year: 2024, number: "2.3", name: "National Economy", value: 5321.0 },
+        { year: 2022, number: "2.4", name: "Healthcare", value: 3012.0 },
+        { year: 2023, number: "2.4", name: "Healthcare", value: 3198.0 },
+        { year: 2024, number: "2.4", name: "Healthcare", value: 4012.0 },
+        { year: 2022, number: "2.5", name: "Other Expenses", value: 6510.5 },
+        { year: 2023, number: "2.5", name: "Other Expenses", value: 6628.7 },
+        { year: 2024, number: "2.5", name: "Other Expenses", value: 8527.5 },
+
+        // Nested subcategories under Social Policy
+        { year: 2022, number: "2.1.1", name: "Pensions", value: 8765.0 },
+        { year: 2023, number: "2.1.1", name: "Pensions", value: 8912.0 },
+        { year: 2024, number: "2.1.1", name: "Pensions", value: 10234.0 },
+        { year: 2022, number: "2.1.2", name: "Social Benefits", value: 4222.0 },
+        { year: 2023, number: "2.1.2", name: "Social Benefits", value: 4322.0 },
+        { year: 2024, number: "2.1.2", name: "Social Benefits", value: 5198.0 },
     ],
 ];
 
