@@ -29,3 +29,6 @@ The following rules should apply to any TypeScript code (or config files in a Ty
 - use `const` or `let` for variable & function definitions;
 - use named module exports;
 - do not add default values for function arguments, unless it's explicitly required by task (or makes a strong sense) to do otherwise;
+
+# React.js
+- component CSS class names should be split into one or more logical groups (separate strings), with each being provided a brief comment about its purpose;
