@@ -11,12 +11,12 @@ function loadViteEnvs(): Record<string, string> {
     const configPath = path.resolve(__dirname, "config.env.example");
     const viteEnvs: Record<string, string> = {};
     const lines = fs.readFileSync(configPath, "utf-8").split("\n");
-    const exportRe = /^export\s+(VITE_\w+)\s*=\s*"([^"]*)"/;
+    const varRe = /^(VITE_\w+)\s*=\s*(.+?)(?:\s*#.*)?$/;
 
     for (const line of lines) {
-        const match = line.match(exportRe);
+        const match = line.match(varRe);
         if (match) {
-            viteEnvs[match[1]] = match[2];
+            viteEnvs[match[1]] = match[2].trim();
         }
     }
 
