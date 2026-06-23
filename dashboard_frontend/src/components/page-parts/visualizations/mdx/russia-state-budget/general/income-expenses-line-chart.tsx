@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
 import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
+import { ChartTooltip } from "@/components/page-parts/visualizations/common/chart-tooltip";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -55,7 +56,7 @@ export const IncomeExpensesLineChart = () => {
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip formatter={tooltipFormatter} />
+                    <Tooltip content={ChartTooltip} formatter={tooltipFormatter} />
                     <Legend />
                     <Line
                         type="monotone"
