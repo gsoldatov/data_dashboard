@@ -14,17 +14,17 @@
     - view etl jobs' logs;
 
 - dashboard frontend:
-    - login page & logout funcitonality;
-    - list available visualizations;
-    - display a visualization;
-    - user page (view / edit);
+    + login page & logout funcitonality;
+    + list available visualizations;
+    + display a visualization;
+    + user page (view / edit);
     - admin page:
-        - edit visualization settings;
+        + edit visualization settings;
         - view ETL jobs statuses & logs;
         ? run ETL jobs;
 
 - data sources / visualizations to implement:
-    - Russia State budget (plan / fact, with drilldown by categories);
+    + Russia State budget (plan / fact, with drilldown by categories);
     - Russia Economic Indicators (GDP, Inflation, production & industrial indexes, etc.);
     ???
 
@@ -38,16 +38,15 @@
     + FastAPI for data fetching;
     + SQLite for storing admin data & dashboard settings;
     + pytest for testing;
-- dashboard frontend:
-    - React for rendering HTML;
-    - tailwind for styling;
-    - @mdx-js/react for rendering markdown with JSX support;
-    - ??? for displaying charts;
-    - RTL / Jest for testing;
-- deployment:
-    - Docker / Docker Compose for running containers;
-    ???
-    - 
++ dashboard frontend:
+    + React for rendering HTML;
+    + tailwind for styling;
+    + @mdx-js/react for rendering markdown with JSX support;
+    + Recharts.js for displaying charts;
+    + vitest for testing;
++ deployment:
+    + Docker / Docker Compose for running containers;
+
 
 
 # To-Do
@@ -215,12 +214,8 @@
     + custom chart tooltip component with styling;
 
 + add a favicon;
-
 + add deployment via docker compose;
-
-- add readme files for project initialization, startup & deployment;
-
-
++ add readme files for project initialization, startup & deployment;
 
 
 
