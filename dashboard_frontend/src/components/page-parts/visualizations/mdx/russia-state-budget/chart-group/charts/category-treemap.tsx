@@ -2,6 +2,7 @@ import { Treemap, Tooltip, ResponsiveContainer } from "recharts";
 
 import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
 import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
+import { ChartTooltip } from "@/components/page-parts/visualizations/common/chart-tooltip";
 import {
     CHART_HEIGHT,
     CHART_COLORS,
@@ -88,6 +89,7 @@ export const CategoryTreemap = ({
                     }}
                 >
                     <Tooltip
+                        content={ChartTooltip}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         formatter={treemapTooltip as any}
                     />

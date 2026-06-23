@@ -4,40 +4,75 @@ import type { NameType, ValueType } from "recharts/types/component/DefaultToolti
 type PayloadEntry<TValue extends ValueType> =
     NonNullable<TooltipProps<TValue, NameType>["payload"]>[number];
 
-/** Shared tooltip content rendering an X-axis indicator row followed by
- *  each payload entry's name and value.
- *  The X-axis label and value are derived from the payload data —
- *  no hardcoded axis name in the tooltip. */
+/**
+ * Create a tooltip content component for a chart whose X-axis data key is
+ * `dataKey` and display label is `label`.  The returned function is meant
+ * to be passed as `content` to a Recharts `<Tooltip>`:
+ *
+ * ```tsx
+ * <Tooltip content={axisTooltipContent("year", "Year")} formatter={tooltipFormatter} />
+ * ```
+ *
+ * Passing the axis info via a factory avoids widening the `<Tooltip>` generics
+ * (Recharts infers `TValue` from `formatter`; an unknown prop like `xAxisKey`
+ * would break that inference).
+ */
+export const axisTooltipContent =
+    (dataKey: string, label?: string) =>
+    <TValue extends ValueType>(
+        props: TooltipProps<TValue, NameType>,
+    ) => <ChartTooltip {...props} xAxisKey={dataKey} xAxisLabel={label} />;
+
+/** Shared tooltip content for Recharts charts.
+ *
+ *  Renders two sections:
+ *  1. An X-axis indicator row (bold) — displayed when `xAxisKey` is provided.
+ *     The data value is read from the first payload entry's raw data
+ *     using `xAxisKey`; the display label comes from `xAxisLabel`
+ *     (or falls back to `xAxisKey` itself).
+ *     Omit `xAxisKey` for chart types without an X-axis (Treemap, Pie, etc.).
+ *  2. One row per payload entry, showing the series name and formatted value.
+ *
+ *  Uses `content={ChartTooltip}` on a Recharts `<Tooltip>` — the function-reference
+ *  pattern so Recharts calls `React.createElement(ChartTooltip, props)`. */
 export const ChartTooltip = <TValue extends ValueType>({
     active,
     payload,
     formatter,
-}: TooltipProps<TValue, NameType>) => {
+    xAxisKey,
+    xAxisLabel,
+}: TooltipProps<TValue, NameType> & { xAxisKey?: string; xAxisLabel?: string }) => {
     if (!active || !payload?.length) return null;
 
-    const xAxis = getXAxisInfo(payload);
+    // Resolve the X-axis indicator value from the first payload entry
+    const xAxisValue =
+        xAxisKey != null
+            ? (payload[0]?.payload as Record<string, unknown> | undefined)?.[
+                  xAxisKey
+              ]
+            : undefined;
 
     return (
         <div
             // Container: themed background / border / shadow, max-width
             className="bg-popover text-popover-foreground border rounded-md shadow-md max-w-[500px]"
         >
-            {xAxis && (
+            {xAxisKey != null && xAxisValue != null && (
                 <div
                     // Indicator row: same layout as data rows, bold, separator border
                     className="flex items-center gap-2 px-3 py-1.5 border-b font-bold"
                 >
                     <span
-                        // Label: same width constraints as name column
+                        // Label: display label (or raw key as fallback), same width as name column
                         className="truncate min-w-[100px] max-w-[350px] flex-1"
                     >
-                        {xAxis.label}
+                        {xAxisLabel ?? xAxisKey}
                     </span>
                     <span
                         // Value: same width constraints as value column
                         className="truncate min-w-[150px] shrink-0 text-right"
                     >
-                        {xAxis.value}
+                        {String(xAxisValue)}
                     </span>
                 </div>
             )}
@@ -52,36 +87,16 @@ export const ChartTooltip = <TValue extends ValueType>({
     );
 };
 
-/** Derive the X-axis label and value from the payload data.
- *  Uses the raw-data property that is not a series dataKey
- *  and does not start with "_" (internal chart helpers). */
-const getXAxisInfo = <TValue extends ValueType>(
-    payload: PayloadEntry<TValue>[],
-): { label: string; value: number | string } | null => {
-    const first = payload[0];
-    if (!first) return null;
-
-    const seriesKeys = new Set(payload.map((e) => String(e.dataKey ?? "")));
-    const raw = first.payload as Record<string, unknown> | undefined;
-    if (!raw) return null;
-
-    const xAxisKey = Object.keys(raw).find(
-        (k) => !seriesKeys.has(k) && !k.startsWith("_"),
-    );
-    if (!xAxisKey) return null;
-
-    const value = raw[xAxisKey];
-    if (typeof value !== "number" && typeof value !== "string") return null;
-
-    const label = xAxisKey.charAt(0).toUpperCase() + xAxisKey.slice(1);
-    return { label, value };
-};
-
 interface TooltipRowProps<TValue extends ValueType> {
     entry: PayloadEntry<TValue>;
     formatter?: TooltipProps<TValue, NameType>["formatter"];
 }
 
+/** Single data row inside the tooltip.
+ *
+ *  Applies the chart's `formatter` to the entry's value and name,
+ *  handling both single-string and `[value, name]`-tuple returns
+ *  (the same logic Recharts' `DefaultTooltipContent` uses). */
 const TooltipRow = <TValue extends ValueType>({
     entry,
     formatter,

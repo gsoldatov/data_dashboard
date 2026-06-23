@@ -12,7 +12,7 @@ import {
 } from "recharts";
 import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
 import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
-import { ChartTooltip } from "@/components/page-parts/visualizations/common/chart-tooltip";
+import { axisTooltipContent } from "@/components/page-parts/visualizations/common/chart-tooltip";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -57,7 +57,7 @@ export const BudgetBalanceBarChart = () => {
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={ChartTooltip} formatter={tooltipFormatter} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={tooltipFormatter} />
                     <Legend />
                     <Bar
                         dataKey="balance"

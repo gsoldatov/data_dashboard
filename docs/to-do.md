@@ -211,6 +211,8 @@
             + categories diff vs prev year:
                 + absolute values;
                 + share in total %;
+        
+    + custom chart tooltip component with styling;
 
 - add a favicon;
 
@@ -232,7 +234,6 @@
 
 
 # Additional
-- custom chart tooltip component with styling;
 - allow reloading configuration in data_loading & dashboard_backend;
 ? migrate airflow & backend to PostgreSQL;
 ? move visualizations list constant to backend and retrieve it where it's used;
