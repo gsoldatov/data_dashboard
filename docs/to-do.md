@@ -214,18 +214,13 @@
         
     + custom chart tooltip component with styling;
 
-- add a favicon;
-
-- admin page:   // add corresponding backend routes
-    - view ETL jobs statuses & logs;
-    ? run ETL jobs;
++ add a favicon;
 
 - add readme files for project initialization & startup:
     - python:
         - install dependencies;
         - pre-commit initialize;
         - setup Airflow (config -> db migrate);
-    ? split main AGENTS.md into skills / sub-files;
 
 - add deployment via docker compose;
 - update skills in skill repo;
@@ -234,6 +229,10 @@
 
 
 # Additional
+? split main AGENTS.md into skills / sub-files;
+- admin page:   // add corresponding backend routes
+    - view ETL jobs statuses & logs;
+    ? run ETL jobs;
 - allow reloading configuration in data_loading & dashboard_backend;
 ? migrate airflow & backend to PostgreSQL;
 ? move visualizations list constant to backend and retrieve it where it's used;
