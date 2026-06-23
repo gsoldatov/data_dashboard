@@ -1,0 +1,33 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.mypy_cache/
+.pytest_cache/
+.python-version
+
+# Node
+node_modules/
+dashboard_frontend/dist/
+
+# Assets (generated at runtime, mounted as volume)
+assets/
+
+# Git
+.git/
+
+# Tests
+**/tests/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+*.md
+.rooignore
+pre-commit-config.yaml

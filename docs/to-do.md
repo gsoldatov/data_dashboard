@@ -216,14 +216,10 @@
 
 + add a favicon;
 
-- add readme files for project initialization & startup:
-    - python:
-        - install dependencies;
-        - pre-commit initialize;
-        - setup Airflow (config -> db migrate);
++ add deployment via docker compose;
 
-- add deployment via docker compose;
-- update skills in skill repo;
+- add readme files for project initialization, startup & deployment;
+
 
 
 

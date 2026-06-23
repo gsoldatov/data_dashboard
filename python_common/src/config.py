@@ -28,6 +28,8 @@ class Config(BaseSettings):
     backend_expired_sessions_cleanup_interval: float
     backend_cors_origins: str
 
+    frontend_port: int
+
     @computed_field  # type: ignore[prop-decorator]
     @property
     def backend_database_url(self) -> str:

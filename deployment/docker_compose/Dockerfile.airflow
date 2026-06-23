@@ -1,0 +1,39 @@
+# Stage 1: build dependencies
+FROM python:3.13-slim AS builder
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+# Layer 1: workspace metadata (cacheable unless pyproject.toml or lock changes)
+COPY pyproject.toml uv.lock ./
+COPY data_loading/pyproject.toml data_loading/
+COPY dashboard_backend/pyproject.toml dashboard_backend/
+COPY python_common/pyproject.toml python_common/
+
+RUN uv sync --package data-dashboard --package data_loading --package python_common --no-dev --frozen
+
+# Layer 2: source code
+COPY data_loading/ data_loading/
+COPY python_common/ python_common/
+
+# Layer 3: runtime config
+COPY config.env ./
+
+RUN uv cache clean
+
+# Stage 2: runtime
+FROM python:3.13-slim AS runtime
+
+# uv is used by setup.py
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=builder /app /app
+
+WORKDIR /app
+ENV PATH="/app/.venv/bin:$PATH"
+
+RUN uv pip install supervisor
+
+COPY deployment/docker_compose/supervisord.conf /app/deployment/docker_compose/supervisord.conf
+
+CMD ["supervisord", "-c", "/app/deployment/docker_compose/supervisord.conf"]
