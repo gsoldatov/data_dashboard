@@ -1,11 +1,10 @@
 import { backendAPI } from "@/store/backend-api";
-import type {
-    VisualizationSettingsResponse,
-    VisualizationSettingsUpsert,
-} from "@/types";
+import type { VisualizationSettingsUpsert } from "@/types/backend/requests/visualization-settings";
 import {
     batchVisualizationSettingsSchema,
+    visualizationSettingsResponseSchema,
     type BatchVisualizationSettingsResponse,
+    type VisualizationSettingsResponse,
 } from "@/types/backend/responses/visualization-settings";
 import { VISUALIZATIONS } from "@/util/constants";
 import { validateResponseData } from "@/store/util";
@@ -37,7 +36,13 @@ const visualizationSettingsApi = backendAPI.injectEndpoints({
                         },
                     ),
                 );
-                return { data: result.data as VisualizationSettingsResponse };
+                const parsed = validateResponseData(
+                    result.data,
+                    visualizationSettingsResponseSchema,
+                    `/api/visualization-settings/${slug}`,
+                );
+                if ("error" in parsed) return parsed;
+                return { data: parsed.data };
             },
         }),
 

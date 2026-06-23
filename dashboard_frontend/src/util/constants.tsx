@@ -1,4 +1,4 @@
-import type { VisualizationInfo } from "@/types";
+import type { VisualizationInfo } from "@/types/visualization-settings";
 
 /** Visualizations known to the application. */
 export const VISUALIZATIONS: VisualizationInfo[] = [

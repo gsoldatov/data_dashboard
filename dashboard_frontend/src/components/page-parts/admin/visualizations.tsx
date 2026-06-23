@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/common/shadcn-ui/table";
 import { Input } from "@/components/common/shadcn-ui/input";
-import type { VisualizationInfo } from "@/types";
+import type { VisualizationInfo } from "@/types/visualization-settings";
 import type { BatchVisualizationSettingsResponse } from "@/types/backend/responses/visualization-settings";
 
 
