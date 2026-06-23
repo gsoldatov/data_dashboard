@@ -1,21 +1,46 @@
 import type { TooltipProps } from "recharts";
-import type { NameType } from "recharts/types/component/DefaultTooltipContent";
+import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
 
+type PayloadEntry<TValue extends ValueType> =
+    NonNullable<TooltipProps<TValue, NameType>["payload"]>[number];
 
-/** Shared tooltip content rendering each payload entry's name and value,
- *  with theming support via shadcn/ui CSS variables. */
-export const ChartTooltip = ({
+/** Shared tooltip content rendering an X-axis indicator row followed by
+ *  each payload entry's name and value.
+ *  The X-axis label and value are derived from the payload data —
+ *  no hardcoded axis name in the tooltip. */
+export const ChartTooltip = <TValue extends ValueType>({
     active,
     payload,
     formatter,
-}: TooltipProps<number, NameType>) => {
+}: TooltipProps<TValue, NameType>) => {
     if (!active || !payload?.length) return null;
+
+    const xAxis = getXAxisInfo(payload);
 
     return (
         <div
             // Container: themed background / border / shadow, max-width
             className="bg-popover text-popover-foreground border rounded-md shadow-md max-w-[500px]"
         >
+            {xAxis && (
+                <div
+                    // Indicator row: same layout as data rows, bold, separator border
+                    className="flex items-center gap-2 px-3 py-1.5 border-b font-bold"
+                >
+                    <span
+                        // Label: same width constraints as name column
+                        className="truncate min-w-[100px] max-w-[350px] flex-1"
+                    >
+                        {xAxis.label}
+                    </span>
+                    <span
+                        // Value: same width constraints as value column
+                        className="truncate min-w-[150px] shrink-0 text-right"
+                    >
+                        {xAxis.value}
+                    </span>
+                </div>
+            )}
             {payload.map((entry, i) => (
                 <TooltipRow
                     key={`tooltip-${i}`}
@@ -27,14 +52,40 @@ export const ChartTooltip = ({
     );
 };
 
-type PayloadEntry = NonNullable<TooltipProps<number, NameType>["payload"]>[number];
+/** Derive the X-axis label and value from the payload data.
+ *  Uses the raw-data property that is not a series dataKey
+ *  and does not start with "_" (internal chart helpers). */
+const getXAxisInfo = <TValue extends ValueType>(
+    payload: PayloadEntry<TValue>[],
+): { label: string; value: number | string } | null => {
+    const first = payload[0];
+    if (!first) return null;
 
-interface TooltipRowProps {
-    entry: PayloadEntry;
-    formatter?: TooltipProps<number, NameType>["formatter"];
+    const seriesKeys = new Set(payload.map((e) => String(e.dataKey ?? "")));
+    const raw = first.payload as Record<string, unknown> | undefined;
+    if (!raw) return null;
+
+    const xAxisKey = Object.keys(raw).find(
+        (k) => !seriesKeys.has(k) && !k.startsWith("_"),
+    );
+    if (!xAxisKey) return null;
+
+    const value = raw[xAxisKey];
+    if (typeof value !== "number" && typeof value !== "string") return null;
+
+    const label = xAxisKey.charAt(0).toUpperCase() + xAxisKey.slice(1);
+    return { label, value };
+};
+
+interface TooltipRowProps<TValue extends ValueType> {
+    entry: PayloadEntry<TValue>;
+    formatter?: TooltipProps<TValue, NameType>["formatter"];
 }
 
-const TooltipRow = ({ entry, formatter }: TooltipRowProps) => {
+const TooltipRow = <TValue extends ValueType>({
+    entry,
+    formatter,
+}: TooltipRowProps<TValue>) => {
     let displayValue: string = String(entry.value ?? "");
     let displayName: string = String(entry.name ?? "");
 
