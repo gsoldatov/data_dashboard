@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { store } from "@/store";
 import { App } from "@/components/app";
 
-// TODO move wrappers & styles into APP
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <Provider store={store}>

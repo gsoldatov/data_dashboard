@@ -236,3 +236,4 @@
     ? refactor app router:
         - history object is available in test cases after component rendering;
         - existing tests pass (render the wholee app or add support to rendering parts of it);
+- move wrappers & styles from main.tsx into APP;    // this would also require to update all test cases, so they properly await for all fetches to end
