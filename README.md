@@ -114,6 +114,10 @@ cp config.env.example config.env
 docker compose --env-file config.env -f deployment/docker_compose/docker-compose.yml up --build -d
 ```
 
+Airflow UI will be available at `http://localhost:$AIRFLOW_PORT`, frontend - at `http://localhost:$FRONTEND_PORT`.
+
+Note, that new DAGs are disabled by default and must be enabled in order to run.
+
 
 ### Deployment Architecture
 **Main containers**:

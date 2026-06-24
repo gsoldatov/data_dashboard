@@ -217,8 +217,8 @@
 + add deployment via docker compose;
 + add readme files for project initialization, startup & deployment;
 
-- readme => deployment => note about disabled DAGs, note about airflow UI & frontend access
 - bundle all shadcn & charts into separate chunks // dynamic import or vite config for chunks
+- reduce CPU usage by Airflow (processor interval, etc.)
 
 
 # Additional
