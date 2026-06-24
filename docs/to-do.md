@@ -217,18 +217,28 @@
 + add deployment via docker compose;
 + add readme files for project initialization, startup & deployment;
 
+- remove rooignore;
+- add .nvmrc
+- readme => deployment => note about disabled DAGs, note about airflow UI & frontend access
+- bundle all shadcn & charts into separate chunks // dynamic import or vite config for chunks
 
 
 # Additional
-? split main AGENTS.md into skills / sub-files;
 - admin page:   // add corresponding backend routes
     - view ETL jobs statuses & logs;
     ? run ETL jobs;
+- add deployment data backup;
+? split main AGENTS.md into skills / sub-files;
+
+- i18n + l10n:	// ru + en
+	- ui
+	- datasets
 - allow reloading configuration in data_loading & dashboard_backend;
-? migrate airflow & backend to PostgreSQL;
 ? move visualizations list constant to backend and retrieve it where it's used;
+- move wrappers & styles from main.tsx into APP;    // this would also require to update all test cases, so they properly await for all fetches to end
+
+? migrate airflow & backend to PostgreSQL;
 - add non tailwaind css classnames to components and use them in tests for more specific checks
     ? refactor app router:
         - history object is available in test cases after component rendering;
         - existing tests pass (render the wholee app or add support to rendering parts of it);
-- move wrappers & styles from main.tsx into APP;    // this would also require to update all test cases, so they properly await for all fetches to end
