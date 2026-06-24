@@ -33,5 +33,26 @@ export default defineConfig({
     build: {
         // Output directory, relative to `root`.
         outDir: "dist",
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    // Recharts — used only by lazy-loaded MDX pages.
+                    if (id.includes("/node_modules/recharts/")) return "recharts";
+
+                    // shadcn/ui wrappers together with their dependencies
+                    // (Radix primitives, Lucide icons, styling utilities)
+                    // so the chunk is self-contained and cacheable.
+                    if (
+                        id.includes("/components/common/shadcn-ui/") ||
+                        id.includes("/node_modules/@radix-ui/") ||
+                        id.includes("/node_modules/lucide-react/") ||
+                        id.includes("/node_modules/class-variance-authority/") ||
+                        id.includes("/node_modules/clsx/") ||
+                        id.includes("/node_modules/tailwind-merge/")
+                    )
+                        return "shadcn-ui";
+                },
+            },
+        },
     },
 });
