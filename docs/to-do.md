@@ -217,8 +217,6 @@
 + add deployment via docker compose;
 + add readme files for project initialization, startup & deployment;
 
-- reduce CPU usage by Airflow (processor interval, etc.)
-
 
 # Additional
 - admin page:   // add corresponding backend routes

@@ -89,6 +89,15 @@ def configure_airflow(config: Config) -> None:
     # # DAG processing (interval between DAG file parses)
     parser.set("dag_processor", "min_file_process_interval", "60")
 
+    # # Number of subprocesses for parsing DAG files
+    parser.set("dag_processor", "parsing_processes", "1")
+
+    # # DAG serialization (interval between updating serialized DAGs)
+    parser.set("core", "min_serialized_dag_update_interval", "120")
+
+    # # Scheduler (idle sleep between scheduling loops)
+    parser.set("scheduler", "scheduler_idle_sleep_time", "5")
+
     # Write config file back to disk
     with open(cfg_path, "w") as f:
         parser.write(f)
