@@ -36,6 +36,8 @@ cp config.env.example config.env
 
 # Python & Node.js dependencies and virtual environment
 uv sync --all-packages
+
+nvm use     # or set Node version another way
 npm install
 
 # Set up pre-commit hooks
