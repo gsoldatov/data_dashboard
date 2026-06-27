@@ -29,12 +29,12 @@ export const CategorySelections = ({
                 <div className="flex flex-wrap gap-1.5">
                     {categories.map((cat) => (
                         <Badge
-                            key={cat.code}
+                            key={cat.number}
                             variant="secondary"
                             className="cursor-pointer"
-                            onClick={() => onDeselect(cat.code)}
+                            onClick={() => onDeselect(cat.number)}
                         >
-                            {cat.code} {cat.name}
+                            {cat.number} {cat.name}
                         </Badge>
                     ))}
                 </div>

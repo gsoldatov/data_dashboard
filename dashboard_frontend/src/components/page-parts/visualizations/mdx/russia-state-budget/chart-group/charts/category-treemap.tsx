@@ -11,7 +11,7 @@ import {
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { TreemapNode } from "recharts/types/util/types";
-import type { CategoryInfo } from "../selectors/category-hierarchy";
+import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
 
 /** Node props Recharts passes to the Treemap content component. */
 interface TreemapContentProps extends TreemapNode {
@@ -57,13 +57,13 @@ export const CategoryTreemap = ({
 
     const data = displayedCategories.map((cat) => {
         const item = items.find(
-            (d) => d.year === year && d.number === cat.code,
+            (d) => d.year === year && d.number === cat.number,
         );
         const abs = item?.value ?? 0;
         const share = rootTotal > 0 ? (abs / rootTotal) * 100 : 0;
         return {
             name: shortName(cat, displayedCategories),
-            code: cat.code,
+            code: cat.number,
             value: abs,
             _share: share,
         };
@@ -161,7 +161,7 @@ const shortName = (
     const parts = cat.name.split(" ");
     const firstWord = parts[0];
     const siblingHasSameFirstWord = siblings.some(
-        (s) => s.code !== cat.code && s.name.startsWith(firstWord),
+        (s) => s.number !== cat.number && s.name.startsWith(firstWord),
     );
     return siblingHasSameFirstWord ? cat.name : firstWord;
 };

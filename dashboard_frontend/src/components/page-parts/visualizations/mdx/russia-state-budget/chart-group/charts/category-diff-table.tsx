@@ -15,7 +15,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "../selectors/category-hierarchy";
+import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
 
 /** Format a number with one decimal place, e.g. 1234.5 → "1234.5". */
 const fmt = (v: number) => v.toFixed(1);
@@ -62,10 +62,10 @@ export const CategoryDiffTable = ({
 
     const rows = displayedCategories.map((cat) => {
         const curr = items.find(
-            (d) => d.year === year && d.number === cat.code,
+            (d) => d.year === year && d.number === cat.number,
         );
         const prev = items.find(
-            (d) => d.year === prevYear && d.number === cat.code,
+            (d) => d.year === prevYear && d.number === cat.number,
         );
         const currAbs = curr?.value ?? 0;
         const prevAbs = prev?.value ?? 0;
@@ -94,7 +94,7 @@ export const CategoryDiffTable = ({
                     </TableHeader>
                     <TableBody>
                         {rows.map((r) => (
-                            <TableRow key={r.cat.code}>
+                            <TableRow key={r.cat.number}>
                                 <TableCell className="w-1/2 truncate whitespace-nowrap">
                                     {r.cat.name}
                                 </TableCell>

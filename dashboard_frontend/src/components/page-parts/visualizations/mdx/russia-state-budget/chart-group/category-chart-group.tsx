@@ -4,14 +4,14 @@ import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visuali
 import {
     getCategories,
     getDepth,
-    getDescendantCodes,
+    getDescendantNumbers,
     groupByDepth,
-    compareCodes,
-} from "./selectors/category-hierarchy";
-import { YearDropdown } from "./selectors/year-dropdown";
-import { YearSelections } from "./selectors/year-selections";
-import { CategoryBreadcrumb } from "./selectors/category-breadcrumb";
-import { CategorySelections } from "./selectors/category-selections";
+    compareNumbers,
+} from "@/components/common/visualizations/selectors/categories/category-hierarchy";
+import { YearDropdown } from "@/components/common/visualizations/selectors/years/year-dropdown";
+import { YearSelections } from "@/components/common/visualizations/selectors/years/year-selections";
+import { CategoryBreadcrumb } from "@/components/common/visualizations/selectors/categories/category-breadcrumb";
+import { CategorySelections } from "@/components/common/visualizations/selectors/categories/category-selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
 import { CategoryTreemap } from "./charts/category-treemap";
@@ -19,8 +19,8 @@ import { CategoryDiffTable } from "./charts/category-diff-table";
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "./selectors/category-hierarchy";
-import type { BreadcrumbLevel } from "./selectors/category-breadcrumb";
+import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
+import type { BreadcrumbLevel } from "@/components/common/visualizations/selectors/categories/category-breadcrumb";
 
 export interface CategoryChartGroupProps {
     rootPrefix: string;
@@ -32,6 +32,8 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
     const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
 
+    const excludedNumbers = new Set(["2.1*"]); // child of 2.1, which overlaps with it
+
     /** Raw user selection: years explicitly picked (empty = all years). */
     const [selectedYears, setSelectedYears] = useState<number[]>([]);
     /** Raw user selection: category codes explicitly picked (empty = top-level). */
@@ -42,7 +44,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         [items],
     );
     const allCategories = useMemo(
-        () => getCategories(items, rootPrefix),
+        () => getCategories(items, rootPrefix, excludedNumbers),
         [items, rootPrefix],
     );
 
@@ -66,10 +68,10 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
         if (selectedCategories.length === 0) {
             const top: CategoryInfo[] = [];
-            for (const [code, name] of allCategories) {
-                if (getDepth(code) === 2) top.push({ code, name });
+            for (const [number, name] of allCategories) {
+                if (getDepth(number) === 2) top.push({ number, name });
             }
-            top.sort((a, b) => compareCodes(a.code, b.code));
+            top.sort((a, b) => compareNumbers(a.number, b.number));
             return top;
         }
 
@@ -81,9 +83,9 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         );
 
         if (bottomMost.length > 1) {
-            return bottomMost.map((code) => ({
-                code,
-                name: allCategories.get(code) ?? code,
+            return bottomMost.map((number) => ({
+                number,
+                name: allCategories.get(number) ?? number,
             }));
         }
 
@@ -91,13 +93,13 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         const targetDepth = getDepth(code) + 1;
         const children: CategoryInfo[] = [];
         for (const [c, n] of allCategories) {
-            if (c.startsWith(code + ".") && getDepth(c) === targetDepth) children.push({ code: c, name: n });
+            if (c.startsWith(code + ".") && getDepth(c) === targetDepth) children.push({ number: c, name: n });
         }
         if (children.length > 0) {
-            children.sort((a, b) => compareCodes(a.code, b.code));
+            children.sort((a, b) => compareNumbers(a.number, b.number));
             return children;
         }
-        return [{ code, name: allCategories.get(code) ?? code }];
+        return [{ number: code, name: allCategories.get(code) ?? code }];
     }, [allCategories, selectedCategories]);
 
     const breadcrumbLevels: BreadcrumbLevel[] = useMemo(() => {
@@ -111,12 +113,12 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         for (let depth = 2; depth <= maxDepth; depth++) {
             // All categories at this depth
             const allAtDepth: CategoryInfo[] = [];
-            for (const [code, name] of allCategories) {
-                if (getDepth(code) === depth) {
-                    allAtDepth.push({ code, name });
+            for (const [number, name] of allCategories) {
+                if (getDepth(number) === depth) {
+                    allAtDepth.push({ number, name });
                 }
             }
-            allAtDepth.sort((a, b) => compareCodes(a.code, b.code));
+            allAtDepth.sort((a, b) => compareNumbers(a.number, b.number));
 
             // Filter by selected parents at the previous depth
             let filtered: CategoryInfo[];
@@ -132,7 +134,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                     break;
                 } else {
                     filtered = allAtDepth.filter((cat) => {
-                        const parts = cat.code.split(".");
+                        const parts = cat.number.split(".");
                         parts.pop();
                         return selectedParents.includes(parts.join("."));
                     });
@@ -154,10 +156,10 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         const result: { depth: number; categories: CategoryInfo[] }[] = [];
         for (const [depth, infos] of groups) {
             const named = infos.map((info) => ({
-                code: info.code,
-                name: allCategories.get(info.code) ?? info.code,
+                number: info.number,
+                name: allCategories.get(info.number) ?? info.number,
             }));
-            named.sort((a, b) => compareCodes(a.code, b.code));
+            named.sort((a, b) => compareNumbers(a.number, b.number));
             result.push({ depth, categories: named });
         }
         result.sort((a, b) => a.depth - b.depth);
@@ -169,7 +171,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     /** Remove `code` and all its descendants from a selection array. */
     const withoutDescendants = useCallback(
         (code: string, selection: string[]): string[] => {
-            const descendants = getDescendantCodes(code, allCategories);
+            const descendants = getDescendantNumbers(code, allCategories);
             return selection.filter((c) => !descendants.includes(c));
         },
         [allCategories],

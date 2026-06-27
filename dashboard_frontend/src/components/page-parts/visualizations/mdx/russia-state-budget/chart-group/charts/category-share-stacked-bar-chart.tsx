@@ -19,7 +19,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "../selectors/category-hierarchy";
+import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
 
 const STACKED_CHART_MARGINS = { ...CHART_MARGINS, top: 25, right: 25 };
 
@@ -54,9 +54,9 @@ export const CategoryShareStackedBarChart = ({
         const map = new Map<string, number>();
         for (const cat of displayedCategories) {
             const item = items.find(
-                (d) => d.year === year && d.number === cat.code,
+                (d) => d.year === year && d.number === cat.number,
             );
-            map.set(cat.code, item?.value ?? 0);
+            map.set(cat.number, item?.value ?? 0);
         }
         absoluteByYear.set(year, map);
         const root = items.find(
@@ -73,7 +73,7 @@ export const CategoryShareStackedBarChart = ({
         const rootTotal = rootTotals.get(year) ?? 1;
         const abs = absoluteByYear.get(year)!;
         for (const cat of displayedCategories) {
-            row[cat.code] = rootTotal > 0 ? (abs.get(cat.code)! / rootTotal) * 100 : 0;
+            row[cat.number] = rootTotal > 0 ? (abs.get(cat.number)! / rootTotal) * 100 : 0;
         }
         row._total = maxTotal; // for right-axis sync
         return row;
@@ -112,9 +112,9 @@ export const CategoryShareStackedBarChart = ({
                     />
                     {displayedCategories.map((cat, i) => (
                         <Bar
-                            key={cat.code}
+                            key={cat.number}
                             yAxisId="pct"
-                            dataKey={cat.code}
+                            dataKey={cat.number}
                             name={shortName(cat, displayedCategories)}
                             stackId="a"
                             fill={CHART_COLORS[i % CHART_COLORS.length]}
@@ -132,14 +132,14 @@ const makeCustomFormatter = (
     absoluteByYear: Map<number, Map<string, number>>,
     categories: CategoryInfo[],
 ) => {
-    const nameByCode = new Map(categories.map((c) => [c.code, c.name]));
+    const nameByNumber = new Map(categories.map((c) => [c.number, c.name]));
     return (v: number, _name: string, props: Record<string, unknown>): [string, string] => {
         const code = String(props.dataKey ?? "");
         const payload = props.payload as Record<string, unknown> | undefined;
         const year = payload?.year as number | undefined;
         const absMap = year != null ? absoluteByYear.get(year) : undefined;
         const abs = absMap?.get(code) ?? 0;
-        const displayName = nameByCode.get(code) ?? code;
+        const displayName = nameByNumber.get(code) ?? code;
         return [`${v.toFixed(1)}%  (${tooltipFormatter(abs)})`, displayName];
     };
 };
@@ -153,7 +153,7 @@ const shortName = (
     const parts = cat.name.split(" ");
     const firstWord = parts[0];
     const siblingHasSameFirstWord = siblings.some(
-        (s) => s.code !== cat.code && s.name.startsWith(firstWord),
+        (s) => s.number !== cat.number && s.name.startsWith(firstWord),
     );
     return siblingHasSameFirstWord ? cat.name : firstWord;
 };

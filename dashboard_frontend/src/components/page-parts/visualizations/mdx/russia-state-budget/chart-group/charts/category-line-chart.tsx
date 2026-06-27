@@ -20,7 +20,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "../selectors/category-hierarchy";
+import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
 
 interface CategoryLineChartProps {
     items: RussiaStateBudgetItem[];
@@ -45,9 +45,9 @@ export const CategoryLineChart = ({
         const row: Record<string, number | string> = { year };
         for (const cat of displayedCategories) {
             const item = items.find(
-                (d) => d.year === year && d.number === cat.code,
+                (d) => d.year === year && d.number === cat.number,
             );
-            row[cat.code] = item?.value ?? 0;
+            row[cat.number] = item?.value ?? 0;
         }
         return row;
     });
@@ -78,9 +78,9 @@ export const CategoryLineChart = ({
                     />
                     {displayedCategories.map((cat, i) => (
                         <Line
-                            key={cat.code}
+                            key={cat.number}
                             type="monotone"
-                            dataKey={cat.code}
+                            dataKey={cat.number}
                             name={shortName(cat, displayedCategories)}
                             stroke={CHART_COLORS[i % CHART_COLORS.length]}
                             dot={false}
@@ -101,7 +101,7 @@ const shortName = (
     const parts = cat.name.split(" ");
     const firstWord = parts[0];
     const siblingHasSameFirstWord = siblings.some(
-        (s) => s.code !== cat.code && s.name.startsWith(firstWord),
+        (s) => s.number !== cat.number && s.name.startsWith(firstWord),
     );
     return siblingHasSameFirstWord ? cat.name : firstWord;
 };

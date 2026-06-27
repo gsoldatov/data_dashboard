@@ -45,12 +45,12 @@ export const CategoryBreadcrumb = ({
                             <DropdownMenuContent side="bottom" align="start" className="max-h-56">
                                 {level.categories.map((cat) => (
                                     <DropdownMenuCheckboxItem
-                                        key={cat.code}
-                                        checked={selectedCategories.includes(cat.code)}
-                                        onCheckedChange={() => onToggle(cat.code)}
+                                        key={cat.number}
+                                        checked={selectedCategories.includes(cat.number)}
+                                        onCheckedChange={() => onToggle(cat.number)}
                                         onSelect={(e) => e.preventDefault()}
                                     >
-                                        {cat.code} {cat.name}
+                                        {cat.number} {cat.name}
                                     </DropdownMenuCheckboxItem>
                                 ))}
                             </DropdownMenuContent>
