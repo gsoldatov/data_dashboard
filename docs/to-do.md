@@ -221,7 +221,7 @@
 - Russia Economy Indicators:
     - data:
 	    + GDP (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts       https://data.worldbank.org/indicator/NY.GDP.MKTP.KD?end=2024&locations=RU&start=1988&view=chart
-	    - GDP PPP (USD);  // https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart
+	    + GDP PPP (USD);  // https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart
 	    - Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
 	    - Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
 	    - Unemployment & Salaries;  // https://rosstat.gov.ru/labor_market_employment_salaries
