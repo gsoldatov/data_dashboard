@@ -18,7 +18,7 @@ import {
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
     tooltipFormatter,
-} from "@/components/page-parts/visualizations/util";
+} from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 

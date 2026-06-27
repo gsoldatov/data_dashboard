@@ -12,7 +12,7 @@ import {
     CHART_HEIGHT,
     POSITIVE_COLOR,
     NEGATIVE_COLOR,
-} from "@/components/page-parts/visualizations/util";
+} from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { CategoryInfo } from "../selectors/category-hierarchy";
