@@ -8,8 +8,8 @@ import {
     groupByDepth,
     compareNumbers,
 } from "@/components/common/visualizations/selectors/hierarchy/util";
-import { YearDropdown } from "@/components/common/visualizations/selectors/years/year-dropdown";
-import { YearSelections } from "@/components/common/visualizations/selectors/years/year-selections";
+import { AttributeDropdown } from "@/components/common/visualizations/selectors/attribute/dropdown";
+import { AttributeSelections } from "@/components/common/visualizations/selectors/attribute/selection";
 import { HierarchyBreadcrumb } from "@/components/common/visualizations/selectors/hierarchy/breadcrumb";
 import { HierarchySelections } from "@/components/common/visualizations/selectors/hierarchy/selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
@@ -243,14 +243,15 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     return (
         <div className="space-y-4" data-testid={dataTestID}>
             <div className="flex items-center gap-2">
-                <YearDropdown
-                    allYears={allYears}
-                    selectedYears={selectedYears}
+                <AttributeDropdown
+                    allValues={allYears}
+                    selectedValues={selectedYears}
                     onToggle={toggleYear}
+                    prompt="Select years"
                 />
-                <YearSelections
-                    selectedYears={selectedYears}
-                    displayedYears={displayedYears}
+                <AttributeSelections
+                    selectedValues={selectedYears}
+                    displayedValues={displayedYears}
                     onToggle={toggleYear}
                     onClear={clearYears}
                 />

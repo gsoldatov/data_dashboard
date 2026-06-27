@@ -122,7 +122,7 @@ describe("Russia State Budget visualization", () => {
                 const scope = await incomeScope();
 
                 expect(
-                    scope.queryByRole("button", { name: "Clear all years" }),
+                    scope.queryByRole("button", { name: "Clear all values" }),
                 ).not.toBeInTheDocument();
             });
 
@@ -136,7 +136,7 @@ describe("Russia State Budget visualization", () => {
                 const trigger = () => scope.getByText("Select years");
                 await selectInDropdown(user, trigger, "2024");
 
-                const badges = within(scope.getByTestId("year-badges"));
+                const badges = within(scope.getByTestId("attribute-badges"));
                 expect(badges.getByText("2024")).toBeInTheDocument();
                 expect(badges.queryByText("2022")).not.toBeInTheDocument();
                 expect(badges.queryByText("2023")).not.toBeInTheDocument();
@@ -153,7 +153,7 @@ describe("Russia State Budget visualization", () => {
                 await selectInDropdown(user, trigger, "2024");
                 await selectInDropdown(user, trigger, "2022");
 
-                const badges = within(scope.getByTestId("year-badges"));
+                const badges = within(scope.getByTestId("attribute-badges"));
                 expect(badges.getByText("2022")).toBeInTheDocument();
                 expect(badges.getByText("2024")).toBeInTheDocument();
                 expect(badges.queryByText("2023")).not.toBeInTheDocument();
@@ -170,7 +170,7 @@ describe("Russia State Budget visualization", () => {
                 await selectInDropdown(user, trigger, "2024");
                 await selectInDropdown(user, trigger, "2022");
 
-                const badges = within(scope.getByTestId("year-badges"));
+                const badges = within(scope.getByTestId("attribute-badges"));
                 expect(badges.getByText("2022")).toBeInTheDocument();
 
                 await user.click(badges.getByText("2022"));
@@ -191,7 +191,7 @@ describe("Russia State Budget visualization", () => {
                 const trigger = () => scope.getByText("Select years");
                 await selectInDropdown(user, trigger, "2023");
 
-                const badges = within(scope.getByTestId("year-badges"));
+                const badges = within(scope.getByTestId("attribute-badges"));
                 expect(badges.getByText("2023")).toBeInTheDocument();
 
                 await user.click(badges.getByText("2023"));
@@ -200,7 +200,7 @@ describe("Russia State Budget visualization", () => {
                     expect(badges.queryByText("2023")).not.toBeInTheDocument();
                 });
                 expect(
-                    scope.queryByRole("button", { name: "Clear all years" }),
+                    scope.queryByRole("button", { name: "Clear all values" }),
                 ).not.toBeInTheDocument();
             });
 
@@ -215,17 +215,17 @@ describe("Russia State Budget visualization", () => {
                 await selectInDropdown(user, trigger, "2022");
                 await selectInDropdown(user, trigger, "2024");
 
-                const badges = within(scope.getByTestId("year-badges"));
+                const badges = within(scope.getByTestId("attribute-badges"));
                 expect(badges.getByText("2022")).toBeInTheDocument();
                 expect(badges.getByText("2024")).toBeInTheDocument();
 
                 await user.click(
-                    scope.getByRole("button", { name: "Clear all years" }),
+                    scope.getByRole("button", { name: "Clear all values" }),
                 );
 
                 await waitFor(() => {
                     expect(
-                        scope.queryByTestId("year-badges"),
+                        scope.queryByTestId("attribute-badges"),
                     ).not.toBeInTheDocument();
                 });
             });

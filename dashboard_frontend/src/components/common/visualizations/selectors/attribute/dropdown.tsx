@@ -5,27 +5,28 @@ import {
     DropdownMenuCheckboxItem,
 } from "@/components/common/shadcn-ui/dropdown-menu";
 
-export interface YearDropdownProps {
-    allYears: number[];
-    selectedYears: number[];
-    onToggle: (year: number) => void;
+export interface AttributeDropdownProps {
+    allValues: number[];
+    selectedValues: number[];
+    onToggle: (value: number) => void;
+    prompt: string;
 }
 
-/** Dropdown with checkboxes for selecting years. Empty selection = all years. */
-export const YearDropdown = ({ allYears, selectedYears, onToggle }: YearDropdownProps) => (
+/** Dropdown with checkboxes for selecting attribute values. Empty selection = all values. */
+export const AttributeDropdown = ({ allValues, selectedValues, onToggle, prompt }: AttributeDropdownProps) => (
     <DropdownMenu>
         <DropdownMenuTrigger className="cursor-pointer inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
-            Select years
+            {prompt}
         </DropdownMenuTrigger>
         <DropdownMenuContent side="bottom" align="start" className="max-h-56">
-            {allYears.map((year) => (
+            {allValues.map((value) => (
                 <DropdownMenuCheckboxItem
-                    key={year}
-                    checked={selectedYears.includes(year)}
-                    onCheckedChange={() => onToggle(year)}
+                    key={value}
+                    checked={selectedValues.includes(value)}
+                    onCheckedChange={() => onToggle(value)}
                     onSelect={(e) => e.preventDefault()}
                 >
-                    {year}
+                    {value}
                 </DropdownMenuCheckboxItem>
             ))}
         </DropdownMenuContent>
