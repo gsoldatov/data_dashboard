@@ -22,6 +22,7 @@ def fetch_page_task(config: Config | None = None) -> None:
     config = config or get_config()
 
     # state budget url
+    # NOTE: update URL in MDX pages, when changine this link
     url="https://minfin.gov.ru/ru/statistics/fedbud/execute?id_57=80041-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_federalnogo_byudzheta_mlrd_rub."
     # state + regions budget url
     # url="https://minfin.gov.ru/ru/statistics/conbud/execute?id_57=93449-kratkaya_ezhegodnaya_informatsiya_ob_ispolnenii_konsolidirovannogo_byudzheta_rossiiskoi_federatsii_i_gosudarstvennykh_vnebyudzhetnykh_fondov_mlrd_rub",
