@@ -16,10 +16,18 @@ const MdxP: FC<ComponentPropsWithoutRef<"p">> = ({ className, ...props }) => (
     <p className={`text-base mb-4${className ? ` ${className}` : ""}`} {...props} />
 );
 
+const MdxA: FC<ComponentPropsWithoutRef<"a">> = ({ className, ...props }) => (
+    <a
+        className={`text-link underline underline-offset-4 decoration-link/50 hover:decoration-link${className ? ` ${className}` : ""}`}
+        {...props}
+    />
+);
+
 /** MDX component mapping — passed to {@link import("@mdx-js/react").MDXProvider}. */
 export const mdxComponents = {
     h1: MdxH1,
     h2: MdxH2,
     h3: MdxH3,
     p: MdxP,
+    a: MdxA,
 };

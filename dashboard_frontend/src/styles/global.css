@@ -16,6 +16,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-link: var(--link);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --radius: 0.5rem;
@@ -36,6 +37,7 @@
   --destructive-foreground: #fafafa;
   --border: #e5e5e5;
   --input: #e5e5e5;
+  --link: #2563eb;
   --ring: #0a0a0a;
   --popover: #ffffff;
   --popover-foreground: #0a0a0a;
@@ -57,6 +59,7 @@
     --destructive-foreground: #fafafa;
     --border: #262626;
     --input: #262626;
+    --link: #60a5fa;
     --ring: #d4d4d4;
     --popover: #171717;
     --popover-foreground: #fafafa;
