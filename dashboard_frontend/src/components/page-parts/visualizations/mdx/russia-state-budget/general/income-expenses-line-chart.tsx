@@ -9,9 +9,9 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
-import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
-import { axisTooltipContent } from "@/components/page-parts/visualizations/common/chart-tooltip";
+import { ChartPlaceholder } from "@/components/common/visualizations/charts/chart-placeholder";
+import { ChartTitle } from "@/components/common/visualizations/charts/chart-title";
+import { axisTooltipContent } from "@/components/common/visualizations/charts/chart-tooltip";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,

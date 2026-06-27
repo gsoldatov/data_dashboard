@@ -6,8 +6,8 @@ import {
     TableHead,
     TableCell,
 } from "@/components/common/shadcn-ui/table";
-import { ChartPlaceholder } from "@/components/page-parts/visualizations/common/chart-placeholder";
-import { ChartTitle } from "@/components/page-parts/visualizations/common/chart-title";
+import { ChartPlaceholder } from "@/components/common/visualizations/charts/chart-placeholder";
+import { ChartTitle } from "@/components/common/visualizations/charts/chart-title";
 import {
     CHART_HEIGHT,
     POSITIVE_COLOR,
