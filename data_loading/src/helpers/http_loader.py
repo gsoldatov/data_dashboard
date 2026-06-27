@@ -9,14 +9,16 @@ class HTTPLoader:
         self,
         url: str,
         save_path: Path,
-        timeout: Timeout | None = None
+        timeout: Timeout | None = None,
+        verify: bool = True,
     ):
         self.url = url
         self.save_path = save_path
         self.timeout = timeout
-    
+        self.verify = verify
+
     def load_file(self) -> None:
-        with httpx.Client(timeout=self.timeout) as client:
+        with httpx.Client(timeout=self.timeout, verify=self.verify) as client:
             with client.stream("GET", self.url) as response:
                 response.raise_for_status()
                 
