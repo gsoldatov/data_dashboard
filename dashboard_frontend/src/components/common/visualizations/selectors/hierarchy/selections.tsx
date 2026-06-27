@@ -1,20 +1,20 @@
 import { Eraser } from "lucide-react";
 import { Badge } from "@/components/common/shadcn-ui/badge";
 
-import type { CategoryInfo } from "./category-hierarchy";
+import type { HierarchyInfo } from "./util";
 
-export interface CategorySelectionsProps {
-    badgeGroups: { depth: number; categories: CategoryInfo[] }[];
+export interface HierarchySelectionsProps {
+    badgeGroups: { depth: number; categories: HierarchyInfo[] }[];
     onClearLevel: (depth: number) => void;
     onDeselect: (code: string) => void;
 }
 
 /** Selected categories displayed as badge rows, one per hierarchy depth, each with a clear-level button. */
-export const CategorySelections = ({
+export const HierarchySelections = ({
     badgeGroups,
     onClearLevel,
     onDeselect,
-}: CategorySelectionsProps) => (
+}: HierarchySelectionsProps) => (
     <>
         {badgeGroups.map(({ depth, categories }) => (
             <div key={depth} className="flex items-center gap-2">

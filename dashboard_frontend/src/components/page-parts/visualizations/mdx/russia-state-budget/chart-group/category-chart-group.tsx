@@ -2,16 +2,16 @@ import { useState, useMemo, useCallback } from "react";
 
 import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
 import {
-    getCategories,
+    getHierarchy,
     getDepth,
     getDescendantNumbers,
     groupByDepth,
     compareNumbers,
-} from "@/components/common/visualizations/selectors/categories/category-hierarchy";
+} from "@/components/common/visualizations/selectors/hierarchy/util";
 import { YearDropdown } from "@/components/common/visualizations/selectors/years/year-dropdown";
 import { YearSelections } from "@/components/common/visualizations/selectors/years/year-selections";
-import { CategoryBreadcrumb } from "@/components/common/visualizations/selectors/categories/category-breadcrumb";
-import { CategorySelections } from "@/components/common/visualizations/selectors/categories/category-selections";
+import { HierarchyBreadcrumb } from "@/components/common/visualizations/selectors/hierarchy/breadcrumb";
+import { HierarchySelections } from "@/components/common/visualizations/selectors/hierarchy/selections";
 import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
 import { CategoryTreemap } from "./charts/category-treemap";
@@ -19,8 +19,8 @@ import { CategoryDiffTable } from "./charts/category-diff-table";
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
-import type { BreadcrumbLevel } from "@/components/common/visualizations/selectors/categories/category-breadcrumb";
+import type { HierarchyInfo } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { BreadcrumbLevel } from "@/components/common/visualizations/selectors/hierarchy/breadcrumb";
 
 export interface CategoryChartGroupProps {
     rootPrefix: string;
@@ -44,7 +44,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
         [items],
     );
     const allCategories = useMemo(
-        () => getCategories(items, rootPrefix, excludedNumbers),
+        () => getHierarchy(items, rootPrefix, excludedNumbers),
         [items, rootPrefix],
     );
 
@@ -63,11 +63,11 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
      *  - Empty selection → all top-level (depth-2) categories.
      *  - Single bottom-most selected → its children, or itself if leaf.
      *  - Multiple bottom-most selected → use them directly. */
-    const displayedCategories: CategoryInfo[] = useMemo(() => {
+    const displayedCategories: HierarchyInfo[] = useMemo(() => {
         if (allCategories.size === 0) return [];
 
         if (selectedCategories.length === 0) {
-            const top: CategoryInfo[] = [];
+            const top: HierarchyInfo[] = [];
             for (const [number, name] of allCategories) {
                 if (getDepth(number) === 2) top.push({ number, name });
             }
@@ -91,7 +91,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
         const code = bottomMost[0];
         const targetDepth = getDepth(code) + 1;
-        const children: CategoryInfo[] = [];
+        const children: HierarchyInfo[] = [];
         for (const [c, n] of allCategories) {
             if (c.startsWith(code + ".") && getDepth(c) === targetDepth) children.push({ number: c, name: n });
         }
@@ -112,7 +112,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
         for (let depth = 2; depth <= maxDepth; depth++) {
             // All categories at this depth
-            const allAtDepth: CategoryInfo[] = [];
+            const allAtDepth: HierarchyInfo[] = [];
             for (const [number, name] of allCategories) {
                 if (getDepth(number) === depth) {
                     allAtDepth.push({ number, name });
@@ -121,7 +121,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
             allAtDepth.sort((a, b) => compareNumbers(a.number, b.number));
 
             // Filter by selected parents at the previous depth
-            let filtered: CategoryInfo[];
+            let filtered: HierarchyInfo[];
             if (depth === 2) {
                 filtered = allAtDepth;
             } else if (selectedCategories.length === 0) {
@@ -153,7 +153,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     const badgeGroups = useMemo(() => {
         if (selectedCategories.length === 0) return [];
         const groups = groupByDepth(selectedCategories);
-        const result: { depth: number; categories: CategoryInfo[] }[] = [];
+        const result: { depth: number; categories: HierarchyInfo[] }[] = [];
         for (const [depth, infos] of groups) {
             const named = infos.map((info) => ({
                 number: info.number,
@@ -258,14 +258,14 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
             <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Select categories</span>
-                <CategoryBreadcrumb
+                <HierarchyBreadcrumb
                     levels={breadcrumbLevels}
                     selectedCategories={selectedCategories}
                     onToggle={toggleCategory}
                 />
             </div>
 
-            <CategorySelections
+            <HierarchySelections
                 badgeGroups={badgeGroups}
                 onClearLevel={clearLevel}
                 onDeselect={deselectCategory}

@@ -5,7 +5,7 @@ export interface HierarchyItem {
 }
 
 /** Unique category from the flat data. */
-export interface CategoryInfo {
+export interface HierarchyInfo {
     number: string;
     name: string;
 }
@@ -16,7 +16,7 @@ export function getDepth(number: string): number {
 }
 
 /** Extract unique (number, name) pairs from flat items, filtered to the given root prefix. */
-export function getCategories(
+export function getHierarchy(
     items: HierarchyItem[],
     rootPrefix: string,
     excludedNumbers?: Set<string>,
@@ -71,8 +71,8 @@ export function compareNumbers(a: string, b: string): number {
 /** Group selected numbers by their hierarchy depth. */
 export function groupByDepth(
     numbers: string[],
-): Map<number, CategoryInfo[]> {
-    const groups = new Map<number, CategoryInfo[]>();
+): Map<number, HierarchyInfo[]> {
+    const groups = new Map<number, HierarchyInfo[]>();
     for (const number of numbers) {
         const depth = getDepth(number);
         if (!groups.has(depth)) groups.set(depth, []);

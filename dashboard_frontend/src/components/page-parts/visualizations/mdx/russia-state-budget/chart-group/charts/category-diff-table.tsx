@@ -15,7 +15,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
+import type { HierarchyInfo } from "@/components/common/visualizations/selectors/hierarchy/util";
 
 /** Format a number with one decimal place, e.g. 1234.5 → "1234.5". */
 const fmt = (v: number) => v.toFixed(1);
@@ -23,7 +23,7 @@ const fmt = (v: number) => v.toFixed(1);
 interface CategoryDiffTableProps {
     items: RussiaStateBudgetItem[];
     displayedYears: number[];
-    displayedCategories: CategoryInfo[];
+    displayedCategories: HierarchyInfo[];
     rootPrefix: string;
     allYears: number[];
     title: string;

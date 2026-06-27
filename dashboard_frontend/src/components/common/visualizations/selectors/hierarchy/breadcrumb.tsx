@@ -12,26 +12,26 @@ import {
     DropdownMenuCheckboxItem,
 } from "@/components/common/shadcn-ui/dropdown-menu";
 
-import type { CategoryInfo } from "./category-hierarchy";
+import type { HierarchyInfo } from "./util";
 
 export interface BreadcrumbLevel {
     label: string;
     depth: number;
-    categories: CategoryInfo[];
+    categories: HierarchyInfo[];
 }
 
-export interface CategoryBreadcrumbProps {
+export interface HierarchyBreadcrumbProps {
     levels: BreadcrumbLevel[];
     selectedCategories: string[];
     onToggle: (code: string) => void;
 }
 
 /** Breadcrumb with one dropdown trigger per hierarchy level. Empty selection = all. */
-export const CategoryBreadcrumb = ({
+export const HierarchyBreadcrumb = ({
     levels,
     selectedCategories,
     onToggle,
-}: CategoryBreadcrumbProps) => (
+}: HierarchyBreadcrumbProps) => (
     <Breadcrumb>
         <BreadcrumbList>
             {levels.map((level, i) => (

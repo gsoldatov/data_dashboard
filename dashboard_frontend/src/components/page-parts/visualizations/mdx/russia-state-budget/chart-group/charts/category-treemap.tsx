@@ -11,7 +11,7 @@ import {
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { TreemapNode } from "recharts/types/util/types";
-import type { CategoryInfo } from "@/components/common/visualizations/selectors/categories/category-hierarchy";
+import type { HierarchyInfo } from "@/components/common/visualizations/selectors/hierarchy/util";
 
 /** Node props Recharts passes to the Treemap content component. */
 interface TreemapContentProps extends TreemapNode {
@@ -21,7 +21,7 @@ interface TreemapContentProps extends TreemapNode {
 interface CategoryTreemapProps {
     items: RussiaStateBudgetItem[];
     displayedYears: number[];
-    displayedCategories: CategoryInfo[];
+    displayedCategories: HierarchyInfo[];
     rootPrefix: string;
     title: string;
     onToggleCategory: (code: string) => void;
@@ -154,8 +154,8 @@ const treemapTooltip = (
 
 /** Shorten a category name when it shares a common prefix with siblings. */
 const shortName = (
-    cat: CategoryInfo,
-    siblings: CategoryInfo[],
+    cat: HierarchyInfo,
+    siblings: HierarchyInfo[],
 ): string => {
     if (siblings.length <= 1) return cat.name;
     const parts = cat.name.split(" ");
