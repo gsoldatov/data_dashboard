@@ -4,13 +4,7 @@ export interface HierarchyItem {
     name: string;
 }
 
-/** Unique category from the flat data. */
-export interface HierarchyInfo {
-    number: string;
-    name: string;
-}
-
-/** Number of hierarchy levels in a category number. */
+/** Number of hierarchy levels in a hierarchy item number. */
 export function getDepth(number: string): number {
     return number.split(".").length;
 }
@@ -24,7 +18,7 @@ export function getHierarchy(
     const map = new Map<string, string>();
     for (const item of items) {
         if (item.number.startsWith(rootPrefix) && !map.has(item.number)) {
-            // Skip the root itself — only subcategories
+            // Skip the root itself — only child hierarchy items
             if (item.number !== rootPrefix && !excludedNumbers?.has(item.number)) {
                 map.set(item.number, item.name);
             }
@@ -48,7 +42,7 @@ export function getDescendantNumbers(
     return descendants;
 }
 
-/** Compare category numbers numerically by segment (e.g. 2.1 < 2.2 < 2.11 < 2.100),
+/** Compare hierarchy item numbers numerically by segment (e.g. 2.1 < 2.2 < 2.11 < 2.100),
  *  with numbers ending in * sorting after their plain counterpart (2.14 < 2.14* < 2.15). */
 export function compareNumbers(a: string, b: string): number {
     const aParts = a.split(".");
@@ -71,8 +65,8 @@ export function compareNumbers(a: string, b: string): number {
 /** Group selected numbers by their hierarchy depth. */
 export function groupByDepth(
     numbers: string[],
-): Map<number, HierarchyInfo[]> {
-    const groups = new Map<number, HierarchyInfo[]>();
+): Map<number, HierarchyItem[]> {
+    const groups = new Map<number, HierarchyItem[]>();
     for (const number of numbers) {
         const depth = getDepth(number);
         if (!groups.has(depth)) groups.set(depth, []);

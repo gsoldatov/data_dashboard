@@ -451,7 +451,7 @@ describe("Russia State Budget visualization", () => {
                 expect(scope.getByText(/1\.1\.1 Oil/)).toBeInTheDocument();
 
                 await user.click(
-                    scope.getByRole("button", { name: "Clear level 2 categories" }),
+                    scope.getByRole("button", { name: "Clear level 2 items" }),
                 );
 
                 await waitFor(() => {

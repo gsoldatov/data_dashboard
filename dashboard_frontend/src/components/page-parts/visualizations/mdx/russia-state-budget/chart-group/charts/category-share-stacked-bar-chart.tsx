@@ -19,14 +19,14 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { HierarchyInfo } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
 
 const STACKED_CHART_MARGINS = { ...CHART_MARGINS, top: 25, right: 25 };
 
 interface CategoryShareStackedBarChartProps {
     items: RussiaStateBudgetItem[];
     displayedYears: number[];
-    displayedCategories: HierarchyInfo[];
+    displayedCategories: HierarchyItem[];
     rootPrefix: string;
     title: string;
 }
@@ -130,7 +130,7 @@ export const CategoryShareStackedBarChart = ({
  *  with the category name instead of the code. */
 const makeCustomFormatter = (
     absoluteByYear: Map<number, Map<string, number>>,
-    categories: HierarchyInfo[],
+    categories: HierarchyItem[],
 ) => {
     const nameByNumber = new Map(categories.map((c) => [c.number, c.name]));
     return (v: number, _name: string, props: Record<string, unknown>): [string, string] => {
@@ -146,8 +146,8 @@ const makeCustomFormatter = (
 
 /** Shorten a category name when it shares a common prefix with siblings. */
 const shortName = (
-    cat: HierarchyInfo,
-    siblings: HierarchyInfo[],
+    cat: HierarchyItem,
+    siblings: HierarchyItem[],
 ): string => {
     if (siblings.length <= 1) return cat.name;
     const parts = cat.name.split(" ");

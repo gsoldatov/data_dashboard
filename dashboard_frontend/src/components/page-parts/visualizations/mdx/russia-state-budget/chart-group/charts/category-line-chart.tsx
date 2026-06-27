@@ -20,12 +20,12 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { HierarchyInfo } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
 
 interface CategoryLineChartProps {
     items: RussiaStateBudgetItem[];
     displayedYears: number[];
-    displayedCategories: HierarchyInfo[];
+    displayedCategories: HierarchyItem[];
     title: string;
 }
 
@@ -94,8 +94,8 @@ export const CategoryLineChart = ({
 
 /** Shorten a category name when it shares a common prefix with siblings. */
 const shortName = (
-    cat: HierarchyInfo,
-    siblings: HierarchyInfo[],
+    cat: HierarchyItem,
+    siblings: HierarchyItem[],
 ): string => {
     if (siblings.length <= 1) return cat.name;
     const parts = cat.name.split(" ");

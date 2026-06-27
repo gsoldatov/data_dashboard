@@ -12,24 +12,24 @@ import {
     DropdownMenuCheckboxItem,
 } from "@/components/common/shadcn-ui/dropdown-menu";
 
-import type { HierarchyInfo } from "./util";
+import type { HierarchyItem } from "./util";
 
 export interface BreadcrumbLevel {
     label: string;
     depth: number;
-    categories: HierarchyInfo[];
+    items: HierarchyItem[];
 }
 
 export interface HierarchyBreadcrumbProps {
     levels: BreadcrumbLevel[];
-    selectedCategories: string[];
+    selectedItems: string[];
     onToggle: (code: string) => void;
 }
 
 /** Breadcrumb with one dropdown trigger per hierarchy level. Empty selection = all. */
 export const HierarchyBreadcrumb = ({
     levels,
-    selectedCategories,
+    selectedItems,
     onToggle,
 }: HierarchyBreadcrumbProps) => (
     <Breadcrumb>
@@ -43,14 +43,14 @@ export const HierarchyBreadcrumb = ({
                                 {level.label}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="bottom" align="start" className="max-h-56">
-                                {level.categories.map((cat) => (
+                                {level.items.map((item) => (
                                     <DropdownMenuCheckboxItem
-                                        key={cat.number}
-                                        checked={selectedCategories.includes(cat.number)}
-                                        onCheckedChange={() => onToggle(cat.number)}
+                                        key={item.number}
+                                        checked={selectedItems.includes(item.number)}
+                                        onCheckedChange={() => onToggle(item.number)}
                                         onSelect={(e) => e.preventDefault()}
                                     >
-                                        {cat.number} {cat.name}
+                                        {item.number} {item.name}
                                     </DropdownMenuCheckboxItem>
                                 ))}
                             </DropdownMenuContent>
