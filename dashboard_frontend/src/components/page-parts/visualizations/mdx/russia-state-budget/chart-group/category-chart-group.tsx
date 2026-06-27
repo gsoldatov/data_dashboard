@@ -16,7 +16,7 @@ import { CategoryLineChart } from "./charts/category-line-chart";
 import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
 import { CategoryTreemap } from "./charts/category-treemap";
 import { CategoryDiffTable } from "./charts/category-diff-table";
-import { ChartsContainer } from "../../../charts-container";
+import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { CategoryInfo } from "./selectors/category-hierarchy";
