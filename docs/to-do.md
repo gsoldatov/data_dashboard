@@ -29,6 +29,7 @@
     ???
 
 
+
 # Project Stack
 + data etl:
     + airflow for managing etl jobs;
@@ -217,6 +218,41 @@
 + add deployment via docker compose;
 + add readme files for project initialization, startup & deployment;
 
+- Russia Economy Indicators:
+    - data:
+	    - GDP (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts
+	    - GDP PPP (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts
+	    - Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
+	    - Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
+	    - Unemployment & Salaries;  // https://rosstat.gov.ru/labor_market_employment_salaries
+
+- Russia Economy by Sectors
+	- Finance
+		https://rosstat.gov.ru/statistics/finance
+	- Oil & Gas (production, exports)
+	- Metallurgy
+	- Agriculture
+	- Energy
+	? Industry
+	- Retail Sales & consumer spending
+	- Construction
+	- Transportation (Cars / Railway / Aircraft)
+		- https://rosstat.gov.ru/statistics/transport
+	- Technology
+	??? other sectors
+
+- Russia Exports / Imports
+	- Balance of Trade
+	- export / import structure
+	- https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
+
+- Common navigation component across Russia's Economy pages 
+
+- Russia Economy Dashboard:
+    - current / yearly indicators from other pages
+
+
+
 
 # Additional
 - admin page:   // add corresponding backend routes
@@ -233,6 +269,7 @@
 - move wrappers & styles from main.tsx into APP;    // this would also require to update all test cases, so they properly await for all fetches to end
 
 ? migrate airflow & backend to PostgreSQL;
+? use Nginx as a reverse proxy for backend in Docker Compose deployment;
 - add non tailwaind css classnames to components and use them in tests for more specific checks
     ? refactor app router:
         - history object is available in test cases after component rendering;
