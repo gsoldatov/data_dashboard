@@ -231,7 +231,7 @@
         + data:
             + Average salaries;     // https://rosstat.gov.ru/storage/mediabank/tab1-zpl_03-2026.xlsx
             + Salaries by economy sector;
-            - Unemployment;     // https://rosstat.gov.ru/labor_market_employment_salaries
+            + Work force & unemployment;   https://rosstat.gov.ru/labour_force
         
         - charts:
             ???
