@@ -47,7 +47,7 @@ describe("AdminVisualizations", () => {
         });
 
         const switches = screen.getAllByRole("switch");
-        expect(switches).toHaveLength(1);
+        expect(switches).toHaveLength(2);
     });
 
     it("toggles is_published on switch click and updates the display", async () => {
@@ -61,7 +61,7 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getByRole("switch");
+        const switchEl = screen.getAllByRole("switch")[1];
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
         fireEvent.click(switchEl);
@@ -82,7 +82,7 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getByRole("switch");
+        const switchEl = screen.getAllByRole("switch")[1];
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
         // Override the PUT to fail for russia_state_budget
@@ -112,9 +112,12 @@ describe("AdminVisualizations", () => {
 
         const filterInput = screen.getByPlaceholderText("Filter by title…");
 
-        // Prefix match — should still show
+        // Prefix match — should still show both
         fireEvent.change(filterInput, { target: { value: "russia" } });
         await waitFor(() => {
+            expect(
+                screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
             ).toBeInTheDocument();
@@ -124,6 +127,9 @@ describe("AdminVisualizations", () => {
         fireEvent.change(filterInput, { target: { value: "zzz" } });
         await waitFor(() => {
             expect(
+                screen.queryByText("Russia GDP"),
+            ).toBeNull();
+            expect(
                 screen.queryByText("Russia State Budget"),
             ).toBeNull();
         });
@@ -131,6 +137,9 @@ describe("AdminVisualizations", () => {
         // Clear filter — shows all again
         fireEvent.change(filterInput, { target: { value: "" } });
         await waitFor(() => {
+            expect(
+                screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
             ).toBeInTheDocument();

@@ -1,0 +1,31 @@
+import { GdpLineChart } from "@/components/page-parts/visualizations/mdx/russia-gdp/gdp-line-chart";
+import { CHART_COLORS } from "@/styles/charts";
+
+
+# Russia GDP
+
+Data sources:
+- [Rosstat](https://rosstat.gov.ru/statistics/accounts), GDP in constant prices;
+- [Worldbank](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2024&locations=RU&start=1988&view=chart), GDP in constant prices (USD);
+- [Worldbank](https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart), GDP PPP in constant prices (USD).
+
+<div data-testid="gdp-chart-group">
+    <GdpLineChart
+        datasetIndex={0}
+        title="GDP, Constant Prices, Bln RUB"
+        color={CHART_COLORS[0]}
+        valueDivisor={1}
+    />
+    <GdpLineChart
+        datasetIndex={1}
+        title="GDP, Constant Prices, Bln USD"
+        color={CHART_COLORS[1]}
+        valueDivisor={1e9}
+    />
+    <GdpLineChart
+        datasetIndex={2}
+        title="GDP PPP, Constant Prices, Bln USD"
+        color={CHART_COLORS[2]}
+        valueDivisor={1e9}
+    />
+</div>

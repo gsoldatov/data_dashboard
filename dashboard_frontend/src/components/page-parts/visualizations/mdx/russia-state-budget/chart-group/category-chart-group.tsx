@@ -30,7 +30,7 @@ export interface CategoryChartGroupProps {
 /** Generic chart group managing shared year/category selections for a data section. */
 export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGroupProps) => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
+    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
 
     const excludedNumbers = new Set(["2.1*"]); // child of 2.1, which overlaps with it
 

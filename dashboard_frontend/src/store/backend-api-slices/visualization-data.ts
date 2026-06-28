@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { backendAPI } from "@/store/backend-api";
+import { russiaGdpItem } from "@/types/visualization-data/russia-gdp";
 import { russiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import { validateResponseData } from "@/store/util";
 
-import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
+type VisualizationDataset = unknown[];
 
-type VisualizationDataset = RussiaStateBudgetItem[];
-
+const russiaGdpResponseSchema = z.array(z.array(russiaGdpItem));
 const russiaStateBudgetResponseSchema = z.array(z.array(russiaStateBudgetItem));
 
 /** Endpoints for fetching visualization page data. */
@@ -19,6 +19,15 @@ const visualizationDataApi = backendAPI.injectEndpoints({
                 const result = await baseQuery(url);
                 if (result.error) {
                     return { error: result.error };
+                }
+                if (slug === "russia_gdp") {
+                    const parsed = validateResponseData(
+                        result.data,
+                        russiaGdpResponseSchema,
+                        url,
+                    );
+                    if ("error" in parsed) return parsed;
+                    return { data: parsed.data };
                 }
                 if (slug === "russia_state_budget") {
                     const parsed = validateResponseData(

@@ -25,7 +25,7 @@ import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-st
 /** Line chart comparing total income (section "1") and total expenses (section "2") over years. */
 export const IncomeExpensesLineChart = () => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
+    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
 
     const incomeByYear = mapByName(items, "1");
     const expensesByYear = mapByName(items, "2");

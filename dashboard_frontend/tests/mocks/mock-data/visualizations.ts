@@ -68,6 +68,26 @@ const russiaStateBudgetData = [
     ],
 ];
 
+/** 3-year mock data for the Russia GDP page (3 datasets). */
+const russiaGdpData = [
+    [
+        { year: 2021, value: 100.0 },
+        { year: 2022, value: 102.1 },
+        { year: 2023, value: 105.3 },
+    ],
+    [
+        { year: 2021, value: 1500000000000 },
+        { year: 2022, value: 1600000000000 },
+        { year: 2023, value: 1700000000000 },
+    ],
+    [
+        { year: 2021, value: 4200000000000 },
+        { year: 2022, value: 4200000000000 },
+        { year: 2023, value: 4300000000000 },
+    ],
+];
+
 export const slugToVisualizationData: Record<string, unknown[]> = {
+    russia_gdp: russiaGdpData,
     russia_state_budget: russiaStateBudgetData,
 };

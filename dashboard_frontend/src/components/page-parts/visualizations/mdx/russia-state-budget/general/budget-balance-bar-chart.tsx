@@ -27,7 +27,7 @@ import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-st
 /** Bar chart showing yearly budget profit / deficit (section "3"). */
 export const BudgetBalanceBarChart = () => {
     const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items: RussiaStateBudgetItem[] = data?.[0] ?? [];
+    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
 
     const balanceItems = items
         .filter((d) => d.number === "3")

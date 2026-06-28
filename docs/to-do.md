@@ -219,37 +219,54 @@
 + add readme files for project initialization, startup & deployment;
 
 - Russia Economy Indicators:
-    - data:
-	    + GDP (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts       https://data.worldbank.org/indicator/NY.GDP.MKTP.KD?end=2024&locations=RU&start=1988&view=chart
-	    + GDP PPP (USD);  // https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart
+    + GDP:
+        + data:
+            + base prices (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts       https://data.worldbank.org/indicator/NY.GDP.MKTP.KD?end=2024&locations=RU&start=1988&view=chart
+            + PPP (USD);  // https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart
+        
+        + charts:
+            + 1 line chart per each GDP dataset;
+    
+    - Labor Market:
+        - Unemployment;     // https://rosstat.gov.ru/labor_market_employment_salaries
+        - Salaries;
+    
+    - Inflation:
 	    - Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
 	    - Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
-	    - Unemployment & Salaries;  // https://rosstat.gov.ru/labor_market_employment_salaries
+    
+    - Exports / Imports:
+        - Balance of Trade
+        - export / import structure
+        - https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
 
-- Russia Economy by Sectors
-	- Finance
-		https://rosstat.gov.ru/statistics/finance
-	- Oil & Gas (production, exports)
-	- Metallurgy
-	- Agriculture
-	- Energy
-	? Industry
-	- Retail Sales & consumer spending
-	- Construction
-	- Transportation (Cars / Railway / Aircraft)
-		- https://rosstat.gov.ru/statistics/transport
-	- Technology
-	??? other sectors
+    - Economy by Sectors:
+        - Finance
+            https://rosstat.gov.ru/statistics/finance
+        - Oil & Gas (production, exports)
+        - Metallurgy
+        - Agriculture
+        - Energy
+        ? Industry
+        - Retail Sales & consumer spending
+        - Construction
+        - Transportation (Cars / Railway / Aircraft)
+            - https://rosstat.gov.ru/statistics/transport
+        - Technology
+        ??? other sectors
+    
+    - Russia Economy Dashboard:
+        - current / yearly indicators from other pages
+    
+    - Common navigation component across Russia's Economy pages
 
-- Russia Exports / Imports
-	- Balance of Trade
-	- export / import structure
-	- https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
 
-- Common navigation component across Russia's Economy pages 
 
-- Russia Economy Dashboard:
-    - current / yearly indicators from other pages
+- add DAG retries
+
+- backend -> get / update vis settings -> validate that slugs match existing whilelist
+- merge small files (frontend types, etc?)
+? refactor visualization data fetching (reuse already loaded datasets without refetching them)  // is published logic should still apply
 
 
 
