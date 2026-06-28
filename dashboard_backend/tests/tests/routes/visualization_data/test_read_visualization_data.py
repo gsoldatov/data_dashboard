@@ -108,6 +108,11 @@ async def test_read_visualization_data_success(
             [{"russia_gdp_constant_prices_usd": True}],
             [{"russia_gdp_ppp_constant_prices": True}],
         ],
+        "russia_labor_market": [
+            [{"russia_salaries_average": True}],
+            [{"russia_salaries_by_sector": True}],
+            [{"russia_labor_workforce": True}],
+        ],
     }
     copy_test_directories(
         test_config.visualization_data_directory,
@@ -116,6 +121,9 @@ async def test_read_visualization_data_success(
             "russia_gdp_constant_prices_rub",
             "russia_gdp_constant_prices_usd",
             "russia_gdp_ppp_constant_prices",
+            "russia_salaries_average",
+            "russia_salaries_by_sector",
+            "russia_labor_workforce",
         ],
         _TESTS_DIR / "mocks" / "visualization_data",
     )

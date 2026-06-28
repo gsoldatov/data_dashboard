@@ -12,6 +12,11 @@ from dashboard_backend.src.services.visualization_data.russia_gdp import (
     get_russia_gdp_constant_prices_usd,
     get_russia_gdp_ppp_constant_prices,
 )
+from dashboard_backend.src.services.visualization_data.russia_labor_market import (
+    get_russia_labor_workforce_data,
+    get_russia_salaries_average_data,
+    get_russia_salaries_by_sector_data,
+)
 from dashboard_backend.src.services.visualization_data.russia_state_budget import (
     get_russia_state_budget_data,
 )
@@ -31,6 +36,11 @@ _REGISTRY: dict[str, list[Callable[[Path], VisualizationDataset]]] = {
         get_russia_gdp_ppp_constant_prices,
     ],
     "russia_state_budget": [get_russia_state_budget_data],
+    "russia_labor_market": [
+        get_russia_salaries_average_data,
+        get_russia_salaries_by_sector_data,
+        get_russia_labor_workforce_data,
+    ],
 }
 
 
