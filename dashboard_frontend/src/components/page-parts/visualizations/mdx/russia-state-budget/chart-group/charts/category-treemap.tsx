@@ -6,7 +6,7 @@ import { ChartTooltip } from "@/components/common/visualizations/charts/chart-to
 import {
     CHART_HEIGHT,
     CHART_COLORS,
-    tooltipFormatter,
+    formatValue,
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
@@ -135,7 +135,7 @@ const TreemapCell = (props: TreemapContentProps) => {
                 fontSize={11}
                 style={{ pointerEvents: "none" }}
             >
-                {tooltipFormatter(value)} ({share.toFixed(1)}%)
+                {formatValue(value, "bln RUB")} ({share.toFixed(1)}%)
             </text>
         </g>
     );
@@ -149,7 +149,7 @@ const treemapTooltip = (
     props: any,
 ): [string, string] => {
     const share = (props.payload?._share as number) ?? 0;
-    return [`${tooltipFormatter(v)}  (${share.toFixed(1)}%)`, name];
+    return [`${formatValue(v, "bln RUB")}  (${share.toFixed(1)}%)`, name];
 };
 
 /** Shorten a category name when it shares a common prefix with siblings. */

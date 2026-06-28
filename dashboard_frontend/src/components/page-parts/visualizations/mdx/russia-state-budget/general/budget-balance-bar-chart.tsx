@@ -19,7 +19,7 @@ import {
     Y_AXIS_LABEL_OFFSET,
     POSITIVE_COLOR,
     NEGATIVE_COLOR,
-    tooltipFormatter,
+    formatValue,
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
@@ -57,7 +57,7 @@ export const BudgetBalanceBarChart = () => {
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={tooltipFormatter} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} />
                     <Legend />
                     <Bar
                         dataKey="balance"

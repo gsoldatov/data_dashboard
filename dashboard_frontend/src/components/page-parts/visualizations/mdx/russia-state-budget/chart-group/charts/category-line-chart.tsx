@@ -16,7 +16,7 @@ import {
     CHART_MARGINS,
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
-    tooltipFormatter,
+    formatValue,
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
@@ -67,7 +67,7 @@ export const CategoryLineChart = ({
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={tooltipFormatter} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} />
                     <Legend
                         height={50}
                         wrapperStyle={{

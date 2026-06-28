@@ -14,7 +14,7 @@ import { axisTooltipContent } from "@/components/common/visualizations/charts/ch
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
-    tooltipFormatter,
+    formatValue,
 } from "@/styles/charts";
 
 import type { RussiaGdpItem } from "@/types/visualization-data/russia-gdp";
@@ -24,6 +24,7 @@ interface GdpLineChartProps {
     title: string;
     color: string;
     valueDivisor: number;
+    unit: string;
 }
 
 /** Line chart for a single Russia GDP dataset. */
@@ -32,6 +33,7 @@ export const GdpLineChart = ({
     title,
     color,
     valueDivisor,
+    unit,
 }: GdpLineChartProps) => {
     const { data } = useGetVisualizationDataQuery("russia_gdp");
     const items = (data?.[datasetIndex] ?? []) as RussiaGdpItem[];
@@ -58,7 +60,7 @@ export const GdpLineChart = ({
                         domain={["auto", "auto"]}
                         tickFormatter={(value: number) => value.toLocaleString()}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={tooltipFormatter} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, unit)} />
                     <Line
                         type="monotone"
                         dataKey="value"

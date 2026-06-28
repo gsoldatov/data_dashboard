@@ -35,5 +35,10 @@ export const CHART_COLORS = [
 export const POSITIVE_COLOR = "#16a34a";
 export const NEGATIVE_COLOR = "#dc2626";
 
-/** Tooltip formatter for bln RUB values. */
-export const tooltipFormatter = (v: number) => `${v.toFixed(1)} bln RUB`;
+/** Format a numeric value with the given unit, using space separators per 3 digits. */
+export const formatValue = (v: number, unit: string): string => {
+    const formatted = v
+        .toFixed(1)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return `${formatted} ${unit}`;
+};

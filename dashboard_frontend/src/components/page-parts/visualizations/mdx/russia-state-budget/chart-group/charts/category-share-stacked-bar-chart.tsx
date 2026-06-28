@@ -15,7 +15,7 @@ import {
     CHART_HEIGHT,
     CHART_MARGINS,
     CHART_COLORS,
-    tooltipFormatter,
+    formatValue,
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
@@ -95,7 +95,7 @@ export const CategoryShareStackedBarChart = ({
                         yAxisId="abs"
                         orientation="right"
                         domain={[0, maxTotal]}
-                        tickFormatter={tooltipFormatter}                        
+                        tickFormatter={(v: number) => formatValue(v, "bln RUB")}                        
                     />
                     <Tooltip
                         content={axisTooltipContent("year", "Year")}
@@ -140,7 +140,7 @@ const makeCustomFormatter = (
         const absMap = year != null ? absoluteByYear.get(year) : undefined;
         const abs = absMap?.get(code) ?? 0;
         const displayName = nameByNumber.get(code) ?? code;
-        return [`${v.toFixed(1)}%  (${tooltipFormatter(abs)})`, displayName];
+        return [`${v.toFixed(1)}%  (${formatValue(abs, "bln RUB")})`, displayName];
     };
 };
 
