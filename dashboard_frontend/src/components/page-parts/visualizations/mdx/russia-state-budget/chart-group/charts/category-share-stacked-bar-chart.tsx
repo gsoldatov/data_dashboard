@@ -15,6 +15,8 @@ import {
     CHART_HEIGHT,
     CHART_MARGINS,
     CHART_COLORS,
+    Y_AXIS_LABEL_OFFSET,
+    numericTickFormatter,
     formatValue,
 } from "@/styles/charts";
 
@@ -95,7 +97,13 @@ export const CategoryShareStackedBarChart = ({
                         yAxisId="abs"
                         orientation="right"
                         domain={[0, maxTotal]}
-                        tickFormatter={(v: number) => formatValue(v, "bln RUB")}                        
+                        tickFormatter={numericTickFormatter}
+                        label={{
+                            value: "bln RUB",
+                            angle: -90,
+                            position: "insideRight",
+                            offset: Y_AXIS_LABEL_OFFSET,
+                        }}
                     />
                     <Tooltip
                         content={axisTooltipContent("year", "Year")}

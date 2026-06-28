@@ -35,6 +35,10 @@ export const CHART_COLORS = [
 export const POSITIVE_COLOR = "#16a34a";
 export const NEGATIVE_COLOR = "#dc2626";
 
+/** Format a numeric value for axis ticks using space separators per 3 digits. */
+export const numericTickFormatter = (v: number): string =>
+    v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
 /** Format a numeric value with the given unit, using space separators per 3 digits. */
 export const formatValue = (v: number, unit: string): string => {
     const formatted = v

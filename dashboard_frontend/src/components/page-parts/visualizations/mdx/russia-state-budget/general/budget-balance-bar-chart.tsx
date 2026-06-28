@@ -19,6 +19,7 @@ import {
     Y_AXIS_LABEL_OFFSET,
     POSITIVE_COLOR,
     NEGATIVE_COLOR,
+    numericTickFormatter,
     formatValue,
 } from "@/styles/charts";
 
@@ -50,6 +51,7 @@ export const BudgetBalanceBarChart = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" />
                     <YAxis
+                        tickFormatter={numericTickFormatter}
                         label={{
                             value: "bln RUB",
                             angle: -90,

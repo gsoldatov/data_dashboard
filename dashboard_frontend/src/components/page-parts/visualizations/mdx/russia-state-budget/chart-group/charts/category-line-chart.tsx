@@ -16,6 +16,7 @@ import {
     CHART_MARGINS,
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
+    numericTickFormatter,
     formatValue,
 } from "@/styles/charts";
 
@@ -60,6 +61,7 @@ export const CategoryLineChart = ({
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" />
                     <YAxis
+                        tickFormatter={numericTickFormatter}
                         label={{
                             value: "bln RUB",
                             angle: -90,
