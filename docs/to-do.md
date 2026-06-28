@@ -228,8 +228,13 @@
             + 1 line chart per each GDP dataset;
     
     - Labor Market:
-        - Unemployment;     // https://rosstat.gov.ru/labor_market_employment_salaries
-        - Salaries;
+        + data:
+            + Average salaries;     // https://rosstat.gov.ru/storage/mediabank/tab1-zpl_03-2026.xlsx
+            - Salaries by economy sector;
+            - Unemployment;     // https://rosstat.gov.ru/labor_market_employment_salaries
+        
+        - charts:
+            ???
     
     - Inflation:
 	    - Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
