@@ -101,19 +101,31 @@ async def test_read_visualization_data_success(
     admin_session: dict[str, str],
 ) -> None:
     """Valid slugs return the data read by their registered getter."""
-    slugs = ["russia_state_budget"]
+    slug_expected = {
+        "russia_state_budget": [[{"russia_state_budget": True}]],
+        "russia_gdp": [
+            [{"russia_gdp_constant_prices_rub": True}],
+            [{"russia_gdp_constant_prices_usd": True}],
+            [{"russia_gdp_ppp_constant_prices": True}],
+        ],
+    }
     copy_test_directories(
         test_config.visualization_data_directory,
-        slugs,
+        [
+            "russia_state_budget",
+            "russia_gdp_constant_prices_rub",
+            "russia_gdp_constant_prices_usd",
+            "russia_gdp_ppp_constant_prices",
+        ],
         _TESTS_DIR / "mocks" / "visualization_data",
     )
     test_client.cookies = admin_session
-    for slug in slugs:
+    for slug, expected in slug_expected.items():
         response = await test_client.get(
             f"/api/visualization-data/{slug}",
         )
         assert response.status_code == 200
-        assert response.json() == [[{slug: True}]]
+        assert response.json() == expected
 
 
 if __name__ == "__main__":

@@ -7,6 +7,11 @@ from typing import Any
 
 from fastapi import Request
 
+from dashboard_backend.src.services.visualization_data.russia_gdp import (
+    get_russia_gdp_constant_prices_rub,
+    get_russia_gdp_constant_prices_usd,
+    get_russia_gdp_ppp_constant_prices,
+)
 from dashboard_backend.src.services.visualization_data.russia_state_budget import (
     get_russia_state_budget_data,
 )
@@ -20,6 +25,11 @@ type VisualizationDataset = dict[str, Any] | list[dict[str, Any]]
 
 # Each key maps a visualization slug to a list of sync data-getter callables.
 _REGISTRY: dict[str, list[Callable[[Path], VisualizationDataset]]] = {
+    "russia_gdp": [
+        get_russia_gdp_constant_prices_rub,
+        get_russia_gdp_constant_prices_usd,
+        get_russia_gdp_ppp_constant_prices,
+    ],
     "russia_state_budget": [get_russia_state_budget_data],
 }
 
