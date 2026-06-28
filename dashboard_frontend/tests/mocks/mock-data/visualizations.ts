@@ -87,7 +87,30 @@ const russiaGdpData = [
     ],
 ];
 
+/** 3-month mock data for the Russia labor market page (3 datasets). */
+const russiaLaborMarketData = [
+    [
+        { year: 2023, value: 74854.0 },
+        { year: 2024, value: 89069.0 },
+        { year: 2025, value: 101784.0 },
+    ],
+    [
+        { year: 2023, sector: "agriculture", value: 54158.1 },
+        { year: 2024, sector: "agriculture", value: 65129.3 },
+        { year: 2023, sector: "mining", value: 89343.7 },
+        { year: 2024, sector: "mining", value: 102116.0 },
+        { year: 2023, sector: "manufacturing", value: 65832.0 },
+        { year: 2024, sector: "manufacturing", value: 76457.0 },
+    ],
+    [
+        { year_month: "2024-01", workforce: 76500.0, employed: 73100.0, unemployed: 3400.0, workforce_share_in_population: 62.5, employed_share_in_population: 59.8, unemployed_share_in_workforce: 4.4 },
+        { year_month: "2024-02", workforce: 76700.0, employed: 73300.0, unemployed: 3400.0, workforce_share_in_population: 62.7, employed_share_in_population: 60.0, unemployed_share_in_workforce: 4.4 },
+        { year_month: "2024-03", workforce: 76900.0, employed: 73600.0, unemployed: 3300.0, workforce_share_in_population: 62.9, employed_share_in_population: 60.2, unemployed_share_in_workforce: 4.3 },
+    ],
+];
+
 export const slugToVisualizationData: Record<string, unknown[]> = {
     russia_gdp: russiaGdpData,
     russia_state_budget: russiaStateBudgetData,
+    russia_labor_market: russiaLaborMarketData,
 };

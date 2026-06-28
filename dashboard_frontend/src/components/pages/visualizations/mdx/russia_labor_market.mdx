@@ -1,0 +1,28 @@
+import { AverageSalaryBarChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/average-salary-bar-chart";
+import { SectorChartGroup } from "@/components/page-parts/visualizations/mdx/russia-labor-market/sector-chart-group";
+import { TotalWorkforceBarChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/total-workforce-bar-chart";
+import { WorkforceEngagementLineChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/workforce-engagement-line-chart";
+import { WorkforceUnemploymentLineChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/workforce-unemployment-line-chart";
+import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
+
+
+# Russia Labor Market
+
+Data sources:
+- Rosstat, [salaries](https://rosstat.gov.ru/labor_market_employment_salaries) and [workforce](https://rosstat.gov.ru/labour_force) statistics.
+
+
+## Average Salaries
+
+<AverageSalaryBarChart />
+
+## Salaries By Sector
+<SectorChartGroup />
+
+## Workforce
+<TotalWorkforceBarChart />
+
+<ChartsContainer dataTestID="workforce-chart-group">
+    <WorkforceEngagementLineChart />
+    <WorkforceUnemploymentLineChart />
+</ChartsContainer>

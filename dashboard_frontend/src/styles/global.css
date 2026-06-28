@@ -40,6 +40,8 @@
   --link: #2563eb;
   --ring: #0a0a0a;
   --chart-grid: #525252;
+  --chart-brush-fill: #ffffff;
+  --chart-brush-stroke: #2563eb;
   --popover: #ffffff;
   --popover-foreground: #0a0a0a;
 }
@@ -63,6 +65,8 @@
     --link: #60a5fa;
     --ring: #d4d4d4;
     --chart-grid: #737373;
+    --chart-brush-fill: #0a0a0a;
+    --chart-brush-stroke: #2563eb;
     --popover: #171717;
     --popover-foreground: #fafafa;
   }

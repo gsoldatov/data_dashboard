@@ -4,4 +4,5 @@ import type { VisualizationInfo } from "@/types/visualization-settings";
 export const VISUALIZATIONS: VisualizationInfo[] = [
     { slug: "russia_gdp", title: "Russia GDP" },
     { slug: "russia_state_budget", title: "Russia State Budget" },
+    { slug: "russia_labor_market", title: "Russia Labor Market" },
 ];

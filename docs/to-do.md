@@ -227,14 +227,18 @@
         + charts:
             + 1 line chart per each GDP dataset;
     
-    - Labor Market:
+    + Labor Market:
         + data:
             + Average salaries;     // https://rosstat.gov.ru/storage/mediabank/tab1-zpl_03-2026.xlsx
             + Salaries by economy sector;
             + Work force & unemployment;   https://rosstat.gov.ru/labour_force
         
-        - charts:
-            ???
+        + charts:
+            + avegrage salary by year;
+            + average salary by sector and year:
+                + with sector filter;
+            + total workforce;
+            + workforce engagement (working / unemployed / not in workforce);
     
     - Inflation:
 	    - Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
@@ -296,3 +300,4 @@
     ? refactor app router:
         - history object is available in test cases after component rendering;
         - existing tests pass (render the wholee app or add support to rendering parts of it);
+? refactor MDX page tests to be more precise on what they check (presence of charts, correct chart values, etc.);

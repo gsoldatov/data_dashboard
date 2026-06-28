@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { backendAPI } from "@/store/backend-api";
 import { russiaGdpItem } from "@/types/visualization-data/russia-gdp";
+import { russiaLaborMarketResponseSchema } from "@/types/visualization-data/russia-labor-market";
 import { russiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import { validateResponseData } from "@/store/util";
 
@@ -33,6 +34,15 @@ const visualizationDataApi = backendAPI.injectEndpoints({
                     const parsed = validateResponseData(
                         result.data,
                         russiaStateBudgetResponseSchema,
+                        url,
+                    );
+                    if ("error" in parsed) return parsed;
+                    return { data: parsed.data };
+                }
+                if (slug === "russia_labor_market") {
+                    const parsed = validateResponseData(
+                        result.data,
+                        russiaLaborMarketResponseSchema,
                         url,
                     );
                     if ("error" in parsed) return parsed;

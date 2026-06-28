@@ -41,6 +41,7 @@ describe("Index", () => {
                     JSON.stringify({
                         russia_gdp: { is_published: false },
                         russia_state_budget: { is_published: false },
+                        russia_labor_market: { is_published: false },
                     }),
                     {
                         status: 200,
@@ -77,6 +78,9 @@ describe("Index", () => {
             expect(
                 screen.getByText("Russia State Budget"),
             ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Labor Market"),
+            ).toBeInTheDocument();
         });
     });
 
@@ -109,6 +113,7 @@ describe("Index", () => {
                     JSON.stringify({
                         russia_gdp: { is_published: false },
                         russia_state_budget: { is_published: false },
+                        russia_labor_market: { is_published: false },
                     }),
                     {
                         status: 200,
@@ -130,6 +135,9 @@ describe("Index", () => {
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Labor Market"),
             ).toBeInTheDocument();
         });
     });
