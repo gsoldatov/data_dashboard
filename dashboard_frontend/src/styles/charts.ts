@@ -2,6 +2,8 @@
 export const CHART_HEIGHT = 400;
 export const CHART_MARGINS = { top: 0, right: 0, left: 20, bottom: 0 };
 export const Y_AXIS_LABEL_OFFSET = -10;
+export const GRID_STROKE_DASHARRAY = "3 9";
+export const GRID_STROKE = "var(--chart-grid)";
 
 /** 24 distinct colours for chart series, ordered to minimise overlap. */
 export const CHART_COLORS = [

@@ -14,6 +14,8 @@ import { axisTooltipContent } from "@/components/common/visualizations/charts/ch
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
+    GRID_STROKE_DASHARRAY,
+    GRID_STROKE,
     CHART_COLORS,
     Y_AXIS_LABEL_OFFSET,
     numericTickFormatter,
@@ -86,7 +88,7 @@ export const CategoryShareStackedBarChart = ({
             <ChartTitle>{title}</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={STACKED_CHART_MARGINS}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
                     <XAxis dataKey="year" />
                     <YAxis
                         yAxisId="pct"

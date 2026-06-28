@@ -121,7 +121,7 @@ A single page app containing a set of data visualizations and related pages.
 - `dashboard_frontend/src/store`:
     - RTK store (`index.ts` + slices in `slices/` subdirectory);
     - RTK Query API for dashboard backend (`backend-api.ts` + slices in `backend-api-slice` subdirectory);
-- `dashboard_frontend/src/styles`: CSS styles and related utilities (e.g., `cn()` for Tailwind class merging);
+- `dashboard_frontend/src/styles`: CSS component and charts styles and related utilities (e.g., `cn()` for Tailwind class merging);
 - `dashboard_frontend/src/types`: shared TypeScript types mirroring backend Pydantic schemas;
 - `dashboard_frontend/tests`: test cases mirroring `src/` structure;
 - build & tooling configuration (`package.json`, `tsconfig.json`, `vite.config.ts`, `vitest.config.ts`) is at the repository root.

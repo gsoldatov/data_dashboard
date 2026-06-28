@@ -14,6 +14,8 @@ import { axisTooltipContent } from "@/components/common/visualizations/charts/ch
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
+    GRID_STROKE_DASHARRAY,
+    GRID_STROKE,
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
     numericTickFormatter,
@@ -58,7 +60,7 @@ export const CategoryLineChart = ({
             <ChartTitle>{title}</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
                     <XAxis dataKey="year" />
                     <YAxis
                         tickFormatter={numericTickFormatter}
