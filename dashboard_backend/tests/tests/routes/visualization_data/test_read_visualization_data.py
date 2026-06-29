@@ -108,6 +108,10 @@ async def test_read_visualization_data_success(
             [{"russia_gdp_constant_prices_usd": True}],
             [{"russia_gdp_ppp_constant_prices": True}],
         ],
+        "russia_inflation": [
+            [{"russia_consumer_price_index": True}],
+            [{"russia_key_rate": True}],
+        ],
         "russia_labor_market": [
             [{"russia_salaries_average": True}],
             [{"russia_salaries_by_sector": True}],
@@ -121,6 +125,8 @@ async def test_read_visualization_data_success(
             "russia_gdp_constant_prices_rub",
             "russia_gdp_constant_prices_usd",
             "russia_gdp_ppp_constant_prices",
+            "russia_consumer_price_index",
+            "russia_key_rate",
             "russia_salaries_average",
             "russia_salaries_by_sector",
             "russia_labor_workforce",
