@@ -22,6 +22,7 @@ A set of ETL jobs with orchestration.
 - data is stored in JSON and other formats;
 - tests:
     - test cases are located in `data_loading/tests/tests` and follow the structure of `src` directory;
+    - test case file names should be unique across the project, so that they can be collected properly;
     - mocks reside in `data_loading/tests/mocks`;
     - each test case file is executable (see `data_loading/tests/tests/helpers/test_http_loader.py` for an example on how make them);
     - test cases are written as functions.
@@ -83,6 +84,7 @@ REST API service, which:
 - all db interactions are performed by repository objects;
 - tests:
     - test cases are located in `dashboard_backend/tests/tests` and follow the structure of `src` directory;
+    - test case file names should be unique across the project, so that they can be collected properly;
     - mocks (test data generators, test DB operations classes, etc.) reside in `dashboard_backend/tests/mocks`;
     - each test case file is executable (when adding a new test case file, check if it can be executed directly);
     - test cases are written as functions;
