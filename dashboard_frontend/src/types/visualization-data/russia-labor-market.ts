@@ -38,10 +38,3 @@ export const russiaLaborMarketWorkforceItem = z.object({
 export type RussiaLaborMarketWorkforceItem = z.infer<
     typeof russiaLaborMarketWorkforceItem
 >;
-
-/** Full response schema: tuple of three datasets. */
-export const russiaLaborMarketResponseSchema = z.tuple([
-    z.array(russiaLaborMarketAverageSalaryItem),
-    z.array(russiaLaborMarketSectorSalaryItem),
-    z.array(russiaLaborMarketWorkforceItem),
-]);

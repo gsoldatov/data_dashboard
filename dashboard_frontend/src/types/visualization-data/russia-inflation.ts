@@ -18,9 +18,3 @@ export const russiaKeyRateItem = z.object({
 
 /** Inferred type for a single Russia key rate data item. */
 export type RussiaKeyRateItem = z.infer<typeof russiaKeyRateItem>;
-
-/** Full response schema: tuple of two datasets (CPI first, key rate second). */
-export const russiaInflationResponseSchema = z.tuple([
-    z.array(russiaCpiItem),
-    z.array(russiaKeyRateItem),
-]);

@@ -1,19 +1,8 @@
-import { z } from "zod";
 import { backendAPI } from "@/store/backend-api";
-import { russiaGdpItem } from "@/types/visualization-data/russia-gdp";
-import { russiaInflationResponseSchema } from "@/types/visualization-data/russia-inflation";
-import { russiaLaborMarketResponseSchema } from "@/types/visualization-data/russia-labor-market";
-import { russiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
+import { visualizationDataResponseValidatorMap } from "@/types/visualization-data/visualization-data";
 import { validateResponseData } from "@/store/util";
 
 type VisualizationDataset = unknown[];
-
-const schemaBySlug: Record<string, z.ZodType> = {
-    russia_gdp: z.array(z.array(russiaGdpItem)),
-    russia_state_budget: z.array(z.array(russiaStateBudgetItem)),
-    russia_labor_market: russiaLaborMarketResponseSchema,
-    russia_inflation: russiaInflationResponseSchema,
-};
 
 /** Endpoints for fetching visualization page data. */
 const visualizationDataApi = backendAPI.injectEndpoints({
@@ -26,7 +15,9 @@ const visualizationDataApi = backendAPI.injectEndpoints({
                 if (result.error) {
                     return { error: result.error };
                 }
-                const schema = schemaBySlug[slug];
+                // Validate response data with the correct validator
+                const schema =
+                    visualizationDataResponseValidatorMap[slug];
                 if (schema) {
                     const parsed = validateResponseData(
                         result.data,
