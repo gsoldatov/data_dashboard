@@ -47,7 +47,7 @@ describe("AdminVisualizations", () => {
         });
 
         const switches = screen.getAllByRole("switch");
-        expect(switches).toHaveLength(3);
+        expect(switches).toHaveLength(4);
     });
 
     it("toggles is_published on switch click and updates the display", async () => {
@@ -61,7 +61,7 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getAllByRole("switch")[1];
+        const switchEl = screen.getAllByRole("switch")[2];
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
         fireEvent.click(switchEl);
@@ -82,7 +82,7 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getAllByRole("switch")[1];
+        const switchEl = screen.getAllByRole("switch")[2];
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
         // Override the PUT to fail for russia_state_budget
@@ -112,11 +112,14 @@ describe("AdminVisualizations", () => {
 
         const filterInput = screen.getByPlaceholderText("Filter by title…");
 
-        // Prefix match — should show all three
+        // Prefix match — should show all four
         fireEvent.change(filterInput, { target: { value: "russia" } });
         await waitFor(() => {
             expect(
                 screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Inflation"),
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
@@ -133,6 +136,9 @@ describe("AdminVisualizations", () => {
                 screen.queryByText("Russia GDP"),
             ).toBeNull();
             expect(
+                screen.queryByText("Russia Inflation"),
+            ).toBeNull();
+            expect(
                 screen.queryByText("Russia State Budget"),
             ).toBeNull();
             expect(
@@ -145,6 +151,9 @@ describe("AdminVisualizations", () => {
         await waitFor(() => {
             expect(
                 screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Inflation"),
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),

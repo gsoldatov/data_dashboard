@@ -40,6 +40,7 @@ describe("Index", () => {
                 new Response(
                     JSON.stringify({
                         russia_gdp: { is_published: false },
+                        russia_inflation: { is_published: false },
                         russia_state_budget: { is_published: false },
                         russia_labor_market: { is_published: false },
                     }),
@@ -74,6 +75,9 @@ describe("Index", () => {
         await waitFor(() => {
             expect(
                 screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Inflation"),
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
@@ -112,6 +116,7 @@ describe("Index", () => {
                 new Response(
                     JSON.stringify({
                         russia_gdp: { is_published: false },
+                        russia_inflation: { is_published: false },
                         russia_state_budget: { is_published: false },
                         russia_labor_market: { is_published: false },
                     }),
@@ -132,6 +137,9 @@ describe("Index", () => {
         await waitFor(() => {
             expect(
                 screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Inflation"),
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia State Budget"),
