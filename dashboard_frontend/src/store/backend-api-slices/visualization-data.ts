@@ -1,14 +1,19 @@
 import { z } from "zod";
 import { backendAPI } from "@/store/backend-api";
 import { russiaGdpItem } from "@/types/visualization-data/russia-gdp";
+import { russiaInflationResponseSchema } from "@/types/visualization-data/russia-inflation";
 import { russiaLaborMarketResponseSchema } from "@/types/visualization-data/russia-labor-market";
 import { russiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import { validateResponseData } from "@/store/util";
 
 type VisualizationDataset = unknown[];
 
-const russiaGdpResponseSchema = z.array(z.array(russiaGdpItem));
-const russiaStateBudgetResponseSchema = z.array(z.array(russiaStateBudgetItem));
+const schemaBySlug: Record<string, z.ZodType> = {
+    russia_gdp: z.array(z.array(russiaGdpItem)),
+    russia_state_budget: z.array(z.array(russiaStateBudgetItem)),
+    russia_labor_market: russiaLaborMarketResponseSchema,
+    russia_inflation: russiaInflationResponseSchema,
+};
 
 /** Endpoints for fetching visualization page data. */
 const visualizationDataApi = backendAPI.injectEndpoints({
@@ -21,32 +26,15 @@ const visualizationDataApi = backendAPI.injectEndpoints({
                 if (result.error) {
                     return { error: result.error };
                 }
-                if (slug === "russia_gdp") {
+                const schema = schemaBySlug[slug];
+                if (schema) {
                     const parsed = validateResponseData(
                         result.data,
-                        russiaGdpResponseSchema,
+                        schema,
                         url,
                     );
                     if ("error" in parsed) return parsed;
-                    return { data: parsed.data };
-                }
-                if (slug === "russia_state_budget") {
-                    const parsed = validateResponseData(
-                        result.data,
-                        russiaStateBudgetResponseSchema,
-                        url,
-                    );
-                    if ("error" in parsed) return parsed;
-                    return { data: parsed.data };
-                }
-                if (slug === "russia_labor_market") {
-                    const parsed = validateResponseData(
-                        result.data,
-                        russiaLaborMarketResponseSchema,
-                        url,
-                    );
-                    if ("error" in parsed) return parsed;
-                    return { data: parsed.data };
+                    return { data: parsed.data as VisualizationDataset[] };
                 }
                 return { data: result.data as VisualizationDataset[] };
             },

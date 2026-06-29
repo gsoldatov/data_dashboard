@@ -240,17 +240,15 @@
             + total workforce;
             + workforce engagement (working / unemployed / not in workforce);
     
-    - Inflation:
+    + Inflation:
 	    + Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
 	    + Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
 
-        - charts:
-            - cumulative inflation line chart:
-                - from & to selectors for period limiting;
-                - single value only selectors, default is YoY for the last period (last period + 11 previous months)
-            - key rate bar chart;
-
-
+        + charts:
+            + cumulative inflation bar chart:
+                + from & to selectors for period limiting;
+                + single value only selectors, default is YoY for the last period (last period + 11 previous months)
+            + key rate line chart;
     
     - Exports / Imports:
         - Balance of Trade

@@ -109,8 +109,47 @@ const russiaLaborMarketData = [
     ],
 ];
 
+/** 15-month mock data for the Russia inflation page (2 datasets: CPI, key rate). */
+const russiaInflationData = [
+    [
+        { year_month: "2023-01", value: 100.8 },
+        { year_month: "2023-02", value: 100.5 },
+        { year_month: "2023-03", value: 100.4 },
+        { year_month: "2023-04", value: 100.6 },
+        { year_month: "2023-05", value: 100.3 },
+        { year_month: "2023-06", value: 100.4 },
+        { year_month: "2023-07", value: 100.6 },
+        { year_month: "2023-08", value: 100.3 },
+        { year_month: "2023-09", value: 100.9 },
+        { year_month: "2023-10", value: 100.8 },
+        { year_month: "2023-11", value: 101.1 },
+        { year_month: "2023-12", value: 100.7 },
+        { year_month: "2024-01", value: 100.9 },
+        { year_month: "2024-02", value: 100.7 },
+        { year_month: "2024-03", value: 100.4 },
+    ],
+    [
+        { year_month: "2023-01", key_rate: 7.5, inflation_yoy: 11.8 },
+        { year_month: "2023-02", key_rate: 7.5, inflation_yoy: 11.0 },
+        { year_month: "2023-03", key_rate: 7.5, inflation_yoy: 3.5 },
+        { year_month: "2023-04", key_rate: 7.5, inflation_yoy: 2.3 },
+        { year_month: "2023-05", key_rate: 7.5, inflation_yoy: 2.5 },
+        { year_month: "2023-06", key_rate: 7.5, inflation_yoy: 3.3 },
+        { year_month: "2023-07", key_rate: 7.5, inflation_yoy: 4.3 },
+        { year_month: "2023-08", key_rate: 8.5, inflation_yoy: 5.2 },
+        { year_month: "2023-09", key_rate: 12.0, inflation_yoy: 6.0 },
+        { year_month: "2023-10", key_rate: 13.0, inflation_yoy: 6.7 },
+        { year_month: "2023-11", key_rate: 15.0, inflation_yoy: 7.5 },
+        { year_month: "2023-12", key_rate: 16.0, inflation_yoy: 7.4 },
+        { year_month: "2024-01", key_rate: 16.0, inflation_yoy: 7.4 },
+        { year_month: "2024-02", key_rate: 16.0, inflation_yoy: 7.7 },
+        { year_month: "2024-03", key_rate: 16.0, inflation_yoy: 7.7 },
+    ],
+];
+
 export const slugToVisualizationData: Record<string, unknown[]> = {
     russia_gdp: russiaGdpData,
     russia_state_budget: russiaStateBudgetData,
     russia_labor_market: russiaLaborMarketData,
+    russia_inflation: russiaInflationData,
 };
