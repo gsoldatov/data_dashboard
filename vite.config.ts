@@ -36,8 +36,14 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks(id) {
-                    // Recharts — used only by lazy-loaded MDX pages.
-                    if (id.includes("/node_modules/recharts/")) return "recharts";
+                    // Recharts and chart/selector components — used only by
+                    // lazy-loaded MDX visualization pages.
+                    if (
+                        id.includes("/node_modules/recharts/") ||
+                        id.includes("/components/common/visualizations/") ||
+                        id.includes("/src/styles/charts")
+                    )
+                        return "charts";
 
                     // shadcn/ui wrappers together with their dependencies
                     // (Radix primitives, Lucide icons, styling utilities)
