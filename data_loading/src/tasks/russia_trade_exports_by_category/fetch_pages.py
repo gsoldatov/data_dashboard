@@ -1,3 +1,24 @@
+"""
+Fetch HTML pages with Russia's export trade data by product category.
+
+Product categories
+------------------
+The WITS CountryProfile page offers 27+ product groupings across multiple
+classification schemes (HS groups, SITC Rev2, Sector, Stages of Processing)
+selectable via the "Product Group" filter.  The 16 HS-based categories
+fetched here come from the "Quick links" section and exclude overlapping
+entries from other schemes (e.g. "Chemical" / "Chemicals", "Fuels" / "Fuel",
+"Transp" / "Machinery and Transport Equipment") as well as the "All Products"
+aggregate.
+
+Yearly totals vs. by-country data
+---------------------------------
+The by-category sums (World partner) match the by-country yearly totals
+within floating-point rounding for nearly all years (1997 is a ~1.7 %
+outlier).  Imports show a systematic discrepancy — see the imports
+fetch task for details.
+"""
+
 import logging
 import re
 import time
