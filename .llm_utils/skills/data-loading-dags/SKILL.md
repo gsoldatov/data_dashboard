@@ -54,11 +54,12 @@ Implementation:
 - use project's config in the DAG and its tasks;
 - tasks should use Airflow task logger and log main steps of tasks;
 - files should be stored to `config.visualization_data_directory / <dag_name>`;
-- DAGs and their tasks should be runnable as standalone scripts.
+- DAGs and their tasks should be runnable as standalone scripts;
+- shared parsing / fetching logic used by multiple DAGs should live in `data_loading/src/helpers/parsing/` and `data_loading/src/helpers/fetching/` respectively, not duplicated across task modules.
 
 
 # Examples
 Consider exploring existing DAGs and related code parts to better understand existing patterns.
 - HTML fetching & parsing (BeautifulSoup tables): `russia_state_budget`;
-- HTML fetching & parsing (embedded JS arrays): `russia_trade_imports` — use when data is in `<script>` tags as JS arrays (`var RYear = [...]`) rather than rendered HTML;
+- HTML fetching & parsing data from embedded JS arrays: `russia_trade_imports` / `russia_trade_exports`;
 - CSV archive fetching & parsing: `russia_gdp_ppp_constant_prices`.
