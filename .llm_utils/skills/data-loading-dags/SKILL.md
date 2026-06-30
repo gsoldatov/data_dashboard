@@ -59,5 +59,6 @@ Implementation:
 
 # Examples
 Consider exploring existing DAGs and related code parts to better understand existing patterns.
-- HTML fetching & parsing: `russia_state_budget`;
+- HTML fetching & parsing (BeautifulSoup tables): `russia_state_budget`;
+- HTML fetching & parsing (embedded JS arrays): `russia_trade_imports` — use when data is in `<script>` tags as JS arrays (`var RYear = [...]`) rather than rendered HTML;
 - CSV archive fetching & parsing: `russia_gdp_ppp_constant_prices`.
