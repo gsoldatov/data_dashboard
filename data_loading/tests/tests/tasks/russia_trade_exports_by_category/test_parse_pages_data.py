@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.tasks.russia_trade_exports_by_category.parse_pages_data import (
+from data_loading.src.tasks.russia_trade_imports_by_category.parse_pages_data import (
     _parse_product_page,
     _product_code_to_name,
 )
