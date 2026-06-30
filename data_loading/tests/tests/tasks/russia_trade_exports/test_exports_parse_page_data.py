@@ -11,7 +11,9 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.tasks.russia_trade_imports.parse_page_data import _parse
+from data_loading.src.helpers.parsing.worldbank_wits_russia_trade import (
+    parse_by_country_page,
+)
 
 
 @pytest.fixture(scope="module")
@@ -26,14 +28,14 @@ def mock_html_content() -> str:
 
 def test_region_exclusion(mock_html_content: str) -> None:
     """Test that regions are excluded from results."""
-    by_country, _ = _parse(mock_html_content)
+    by_country, _ = parse_by_country_page(mock_html_content)
     countries = {entry["country"] for entry in by_country}
     assert "Europe & Central Asia" not in countries
 
 
 def test_special_categories_included(mock_html_content: str) -> None:
     """Test that Special Categories and Unspecified are kept."""
-    by_country, _ = _parse(mock_html_content)
+    by_country, _ = parse_by_country_page(mock_html_content)
     countries = {entry["country"] for entry in by_country}
     assert "Special Categories" in countries
     assert "Unspecified" in countries
@@ -44,7 +46,7 @@ def test_special_categories_included(mock_html_content: str) -> None:
 
 def test_yearly_totals(mock_html_content: str) -> None:
     """Test that yearly totals include Special Categories and Unspecified."""
-    _, totals = _parse(mock_html_content)
+    _, totals = parse_by_country_page(mock_html_content)
 
     # 1992: China(4500.0) + Germany(1800.25) + Special(7777.7)
     #       + US(3000.5) + Unspecified(0.001) = 17078.451 thousand

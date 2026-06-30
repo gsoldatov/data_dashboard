@@ -11,9 +11,9 @@ PROJECT_ROOT = Path(__file__).parents[5]
 if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.tasks.russia_trade_imports_by_category.parse_pages_data import (
-    _parse_product_page,
-    _product_code_to_name,
+from data_loading.src.helpers.parsing.worldbank_wits_russia_trade import (
+    parse_product_page,
+    product_code_to_name,
 )
 
 
@@ -43,14 +43,14 @@ def mock_machelec_html() -> str:
 
 def test_product_code_to_name() -> None:
     """Test product code to readable name conversion."""
-    assert _product_code_to_name("28-38_Chemicals") == "Chemicals"
-    assert _product_code_to_name("84-85_MachElec") == "Machines and Electronics"
-    assert _product_code_to_name("16-24_FoodProd") == "Food Products"
+    assert product_code_to_name("28-38_Chemicals") == "Chemicals"
+    assert product_code_to_name("84-85_MachElec") == "Machines and Electronics"
+    assert product_code_to_name("16-24_FoodProd") == "Food Products"
 
 
 def test_chemicals_empty_years_skipped(mock_chemicals_html: str) -> None:
     """Test that years with empty values are excluded from output."""
-    entries = _parse_product_page(mock_chemicals_html, "Chemicals")
+    entries = parse_product_page(mock_chemicals_html, "Chemicals")
     years = {e["year"] for e in entries}
     assert 1996 not in years
     assert 1997 not in years
@@ -60,7 +60,7 @@ def test_chemicals_empty_years_skipped(mock_chemicals_html: str) -> None:
 
 def test_chemicals_value_conversion(mock_chemicals_html: str) -> None:
     """Test that values are converted from thousands to raw USD."""
-    entries = _parse_product_page(mock_chemicals_html, "Chemicals")
+    entries = parse_product_page(mock_chemicals_html, "Chemicals")
     entries_by_year = {e["year"]: e["value"] for e in entries}
 
     assert entries_by_year[1998] == 2_100_500_500.0
@@ -69,14 +69,14 @@ def test_chemicals_value_conversion(mock_chemicals_html: str) -> None:
 
 def test_machelec_all_years_present(mock_machelec_html: str) -> None:
     """Test that MachElec has data for consecutive years."""
-    entries = _parse_product_page(mock_machelec_html, "Machines and Electronics")
+    entries = parse_product_page(mock_machelec_html, "Machines and Electronics")
     years = {e["year"] for e in entries}
     assert years == {1998, 1999, 2000}
 
 
 def test_machelec_value_conversion(mock_machelec_html: str) -> None:
     """Test MachElec value conversion from thousands to raw USD."""
-    entries = _parse_product_page(
+    entries = parse_product_page(
         mock_machelec_html, "Machines and Electronics"
     )
     entries_by_year = {e["year"]: e["value"] for e in entries}
@@ -88,7 +88,7 @@ def test_machelec_value_conversion(mock_machelec_html: str) -> None:
 
 def test_output_structure(mock_chemicals_html: str) -> None:
     """Test that output entries have the expected structure."""
-    entries = _parse_product_page(mock_chemicals_html, "Chemicals")
+    entries = parse_product_page(mock_chemicals_html, "Chemicals")
 
     for entry in entries:
         assert isinstance(entry["year"], int)
@@ -101,8 +101,8 @@ def test_combined_products(
     mock_chemicals_html: str, mock_machelec_html: str
 ) -> None:
     """Test combined results from multiple product pages."""
-    chem = _parse_product_page(mock_chemicals_html, "Chemicals")
-    mach = _parse_product_page(
+    chem = parse_product_page(mock_chemicals_html, "Chemicals")
+    mach = parse_product_page(
         mock_machelec_html, "Machines and Electronics"
     )
 

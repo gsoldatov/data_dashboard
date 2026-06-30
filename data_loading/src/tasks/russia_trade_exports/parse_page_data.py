@@ -10,7 +10,9 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.tasks.russia_trade_imports.parse_page_data import _parse
+from data_loading.src.helpers.parsing.worldbank_wits_russia_trade import (
+    parse_by_country_page,
+)
 from python_common.src import Config, get_config
 
 
@@ -39,7 +41,7 @@ def parse_page_data_task(config: Config | None = None) -> None:
         with open(page_path, encoding="utf-8") as f:
             html_content = f.read()
 
-        by_country, totals = _parse(html_content)
+        by_country, totals = parse_by_country_page(html_content)
 
         logger.debug("Writing by-country JSON output to %s", by_country_path)
         with open(by_country_path, "w", encoding="utf-8") as f:

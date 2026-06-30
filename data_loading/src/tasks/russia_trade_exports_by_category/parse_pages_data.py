@@ -10,9 +10,9 @@ if __name__ == "__main__":
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from data_loading.src.tasks.russia_trade_imports_by_category.parse_pages_data import (
-    _parse_product_page,
-    _product_code_to_name,
+from data_loading.src.helpers.parsing.worldbank_wits_russia_trade import (
+    parse_product_page,
+    product_code_to_name,
 )
 from python_common.src import Config, get_config
 
@@ -49,13 +49,13 @@ def parse_pages_data_task(config: Config | None = None) -> None:
 
         for page_file in page_files:
             product_code = page_file.stem
-            product_category = _product_code_to_name(product_code)
+            product_category = product_code_to_name(product_code)
 
             logger.debug("Reading HTML from %s", page_file)
             with open(page_file, encoding="utf-8") as f:
                 html_content = f.read()
 
-            entries = _parse_product_page(html_content, product_category)
+            entries = parse_product_page(html_content, product_category)
             logger.debug(
                 "Extracted %d entries for %s", len(entries), product_category
             )

@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from airflow.sdk import task
 
@@ -11,6 +10,9 @@ if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from data_loading.src.helpers import HTTPLoader
+from data_loading.src.helpers.fetching.worldbank_wits_russia_trade import (
+    build_wits_by_country_url,
+)
 from python_common.src import Config, get_config
 
 
@@ -23,13 +25,7 @@ def fetch_page_task(config: Config | None = None) -> None:
     logger = logging.getLogger("airflow.task")
     config = config or get_config()
 
-    current_year = datetime.now().year
-    url = (
-        "https://wits.worldbank.org/CountryProfile/en/Country/RUS"
-        "/StartYear/1992/EndYear/"
-        f"{current_year}"
-        "/TradeFlow/Import/Partner/BY-COUNTRY/Indicator/MPRT-TRD-VL"
-    )
+    url = build_wits_by_country_url("Import", "MPRT-TRD-VL")
 
     logger.info("Fetching Russia trade imports page from %s", url)
 

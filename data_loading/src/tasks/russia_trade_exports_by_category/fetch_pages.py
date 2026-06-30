@@ -1,30 +1,14 @@
 """
 Fetch HTML pages with Russia's export trade data by product category.
 
-Product categories
-------------------
-The WITS CountryProfile page offers 27+ product groupings across multiple
-classification schemes (HS groups, SITC Rev2, Sector, Stages of Processing)
-selectable via the "Product Group" filter.  The 16 HS-based categories
-fetched here come from the "Quick links" section and exclude overlapping
-entries from other schemes (e.g. "Chemical" / "Chemicals", "Fuels" / "Fuel",
-"Transp" / "Machinery and Transport Equipment") as well as the "All Products"
-aggregate.
-
-Yearly totals vs. by-country data
----------------------------------
-The by-category sums (World partner) match the by-country yearly totals
-within floating-point rounding for nearly all years (1997 is a ~1.7 %
-outlier).  Imports show a systematic discrepancy — see the imports
-fetch task for details.
+For notes on product categories and yearly-total discrepancies see
+``data_loading.src.helpers.fetching.worldbank_wits_russia_trade``.
 """
 
 import logging
-import re
 import time
 from datetime import datetime
 
-import httpx
 from airflow.sdk import task
 
 if __name__ == "__main__":
@@ -35,10 +19,10 @@ if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from data_loading.src.helpers import HTTPLoader
+from data_loading.src.helpers.fetching.worldbank_wits_russia_trade import (
+    get_product_codes,
+)
 from python_common.src import Config, get_config
-
-_RE_PRODUCT_CODE = re.compile(r"Product/([^\"'&\s]+)")
-_EXCLUDED_PRODUCTS: frozenset[str] = frozenset({"Total"})
 
 
 @task
@@ -56,7 +40,7 @@ def fetch_pages_task(config: Config | None = None) -> None:
 
     current_year = datetime.now().year
 
-    product_codes = _get_product_codes(logger)
+    product_codes = get_product_codes(logger)
     logger.info("Found %d product categories", len(product_codes))
 
     for i, product_code in enumerate(product_codes):
@@ -88,21 +72,6 @@ def fetch_pages_task(config: Config | None = None) -> None:
 
         if i < len(product_codes) - 1:
             time.sleep(1.5)
-
-
-def _get_product_codes(logger: logging.Logger) -> list[str]:
-    """Extract product category codes from the RUS country profile page."""
-    rus_url = "https://wits.worldbank.org/CountryProfile/en/RUS"
-
-    logger.info("Fetching RUS country profile to extract product codes")
-    with httpx.Client() as client:
-        response = client.get(rus_url)
-        response.raise_for_status()
-        html = response.text
-
-    codes = sorted(set(_RE_PRODUCT_CODE.findall(html)) - _EXCLUDED_PRODUCTS)
-    logger.debug("Product codes: %s", codes)
-    return codes
 
 
 if __name__ == "__main__":
