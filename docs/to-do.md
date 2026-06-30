@@ -251,7 +251,7 @@
             + key rate line chart;
     
     - Exports / Imports:
-        - Balance of Trade
+        + yearly exports / imports by country;  // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1992/EndYear/2026/TradeFlow/Import/Partner/BY-COUNTRY/Indicator/MPRT-TRD-VL
         - export / import structure
         - https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
 
@@ -279,9 +279,12 @@
 
 - add DAG retries
 
+- revisit styling; colors, fonts, etc.
+
 - backend -> get / update vis settings -> validate that slugs match existing whilelist
 - merge small files (frontend types, etc?)
 ? refactor visualization data fetching (reuse already loaded datasets without refetching them)  // is published logic should still apply
+    - move common file reading logic into a function;
 
 
 

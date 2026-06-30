@@ -3,7 +3,6 @@ import logging
 import re
 from typing import Any
 
-import pycountry
 from airflow.sdk import task
 
 if __name__ == "__main__":
@@ -15,46 +14,19 @@ if __name__ == "__main__":
 
 from python_common.src import Config, get_config
 
-# Mapping from WITS partner names to ISO country names for pycountry lookup.
-# Entries mapped to None are explicitly excluded (not real countries).
-_WITS_TO_ISO: dict[str, str | None] = {
-    "Anguila": "Anguilla",
-    "Bahamas, The": "Bahamas",
-    "Belgium-Luxembourg": "Belgium",
-    "British Indian Ocean Ter.": "British Indian Ocean Territory",
-    "Brunei": "Brunei Darussalam",
-    "Cape Verde": "Cabo Verde",
-    "Congo, Dem. Rep.": "Congo, The Democratic Republic of the",
-    "Congo, Rep.": "Congo",
-    "East Timor": "Timor-Leste",
-    "Egypt, Arab Rep.": "Egypt",
-    "Ethiopia(excludes Eritrea)": "Ethiopia",
-    "Faeroe Islands": "Faroe Islands",
-    "Fm Sudan": None,
-    "Fr. So. Ant. Tr": "French Southern Territories",
-    "Gambia, The": "Gambia",
-    "Hong Kong, China": "Hong Kong",
-    "Iran, Islamic Rep.": "Iran, Islamic Republic of",
-    "Korea, Dem. Rep.": "Korea, Democratic People's Republic of",
-    "Korea, Rep.": "Korea, Republic of",
-    "Lao PDR": "Lao People's Democratic Republic",
-    "Micronesia, Fed. Sts.": "Micronesia, Federated States of",
-    "Netherlands Antilles": None,
-    "Occ.Pal.Terr": "Palestine, State of",
-    "Other Asia, nes": None,
-    "Saint Maarten (Dutch part)": "Sint Maarten (Dutch part)",
-    "Serbia, FR(Serbia/Montenegro)": "Serbia",
-    "Slovak Republic": "Slovakia",
-    "Special Categories": None,
-    "St. Kitts and Nevis": "Saint Kitts and Nevis",
-    "St. Lucia": "Saint Lucia",
-    "St. Vincent and the Grenadines": "Saint Vincent and the Grenadines",
-    "Turkey": "Türkiye",
-    "Turks and Caicos Isl.": "Turks and Caicos Islands",
-    "Unspecified": None,
-    "Us Msc.Pac.I": "United States Minor Outlying Islands",
-    "Wallis and Futura Isl.": "Wallis and Futuna",
-}
+# WITS region/aggregate entries to exclude.
+# These are only present in the ALL view, but the blocklist serves as a safety
+# net in case the data source changes.
+_EXCLUDED_REGIONS: frozenset[str] = frozenset({
+    "World",
+    "East Asia & Pacific",
+    "Europe & Central Asia",
+    "Latin America & Caribbean",
+    "Middle East, North Africa, Afghanistan & Pakistan",
+    "North America",
+    "South Asia",
+    "Sub-Saharan Africa",
+})
 
 # Regex to extract JS arrays from the page source
 _RE_PARTNER_NAMES = re.compile(r"RPartnerName\s*=\s*(\[.*?\]);", re.DOTALL)
@@ -147,7 +119,7 @@ def _parse(
     yearly_sums: dict[int, float] = {}
 
     for idx, name in enumerate(partner_names):
-        if not _is_country(name):
+        if name in _EXCLUDED_REGIONS:
             continue
 
         for year, values in sorted(years_data.items()):
@@ -171,33 +143,6 @@ def _parse(
     ]
 
     return by_country, totals
-
-
-def _is_country(name: str) -> bool:
-    """
-    Returns True if the given WITS partner name corresponds to a real country
-    or territory (as opposed to aggregates like 'Special Categories').
-    """
-    # Check explicit mapping first
-    if name in _WITS_TO_ISO:
-        return _WITS_TO_ISO[name] is not None
-
-    # Try direct pycountry lookup
-    try:
-        pycountry.countries.lookup(name)
-        return True
-    except LookupError:
-        pass
-
-    # Try fuzzy search as fallback
-    try:
-        results = pycountry.countries.search_fuzzy(name)
-        if results:
-            return True
-    except LookupError:
-        pass
-
-    return False
 
 
 if __name__ == "__main__":
