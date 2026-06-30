@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fuels Exports - Mock Data</title>
+</head>
+<body>
+    <div id="jqx-Product">
+        <div id="jqx-ProductGrid"></div>
+    </div>
+
+    <script>
+        var col0 = ["World"];
+        var col1 = [""];
+        var col2 = [""];
+        var col3 = [""];
+        var col4 = [""];
+        var col5 = [""];
+        var col6 = [""];
+        var col7 = [""];
+        var col8 = [""];
+        var col9 = ["51860984.947"];
+        var col10 = ["56120644.815"];
+    </script>
+
+    <script>
+        var partnerSource = {
+            localdata: partnerData,
+            datatype: "array",
+            datafields: [
+                { name: 'col0' },
+                { name: 'col1', type: 'float' },
+                { name: 'col2', type: 'float' },
+                { name: 'col3', type: 'float' },
+                { name: 'col4', type: 'float' },
+                { name: 'col5', type: 'float' },
+                { name: 'col6', type: 'float' },
+                { name: 'col7', type: 'float' },
+                { name: 'col8', type: 'float' },
+                { name: 'col9', type: 'float' },
+                { name: 'col10', type: 'float' }
+            ]
+        };
+
+        $("#jqx-ProductGrid").jqxGrid({
+            source: dataAdapter,
+            columns: [
+                { text:'Partner Name', datafield:'col0', minwidth: 200 },
+                { text:'1992', datafield:'col1' },
+                { text:'1993', datafield:'col2' },
+                { text:'1994', datafield:'col3' },
+                { text:'1995', datafield:'col4' },
+                { text:'1996', datafield:'col5' },
+                { text:'1997', datafield:'col6' },
+                { text:'1998', datafield:'col7' },
+                { text:'1999', datafield:'col8' },
+                { text:'2000', datafield:'col9' },
+                { text:'2001', datafield:'col10' }
+            ]
+        });
+    </script>
+</body>
+</html>
