@@ -18,16 +18,26 @@ const visualizationDataApi = backendAPI.injectEndpoints({
                 // Validate response data with the correct validator
                 const schema =
                     visualizationDataResponseValidatorMap[slug];
-                if (schema) {
-                    const parsed = validateResponseData(
-                        result.data,
-                        schema,
-                        url,
+                if (!schema) {
+                    console.error(
+                        `No response validator found for visualization slug "${slug}". ` +
+                            "Add a Zod schema to visualizationDataResponseValidatorMap.",
                     );
-                    if ("error" in parsed) return parsed;
-                    return { data: parsed.data as VisualizationDataset[] };
+                    return {
+                        error: {
+                            status: "CUSTOM_ERROR",
+                            error: `Missing response validator for "${slug}".`,
+                            data: result.data,
+                        },
+                    };
                 }
-                return { data: result.data as VisualizationDataset[] };
+                const parsed = validateResponseData(
+                    result.data,
+                    schema,
+                    url,
+                );
+                if ("error" in parsed) return parsed;
+                return { data: parsed.data as VisualizationDataset[] };
             },
         }),
     }),

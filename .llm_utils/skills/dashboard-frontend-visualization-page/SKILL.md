@@ -13,7 +13,8 @@ which handles auth-gated publish-status checks and wraps the MDX content in `<Vi
 Key architectural points:
 - All visualizations are registered in `VISUALIZATIONS` (see `dashboard_frontend/src/util/constants.tsx`).
 - Data is fetched via the RTK Query `getVisualizationData` endpoint (slug-based, no per-visualization route
-  changes needed). Response validation is slug-conditional (see `visualization-data.ts` in the RTKQ slice).
+  changes needed). Response validation is **mandatory** — every slug must have a Zod schema
+  registered in `visualizationDataResponseValidatorMap`, or the fetch will fail with an error.
 - The visualization page component (`visualization.tsx`) discovers MDX files automatically — no router
   changes needed when adding a new visualization.
 - MDX files are thin: they import chart components from `page-parts/visualizations/mdx/<slug>/` and
@@ -33,6 +34,8 @@ Key architectural points:
 - Define Zod schemas in `dashboard_frontend/src/types/visualization-data/<slug>.ts` for each item type.
 - Register the slug in `visualizationDataResponseValidatorMap` in
   `dashboard_frontend/src/types/visualization-data/visualization-data.ts`.
+  **This is mandatory** — the RTKQ fetch will fail with a `CUSTOM_ERROR` if no validator
+  is registered for the slug.
   Use `z.tuple([...])` for fixed-length arrays, `z.array(z.array(...))` for variable-length.
 
 
