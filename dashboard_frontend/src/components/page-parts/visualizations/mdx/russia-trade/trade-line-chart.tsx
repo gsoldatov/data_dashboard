@@ -1,0 +1,105 @@
+import { useMemo } from "react";
+import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+} from "recharts";
+import { ChartPlaceholder } from "@/components/common/visualizations/charts/chart-placeholder";
+import { ChartTitle } from "@/components/common/visualizations/charts/chart-title";
+import { axisTooltipContent } from "@/components/common/visualizations/charts/chart-tooltip";
+import {
+    CHART_HEIGHT,
+    CHART_MARGINS,
+    GRID_STROKE_DASHARRAY,
+    GRID_STROKE,
+    Y_AXIS_LABEL_OFFSET,
+    CHART_COLORS,
+    formatValue,
+} from "@/styles/charts";
+
+import type { TradeYearlyTotalItem } from "@/types/visualization-data/russia-trade";
+
+const BLN = 1_000_000_000;
+
+/** Combined line chart showing total exports and imports by year. */
+export const TradeLineChart = () => {
+    const { data } = useGetVisualizationDataQuery("russia_trade");
+    const exportsYearly = (data?.[1] ?? []) as TradeYearlyTotalItem[];
+    const importsYearly = (data?.[4] ?? []) as TradeYearlyTotalItem[];
+
+    const chartData = useMemo(() => {
+        const exportsByYear = new Map<number, number>();
+        for (const item of exportsYearly) {
+            exportsByYear.set(item.year, item.value / BLN);
+        }
+        const importsByYear = new Map<number, number>();
+        for (const item of importsYearly) {
+            importsByYear.set(item.year, item.value / BLN);
+        }
+
+        const years = new Set([
+            ...exportsByYear.keys(),
+            ...importsByYear.keys(),
+        ]);
+        return [...years]
+            .sort((a, b) => a - b)
+            .map((year) => ({
+                year,
+                exports: exportsByYear.get(year) ?? 0,
+                imports: importsByYear.get(year) ?? 0,
+            }));
+    }, [exportsYearly, importsYearly]);
+
+    if (chartData.length === 0) {
+        return <ChartPlaceholder height={CHART_HEIGHT} />;
+    }
+
+    return (
+        <div>
+            <ChartTitle>Total Exports &amp; Imports by Year</ChartTitle>
+            <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
+                <LineChart data={chartData} margin={CHART_MARGINS}>
+                    <CartesianGrid
+                        stroke={GRID_STROKE}
+                        strokeDasharray={GRID_STROKE_DASHARRAY}
+                    />
+                    <XAxis dataKey="year" />
+                    <YAxis
+                        tickFormatter={(v: number) => v.toFixed(0)}
+                        label={{
+                            value: "bln USD",
+                            angle: -90,
+                            position: "insideLeft",
+                            offset: Y_AXIS_LABEL_OFFSET,
+                        }}
+                    />
+                    <Tooltip
+                        content={axisTooltipContent("year", "Year")}
+                        formatter={(v: number) => formatValue(v, "bln USD")}
+                    />
+                    <Legend />
+                    <Line
+                        type="monotone"
+                        dataKey="exports"
+                        name="Exports"
+                        stroke={CHART_COLORS[0]}
+                        dot={false}
+                    />
+                    <Line
+                        type="monotone"
+                        dataKey="imports"
+                        name="Imports"
+                        stroke={CHART_COLORS[1]}
+                        dot={false}
+                    />
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};

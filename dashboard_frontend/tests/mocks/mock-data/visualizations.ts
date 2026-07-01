@@ -147,9 +147,98 @@ const russiaInflationData = [
     ],
 ];
 
+/** 3-year mock data for the Russia Trade page (6 datasets). */
+const russiaTradeData = [
+    // [0] exports by country
+    [
+        { year: 2022, country: "China", value: 114000000000 },
+        { year: 2023, country: "China", value: 129000000000 },
+        { year: 2024, country: "China", value: 138000000000 },
+        { year: 2022, country: "India", value: 42000000000 },
+        { year: 2023, country: "India", value: 58000000000 },
+        { year: 2024, country: "India", value: 64000000000 },
+        { year: 2022, country: "Turkey", value: 32000000000 },
+        { year: 2023, country: "Turkey", value: 38000000000 },
+        { year: 2024, country: "Turkey", value: 41000000000 },
+        { year: 2022, country: "Germany", value: 25000000000 },
+        { year: 2023, country: "Germany", value: 18000000000 },
+        { year: 2024, country: "Germany", value: 15000000000 },
+        { year: 2022, country: "Brazil", value: 15000000000 },
+        { year: 2023, country: "Brazil", value: 17000000000 },
+        { year: 2024, country: "Brazil", value: 19000000000 },
+    ],
+    // [1] exports yearly totals
+    [
+        { year: 2022, value: 588300000000 },
+        { year: 2023, value: 465400000000 },
+        { year: 2024, value: 478200000000 },
+    ],
+    // [2] exports by category
+    [
+        { year: 2022, product_category: "Fuels", value: 320000000000 },
+        { year: 2023, product_category: "Fuels", value: 240000000000 },
+        { year: 2024, product_category: "Fuels", value: 250000000000 },
+        { year: 2022, product_category: "Metals", value: 68000000000 },
+        { year: 2023, product_category: "Metals", value: 52000000000 },
+        { year: 2024, product_category: "Metals", value: 55000000000 },
+        { year: 2022, product_category: "Chemicals", value: 42000000000 },
+        { year: 2023, product_category: "Chemicals", value: 35000000000 },
+        { year: 2024, product_category: "Chemicals", value: 38000000000 },
+        { year: 2022, product_category: "Machines and Electronics", value: 35000000000 },
+        { year: 2023, product_category: "Machines and Electronics", value: 28000000000 },
+        { year: 2024, product_category: "Machines and Electronics", value: 30000000000 },
+        { year: 2022, product_category: "Animal", value: 28000000000 },
+        { year: 2023, product_category: "Animal", value: 22000000000 },
+        { year: 2024, product_category: "Animal", value: 24000000000 },
+    ],
+    // [3] imports by country
+    [
+        { year: 2022, country: "China", value: 87000000000 },
+        { year: 2023, country: "China", value: 112000000000 },
+        { year: 2024, country: "China", value: 125000000000 },
+        { year: 2022, country: "Germany", value: 32000000000 },
+        { year: 2023, country: "Germany", value: 28000000000 },
+        { year: 2024, country: "Germany", value: 26000000000 },
+        { year: 2022, country: "Turkey", value: 18000000000 },
+        { year: 2023, country: "Turkey", value: 21000000000 },
+        { year: 2024, country: "Turkey", value: 24000000000 },
+        { year: 2022, country: "India", value: 12000000000 },
+        { year: 2023, country: "India", value: 16000000000 },
+        { year: 2024, country: "India", value: 19000000000 },
+        { year: 2022, country: "Brazil", value: 9000000000 },
+        { year: 2023, country: "Brazil", value: 11000000000 },
+        { year: 2024, country: "Brazil", value: 13000000000 },
+    ],
+    // [4] imports yearly totals
+    [
+        { year: 2022, value: 280400000000 },
+        { year: 2023, value: 303800000000 },
+        { year: 2024, value: 324600000000 },
+    ],
+    // [5] imports by category
+    [
+        { year: 2022, product_category: "Machines and Electronics", value: 95000000000 },
+        { year: 2023, product_category: "Machines and Electronics", value: 112000000000 },
+        { year: 2024, product_category: "Machines and Electronics", value: 120000000000 },
+        { year: 2022, product_category: "Chemicals", value: 45000000000 },
+        { year: 2023, product_category: "Chemicals", value: 48000000000 },
+        { year: 2024, product_category: "Chemicals", value: 52000000000 },
+        { year: 2022, product_category: "Transportation", value: 32000000000 },
+        { year: 2023, product_category: "Transportation", value: 35000000000 },
+        { year: 2024, product_category: "Transportation", value: 38000000000 },
+        { year: 2022, product_category: "Metals", value: 25000000000 },
+        { year: 2023, product_category: "Metals", value: 28000000000 },
+        { year: 2024, product_category: "Metals", value: 30000000000 },
+        { year: 2022, product_category: "Textiles and Clothing", value: 22000000000 },
+        { year: 2023, product_category: "Textiles and Clothing", value: 24000000000 },
+        { year: 2024, product_category: "Textiles and Clothing", value: 26000000000 },
+    ],
+];
+
 export const slugToVisualizationData: Record<string, unknown[]> = {
     russia_gdp: russiaGdpData,
     russia_state_budget: russiaStateBudgetData,
     russia_labor_market: russiaLaborMarketData,
     russia_inflation: russiaInflationData,
+    russia_trade: russiaTradeData,
 };

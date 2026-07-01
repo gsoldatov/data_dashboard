@@ -47,7 +47,7 @@ describe("AdminVisualizations", () => {
         });
 
         const switches = screen.getAllByRole("switch");
-        expect(switches).toHaveLength(4);
+        expect(switches).toHaveLength(5);
     });
 
     it("toggles is_published on switch click and updates the display", async () => {
@@ -112,7 +112,7 @@ describe("AdminVisualizations", () => {
 
         const filterInput = screen.getByPlaceholderText("Filter by title…");
 
-        // Prefix match — should show all four
+        // Prefix match — should show all five
         fireEvent.change(filterInput, { target: { value: "russia" } });
         await waitFor(() => {
             expect(
@@ -126,6 +126,9 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia Labor Market"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Trade"),
             ).toBeInTheDocument();
         });
 
@@ -144,6 +147,9 @@ describe("AdminVisualizations", () => {
             expect(
                 screen.queryByText("Russia Labor Market"),
             ).toBeNull();
+            expect(
+                screen.queryByText("Russia Trade"),
+            ).toBeNull();
         });
 
         // Clear filter — shows all again
@@ -160,6 +166,9 @@ describe("AdminVisualizations", () => {
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia Labor Market"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Trade"),
             ).toBeInTheDocument();
         });
     });

@@ -49,3 +49,18 @@ export const formatValue = (v: number, unit: string): string => {
         .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return `${formatted} ${unit}`;
 };
+
+/** Format a numeric value with the given unit, auto-scaling to the most
+ *  readable magnitude (k / M / B). */
+export const formatScaledValue = (v: number, unit: string): string => {
+    if (v >= 1_000_000_000) {
+        return `${(v / 1_000_000_000).toFixed(1)}B ${unit}`;
+    }
+    if (v >= 1_000_000) {
+        return `${(v / 1_000_000).toFixed(1)}M ${unit}`;
+    }
+    if (v >= 1_000) {
+        return `${(v / 1_000).toFixed(1)}k ${unit}`;
+    }
+    return formatValue(v, unit);
+};

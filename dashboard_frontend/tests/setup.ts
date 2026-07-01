@@ -44,3 +44,6 @@ global.ResizeObserver = vi.fn().mockImplementation((callback) => ({
     unobserve: vi.fn(),
     disconnect: vi.fn(),
 }));
+
+// jsdom does not implement hasPointerCapture (used by Radix Select).
+Element.prototype.hasPointerCapture = vi.fn().mockReturnValue(false);

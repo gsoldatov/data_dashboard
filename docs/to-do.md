@@ -251,13 +251,21 @@
                 + single value only selectors, default is YoY for the last period (last period + 11 previous months)
             + key rate line chart;
     
-    - Exports / Imports:
+    + Exports / Imports:
         + data:
             + yearly exports / imports by country;  // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1992/EndYear/2026/TradeFlow/Import/Partner/BY-COUNTRY/Indicator/MPRT-TRD-VL
             + export / import structure;    // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1996/EndYear/2021/TradeFlow/Import/Indicator/MPRT-TRD-VL/Partner/WLD/Product/Chemical
         
-        - charts:
-            ???
+        + charts:
+            + total exports / imports by year line chart;
+            + exports / imports chart group:
+                + single value selector for years, last available year is selected by default
+                + export by country bar chart;  // in bln USD for the selected year, sorted desc by export value
+                + export by category treemap;   // in bln USD for the selected year
+                + import by country bar chart;
+                + import by category treemap;
+                
+
         
 
     - Economy by Sectors:
