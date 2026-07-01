@@ -13,6 +13,7 @@ from dashboard_backend.src.middleware.db_repository import DBRepositoryMiddlewar
 from dashboard_backend.src.routes import setup_routes
 from dashboard_backend.src.scheduled import setup_scheduler
 from dashboard_backend.src.util.exceptions import (
+    ApplicationException,
     DuplicateException,
     InvalidCredentialsException,
     NotFoundException,
@@ -61,6 +62,12 @@ def create_app(config: Config | None = None) -> FastAPI:
         _request: Request, exc: VisualizationDataNotFoundException
     ) -> JSONResponse:
         return JSONResponse(status_code=404, content={"detail": str(exc)})
+
+    @app.exception_handler(ApplicationException)
+    async def application_error_handler(
+        _request: Request, exc: ApplicationException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=500, content={"detail": str(exc)})
 
     @app.exception_handler(DuplicateException)
     async def duplicate_handler(

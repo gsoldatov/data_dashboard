@@ -3,51 +3,39 @@
 import asyncio
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
 
 from fastapi import Request
 
-from dashboard_backend.src.services.visualization_data.russia_gdp import (
-    get_russia_gdp_constant_prices_rub,
-    get_russia_gdp_constant_prices_usd,
-    get_russia_gdp_ppp_constant_prices,
+from dashboard_backend.src.services.visualization_data.read_json_file import (
+    JSONFileReader,
+    VisualizationDataset,
 )
-from dashboard_backend.src.services.visualization_data.russia_inflation import (
-    get_russia_consumer_price_index_data,
-    get_russia_key_rate_data,
-)
-from dashboard_backend.src.services.visualization_data.russia_labor_market import (
-    get_russia_labor_workforce_data,
-    get_russia_salaries_average_data,
-    get_russia_salaries_by_sector_data,
-)
-from dashboard_backend.src.services.visualization_data.russia_state_budget import (
-    get_russia_state_budget_data,
-)
-from dashboard_backend.src.util.exceptions import (
-    NotFoundException,
-    VisualizationDataNotFoundException,
-)
+from dashboard_backend.src.util.exceptions import NotFoundException
 
-type VisualizationDataset = dict[str, Any] | list[dict[str, Any]]
-""" Union of possible visualization dataset types. """
+__all__ = [
+    "VisualizationDataset",
+    "VisualizationDataService",
+    "get_visualization_data_service",
+]
 
 # Each key maps a visualization slug to a list of sync data-getter callables.
 _REGISTRY: dict[str, list[Callable[[Path], VisualizationDataset]]] = {
     "russia_gdp": [
-        get_russia_gdp_constant_prices_rub,
-        get_russia_gdp_constant_prices_usd,
-        get_russia_gdp_ppp_constant_prices,
+        JSONFileReader("russia_gdp_constant_prices_rub/gdp.json").read,
+        JSONFileReader("russia_gdp_constant_prices_usd/gdp.json").read,
+        JSONFileReader("russia_gdp_ppp_constant_prices/gdp.json").read,
     ],
     "russia_inflation": [
-        get_russia_consumer_price_index_data,
-        get_russia_key_rate_data,
+        JSONFileReader("russia_consumer_price_index/cpi.json").read,
+        JSONFileReader("russia_key_rate/key_rate.json").read,
     ],
-    "russia_state_budget": [get_russia_state_budget_data],
+    "russia_state_budget": [
+        JSONFileReader("russia_state_budget/budget.json").read,
+    ],
     "russia_labor_market": [
-        get_russia_salaries_average_data,
-        get_russia_salaries_by_sector_data,
-        get_russia_labor_workforce_data,
+        JSONFileReader("russia_salaries_average/salaries.json").read,
+        JSONFileReader("russia_salaries_by_sector/salaries.json").read,
+        JSONFileReader("russia_labor_workforce/workforce.json").read,
     ],
 }
 
@@ -71,12 +59,7 @@ class VisualizationDataService:
         def _call_all() -> list[VisualizationDataset]:
             results: list[VisualizationDataset] = []
             for g in getters:
-                try:
-                    results.append(g(self._data_directory))
-                except FileNotFoundError as e:
-                    raise VisualizationDataNotFoundException(
-                        f"Data file not found for slug: {slug}"
-                    ) from e
+                results.append(g(self._data_directory))
             return results
 
         return await asyncio.to_thread(_call_all)

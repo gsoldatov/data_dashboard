@@ -16,6 +16,10 @@ class VisualizationDataNotFoundException(Exception):
     """Raised when a visualization's data file cannot be read."""
 
 
+class ApplicationException(Exception):
+    """Raised for unexpected server-side errors (maps to HTTP 500)."""
+
+
 class DuplicateException(Exception):
     """Raised when a uniqueness constraint would be violated."""
 
