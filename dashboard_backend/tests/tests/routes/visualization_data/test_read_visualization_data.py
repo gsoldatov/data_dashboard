@@ -117,6 +117,14 @@ async def test_read_visualization_data_success(
             [{"russia_salaries_by_sector": True}],
             [{"russia_labor_workforce": True}],
         ],
+        "russia_trade": [
+            [{"russia_trade_exports_by_country": True}],
+            [{"russia_trade_exports_yearly_totals": True}],
+            [{"russia_trade_exports_by_category": True}],
+            [{"russia_trade_imports_by_country": True}],
+            [{"russia_trade_imports_yearly_totals": True}],
+            [{"russia_trade_imports_by_category": True}],
+        ],
     }
     copy_test_directories(
         test_config.visualization_data_directory,
@@ -130,6 +138,10 @@ async def test_read_visualization_data_success(
             "russia_salaries_average",
             "russia_salaries_by_sector",
             "russia_labor_workforce",
+            "russia_trade_exports",
+            "russia_trade_exports_by_category",
+            "russia_trade_imports",
+            "russia_trade_imports_by_category",
         ],
         _TESTS_DIR / "mocks" / "visualization_data",
     )

@@ -241,8 +241,9 @@
             + workforce engagement (working / unemployed / not in workforce);
     
     + Inflation:
-	    + Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
-	    + Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
+        + data:
+            + Consumer Price Index / Inflation; // https://rosstat.gov.ru/statistics/price
+            + Interest Rate;    // https://www.cbr.ru/hd_base/infl/?UniDbQuery.Posted=True&UniDbQuery.From=17.09.2013&UniDbQuery.To=26.06.2026
 
         + charts:
             + cumulative inflation bar chart:
@@ -251,9 +252,13 @@
             + key rate line chart;
     
     - Exports / Imports:
-        + yearly exports / imports by country;  // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1992/EndYear/2026/TradeFlow/Import/Partner/BY-COUNTRY/Indicator/MPRT-TRD-VL
-        - export / import structure
-        - https://rosstat.gov.ru/statistics/vneshnyaya_torgovlya
+        + data:
+            + yearly exports / imports by country;  // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1992/EndYear/2026/TradeFlow/Import/Partner/BY-COUNTRY/Indicator/MPRT-TRD-VL
+            + export / import structure;    // https://wits.worldbank.org/CountryProfile/en/Country/RUS/StartYear/1996/EndYear/2021/TradeFlow/Import/Indicator/MPRT-TRD-VL/Partner/WLD/Product/Chemical
+        
+        - charts:
+            ???
+        
 
     - Economy by Sectors:
         - Finance
@@ -295,6 +300,8 @@
     ? run ETL jobs;
 - add deployment data backup;
 ? split main AGENTS.md into skills / sub-files;
+- add backend access & event logging to files:
+    - add maintentance tasks for clearing log files;    // apscheduler
 
 - i18n + l10n:	// ru + en
 	- ui

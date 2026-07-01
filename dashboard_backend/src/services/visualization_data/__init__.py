@@ -32,6 +32,14 @@ _REGISTRY: dict[str, list[Callable[[Path], VisualizationDataset]]] = {
     "russia_state_budget": [
         JSONFileReader("russia_state_budget/budget.json").read,
     ],
+    "russia_trade": [
+        JSONFileReader("russia_trade_exports/exports_by_country.json").read,
+        JSONFileReader("russia_trade_exports/exports_yearly_totals.json").read,
+        JSONFileReader("russia_trade_exports_by_category/exports_by_category.json").read,
+        JSONFileReader("russia_trade_imports/imports_by_country.json").read,
+        JSONFileReader("russia_trade_imports/imports_yearly_totals.json").read,
+        JSONFileReader("russia_trade_imports_by_category/imports_by_category.json").read,
+    ],
     "russia_labor_market": [
         JSONFileReader("russia_salaries_average/salaries.json").read,
         JSONFileReader("russia_salaries_by_sector/salaries.json").read,
