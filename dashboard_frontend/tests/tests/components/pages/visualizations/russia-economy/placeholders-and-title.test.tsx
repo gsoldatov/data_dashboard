@@ -49,12 +49,26 @@ describe("Russia Economy visualization", () => {
                 ).toBeInTheDocument();
             });
 
-            expect(screen.getByText("GDP")).toBeInTheDocument();
             expect(
-                screen.getByText("Inflation & Unemployment"),
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
             ).toBeInTheDocument();
-            expect(screen.getByText("Trade")).toBeInTheDocument();
-            expect(screen.getByText("Budget")).toBeInTheDocument();
+
+            expect(
+                screen.getByRole("heading", { name: "GDP" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("heading", {
+                    name: "Inflation & Unemployment",
+                }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("heading", { name: "Trade" }),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole("heading", { name: "Budget" }),
+            ).toBeInTheDocument();
         });
 
         it("renders a single year selector", async () => {

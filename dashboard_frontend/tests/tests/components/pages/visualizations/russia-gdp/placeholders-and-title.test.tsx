@@ -48,6 +48,12 @@ describe("Russia GDP visualization", () => {
             });
 
             expect(
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
+            ).toBeInTheDocument();
+
+            expect(
                 screen.getByText("GDP, Constant Prices, Bln RUB"),
             ).toBeInTheDocument();
             expect(

@@ -55,6 +55,12 @@ describe("Russia State Budget visualization", () => {
             });
 
             expect(
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
+            ).toBeInTheDocument();
+
+            expect(
                 screen.getByText(
                     "Budget plan & execution data for Russian Federation.",
                 ),

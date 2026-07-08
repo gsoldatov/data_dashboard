@@ -49,6 +49,12 @@ describe("Russia Inflation visualization", () => {
                 ).toBeInTheDocument();
             });
 
+            expect(
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
+            ).toBeInTheDocument();
+
             expect(screen.getByText("Cumulative Inflation, %")).toBeInTheDocument();
             expect(screen.getByText("Key Rate, %")).toBeInTheDocument();
         });

@@ -50,6 +50,12 @@ describe("Russia Trade visualization", () => {
             });
 
             expect(
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
+            ).toBeInTheDocument();
+
+            expect(
                 screen.getByText("Total Exports & Imports by Year"),
             ).toBeInTheDocument();
             expect(

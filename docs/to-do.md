@@ -218,7 +218,7 @@
 + add deployment via docker compose;
 + add readme files for project initialization, startup & deployment;
 
-- Russia Economy Indicators:
++ Russia Economy Indicators:
     + GDP:
         + data:
             + base prices (RUB / USD);  // https://rosstat.gov.ru/statistics/accounts       https://data.worldbank.org/indicator/NY.GDP.MKTP.KD?end=2024&locations=RU&start=1988&view=chart
@@ -289,7 +289,7 @@
         
         + check styling when stacked;
 
-    - Common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
+    + common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
 - add DAG retries;
 - revisit styling; colors, fonts, etc;

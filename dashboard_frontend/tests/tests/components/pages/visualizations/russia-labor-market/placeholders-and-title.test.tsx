@@ -49,6 +49,12 @@ describe("Russia Labor Market visualization", () => {
                 ).toBeInTheDocument();
             });
 
+            expect(
+                screen.getByRole("navigation", {
+                    name: "Visualization pages",
+                }),
+            ).toBeInTheDocument();
+
             await waitFor(() => {
                 expect(screen.getByText("Average Salaries")).toBeInTheDocument();
                 expect(
