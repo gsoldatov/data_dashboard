@@ -18,20 +18,15 @@ import type { TradeByCategoryItem } from "@/types/visualization-data/russia-trad
 import type { TreemapNode } from "recharts/types/util/types";
 
 interface CategoryTreemapProps {
-    flow: "exports" | "imports";
+    label: string;
+    datasetName: string;
     selectedYear: string;
 }
 
 const BLN = 1_000_000_000;
 
-export const CategoryTreemap = ({ flow, selectedYear }: CategoryTreemapProps) => {
-    const isExports = flow === "exports";
-    const label = isExports ? "Exports" : "Imports";
-    const categoryDataset = isExports
-        ? "russia_trade_exports_by_category"
-        : "russia_trade_imports_by_category";
-
-    const { data } = useGetVisualizationDatasetQuery(categoryDataset);
+export const CategoryTreemap = ({ label, datasetName, selectedYear }: CategoryTreemapProps) => {
+    const { data } = useGetVisualizationDatasetQuery(datasetName);
     const categoryItems = (data ?? []) as TradeByCategoryItem[];
 
     const { treemapData, treemapTotal } = useMemo(() => {

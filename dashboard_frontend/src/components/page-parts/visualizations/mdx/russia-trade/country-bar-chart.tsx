@@ -25,7 +25,8 @@ import {
 import type { TradeByCountryItem } from "@/types/visualization-data/russia-trade";
 
 interface CountryBarChartProps {
-    flow: "exports" | "imports";
+    label: string;
+    datasetName: string;
     selectedYear: string;
 }
 
@@ -33,14 +34,8 @@ const BLN = 1_000_000_000;
 const BAR_HEIGHT = 25;
 const VISIBLE_BARS = 15;
 
-export const CountryBarChart = ({ flow, selectedYear }: CountryBarChartProps) => {
-    const isExports = flow === "exports";
-    const label = isExports ? "Exports" : "Imports";
-    const countryDataset = isExports
-        ? "russia_trade_exports_by_country"
-        : "russia_trade_imports_by_country";
-
-    const { data } = useGetVisualizationDatasetQuery(countryDataset);
+export const CountryBarChart = ({ label, datasetName, selectedYear }: CountryBarChartProps) => {
+    const { data } = useGetVisualizationDatasetQuery(datasetName);
     const countryItems = (data ?? []) as TradeByCountryItem[];
 
     const chartData = useMemo(() => {

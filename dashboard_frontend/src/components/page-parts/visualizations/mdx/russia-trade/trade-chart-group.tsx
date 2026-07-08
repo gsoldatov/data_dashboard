@@ -44,15 +44,31 @@ export const TradeChartGroup = ({ dataTestID }: TradeChartGroupProps) => {
                 onSelect={setSelectedYear}
             />
 
-            <CountryBarChart flow="exports" selectedYear={selectedYear} />
+            <CountryBarChart
+                label="Exports"
+                datasetName="russia_trade_exports_by_country"
+                selectedYear={selectedYear}
+            />
             <div className="mt-6">
-                <CategoryTreemap flow="exports" selectedYear={selectedYear} />
+                <CategoryTreemap
+                    label="Exports"
+                    datasetName="russia_trade_exports_by_category"
+                    selectedYear={selectedYear}
+                />
             </div>
             <div className="mt-6">
-                <CountryBarChart flow="imports" selectedYear={selectedYear} />
+                <CountryBarChart
+                    label="Imports"
+                    datasetName="russia_trade_imports_by_country"
+                    selectedYear={selectedYear}
+                />
             </div>
             <div className="mt-6">
-                <CategoryTreemap flow="imports" selectedYear={selectedYear} />
+                <CategoryTreemap
+                    label="Imports"
+                    datasetName="russia_trade_imports_by_category"
+                    selectedYear={selectedYear}
+                />
             </div>
         </div>
     );
