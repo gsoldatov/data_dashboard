@@ -156,7 +156,7 @@ A single page app containing a set of data visualizations and related pages.
     - key visualization components:
         - `<Visualization>` - page-level component, queries backend to check if a visualization can be displayed, then imports and renders corresponding MDX file;
         - `VisualizationDataLoader` - wrapper for loading visualization data;
-        - MDX files - contain visualizations themselves, a single file per visualization;
+        - MDX files - contain visualizations and an array of dataset names they use, a single file per visualization;
 - data validation and typing:
     - Zod schemas and other types are stored in `dashboard_frontend/src/types`;
     - schema names should with a small letter and type names with a capital one;
