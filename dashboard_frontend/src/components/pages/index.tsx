@@ -70,6 +70,7 @@ export const Index = () => {
                         <VisualizationLink
                             slug={viz.slug}
                             title={viz.title}
+                            icon={viz.icon}
                         />
                     </li>
                 ))}
