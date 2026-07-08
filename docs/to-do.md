@@ -264,48 +264,42 @@
                 + export by category treemap;   // in bln USD for the selected year
                 + import by country bar chart;
                 + import by category treemap;
-                
-
+    
+    + refactor visualization data fetching (reuse already loaded datasets without refetching them):
+        + backend accepts a list of dataset names, validates them and checks for non-admins, if each dataset has at least one published visualization, where it's used;
+        + frontend checks, which datasets are cached, fetching missing and returns cached datasets after or instead the fetch;
+        + charts access required datasets after they were loaded;
         
+    - Russia Economy Dashboard; // current / yearly indicators from other pages    
+    - Common navigation component across Russia's Economy pages;
 
-    - Economy by Sectors:
-        - Finance
-            https://rosstat.gov.ru/statistics/finance
-        - Oil & Gas (production, exports)
-        - Metallurgy
-        - Agriculture
-        - Energy
-        ? Industry
-        - Retail Sales & consumer spending
-        - Construction
-        - Transportation (Cars / Railway / Aircraft)
-            - https://rosstat.gov.ru/statistics/transport
-        - Technology
-        ??? other sectors
-    
-    - Russia Economy Dashboard:
-        - current / yearly indicators from other pages
-    
-    - Common navigation component across Russia's Economy pages
+- add DAG retries;
+- revisit styling; colors, fonts, etc;
+- backend -> get / update vis settings -> validate that slugs match existing whilelist;
+- merge small files (frontend types, etc?);
 
+- admin page:   // add corresponding backend routes
+    - view ETL jobs statuses & logs;
+    ? run ETL jobs;
 
-
-- add DAG retries
-
-- revisit styling; colors, fonts, etc.
-
-- backend -> get / update vis settings -> validate that slugs match existing whilelist
-- merge small files (frontend types, etc?)
-? refactor visualization data fetching (reuse already loaded datasets without refetching them)  // is published logic should still apply
-    - move common file reading logic into a function;
-
+- Russia Economy by Sectors:
+    - Finance
+        https://rosstat.gov.ru/statistics/finance
+    - Oil & Gas (production, exports)
+    - Metallurgy
+    - Agriculture
+    - Energy
+    ? Industry
+    - Retail Sales & consumer spending
+    - Construction
+    - Transportation (Cars / Railway / Aircraft)
+        - https://rosstat.gov.ru/statistics/transport
+    - Technology
+    ??? other sectors
 
 
 
 # Additional
-- admin page:   // add corresponding backend routes
-    - view ETL jobs statuses & logs;
-    ? run ETL jobs;
 - add deployment data backup;
 ? split main AGENTS.md into skills / sub-files;
 - add backend access & event logging to files:
@@ -317,6 +311,9 @@
 - allow reloading configuration in data_loading & dashboard_backend;
 ? move visualizations list constant to backend and retrieve it where it's used;
 - move wrappers & styles from main.tsx into APP;    // this would also require to update all test cases, so they properly await for all fetches to end
+
+? refactor is_published checks for visualizations:
+    - chunk should not be fetchable, if its not published (for non-admins);
 
 ? migrate airflow & backend to PostgreSQL;
 ? use Nginx as a reverse proxy for backend in Docker Compose deployment;
