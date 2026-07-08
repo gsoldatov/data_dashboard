@@ -270,8 +270,26 @@
         + frontend checks, which datasets are cached, fetching missing and returns cached datasets after or instead the fetch;
         + charts access required datasets after they were loaded;
         
-    - Russia Economy Dashboard; // current / yearly indicators from other pages    
-    - Common navigation component across Russia's Economy pages;
+    + Russia Economy Dashboard:     // a set of tables displaying data for currently selected year
+        + single value selector for year (find all years from used datasets);   // select previous year by default
+        + gdp:
+            + rub => absolute values + diff YoY in %;
+            + usd ppp => absolute values + diff YoY in %;
+        + inflation & unemployment:
+            + inflation (last available month of selected year => YoY change + diff in pp);
+            + keyrate (last available month of selected year + absolute diff YoY);
+            + unemployment (last available month of selected year);
+        + trade:
+            + total yearly exports + diff YoY (absolute & in %);
+            + total yearly imports + diff YoY (absolute & in %);
+        + budget:
+            + yearly income (absolute value + diff YoY in %);
+            + yearly expenses (absolute value + diff YoY in %);
+            + difference between income & expenses;
+        
+        + check styling when stacked;
+
+    - Common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
 - add DAG retries;
 - revisit styling; colors, fonts, etc;

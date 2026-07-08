@@ -44,6 +44,7 @@ describe("Index", () => {
                         russia_state_budget: { is_published: false },
                         russia_labor_market: { is_published: false },
                         russia_trade: { is_published: false },
+                        russia_economy: { is_published: false },
                     }),
                     {
                         status: 200,
@@ -89,6 +90,9 @@ describe("Index", () => {
             expect(
                 screen.getByText("Russia Trade"),
             ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Economy Dashboard"),
+            ).toBeInTheDocument();
         });
     });
 
@@ -124,6 +128,7 @@ describe("Index", () => {
                         russia_state_budget: { is_published: false },
                         russia_labor_market: { is_published: false },
                         russia_trade: { is_published: false },
+                        russia_economy: { is_published: false },
                     }),
                     {
                         status: 200,
@@ -154,6 +159,9 @@ describe("Index", () => {
             ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia Trade"),
+            ).toBeInTheDocument();
+            expect(
+                screen.getByText("Russia Economy Dashboard"),
             ).toBeInTheDocument();
         });
     });

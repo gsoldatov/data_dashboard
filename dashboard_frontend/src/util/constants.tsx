@@ -7,4 +7,5 @@ export const VISUALIZATIONS: VisualizationInfo[] = [
     { slug: "russia_state_budget", title: "Russia State Budget" },
     { slug: "russia_labor_market", title: "Russia Labor Market" },
     { slug: "russia_trade", title: "Russia Trade" },
+    { slug: "russia_economy", title: "Russia Economy Dashboard" },
 ];

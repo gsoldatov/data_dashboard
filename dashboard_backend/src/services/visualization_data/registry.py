@@ -9,7 +9,7 @@ from dashboard_backend.src.services.visualization_data.read_json_file import (
 DATASET_REGISTRY: dict[str, dict[str, object]] = {
     "russia_gdp_constant_prices_rub": {
         "getter": JSONFileReader("russia_gdp_constant_prices_rub/gdp.json").read,
-        "consumers": ["russia_gdp"],
+        "consumers": ["russia_gdp", "russia_economy"],
     },
     "russia_gdp_constant_prices_usd": {
         "getter": JSONFileReader("russia_gdp_constant_prices_usd/gdp.json").read,
@@ -17,19 +17,19 @@ DATASET_REGISTRY: dict[str, dict[str, object]] = {
     },
     "russia_gdp_ppp_constant_prices": {
         "getter": JSONFileReader("russia_gdp_ppp_constant_prices/gdp.json").read,
-        "consumers": ["russia_gdp"],
+        "consumers": ["russia_gdp", "russia_economy"],
     },
     "russia_consumer_price_index": {
         "getter": JSONFileReader("russia_consumer_price_index/cpi.json").read,
-        "consumers": ["russia_inflation"],
+        "consumers": ["russia_inflation", "russia_economy"],
     },
     "russia_key_rate": {
         "getter": JSONFileReader("russia_key_rate/key_rate.json").read,
-        "consumers": ["russia_inflation"],
+        "consumers": ["russia_inflation", "russia_economy"],
     },
     "russia_state_budget": {
         "getter": JSONFileReader("russia_state_budget/budget.json").read,
-        "consumers": ["russia_state_budget"],
+        "consumers": ["russia_state_budget", "russia_economy"],
     },
     "russia_trade_exports_by_country": {
         "getter": JSONFileReader(
@@ -41,7 +41,7 @@ DATASET_REGISTRY: dict[str, dict[str, object]] = {
         "getter": JSONFileReader(
             "russia_trade_exports/exports_yearly_totals.json"
         ).read,
-        "consumers": ["russia_trade"],
+        "consumers": ["russia_trade", "russia_economy"],
     },
     "russia_trade_exports_by_category": {
         "getter": JSONFileReader(
@@ -59,7 +59,7 @@ DATASET_REGISTRY: dict[str, dict[str, object]] = {
         "getter": JSONFileReader(
             "russia_trade_imports/imports_yearly_totals.json"
         ).read,
-        "consumers": ["russia_trade"],
+        "consumers": ["russia_trade", "russia_economy"],
     },
     "russia_trade_imports_by_category": {
         "getter": JSONFileReader(
@@ -77,6 +77,6 @@ DATASET_REGISTRY: dict[str, dict[str, object]] = {
     },
     "russia_labor_workforce": {
         "getter": JSONFileReader("russia_labor_workforce/workforce.json").read,
-        "consumers": ["russia_labor_market"],
+        "consumers": ["russia_labor_market", "russia_economy"],
     },
 }
