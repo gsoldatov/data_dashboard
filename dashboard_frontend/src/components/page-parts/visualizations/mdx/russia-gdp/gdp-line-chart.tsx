@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     LineChart,
     Line,
@@ -22,7 +22,7 @@ import {
 import type { RussiaGdpItem } from "@/types/visualization-data/russia-gdp";
 
 interface GdpLineChartProps {
-    datasetIndex: number;
+    datasetName: string;
     title: string;
     color: string;
     valueDivisor: number;
@@ -31,14 +31,14 @@ interface GdpLineChartProps {
 
 /** Line chart for a single Russia GDP dataset. */
 export const GdpLineChart = ({
-    datasetIndex,
+    datasetName,
     title,
     color,
     valueDivisor,
     unit,
 }: GdpLineChartProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_gdp");
-    const items = (data?.[datasetIndex] ?? []) as RussiaGdpItem[];
+    const { data } = useGetVisualizationDatasetQuery(datasetName);
+    const items = (data ?? []) as RussiaGdpItem[];
 
     const chartData = [...items]
         .sort((a, b) => a.year - b.year)

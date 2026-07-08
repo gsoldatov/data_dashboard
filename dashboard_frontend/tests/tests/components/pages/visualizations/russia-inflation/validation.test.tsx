@@ -2,76 +2,79 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../../../../test-utils";
 import { MockBackend } from "../../../../../mocks/backend/mock-backend";
-import { visualizationDataResponseValidatorMap } from "@/types/visualization-data/visualization-data";
+import { datasetValidatorMap } from "@/types/visualization-data/visualization-data";
 import { App } from "@/components/app";
 
 
-const russiaInflationSchema =
-    visualizationDataResponseValidatorMap["russia_inflation"]!;
+const cpiSchema =
+    datasetValidatorMap["russia_consumer_price_index"]!;
+const keyRateSchema =
+    datasetValidatorMap["russia_key_rate"]!;
 
 
 describe("Russia Inflation data validation", () => {
-    describe("schema", () => {
+    describe("CPI schema", () => {
         it("rejects non-array data", () => {
-            const result = russiaInflationSchema.safeParse({});
+            const result = cpiSchema.safeParse({});
             expect(result.success).toBe(false);
         });
 
-        it("rejects wrong number of datasets", () => {
-            const result = russiaInflationSchema.safeParse([
-                [{ year_month: "2023-01", value: 100.8 }],
-            ]);
-            expect(result.success).toBe(false);
-        });
-
-        it("rejects CPI items with wrong field types", () => {
-            const result = russiaInflationSchema.safeParse([
+        it("rejects items with wrong field types", () => {
+            const result = cpiSchema.safeParse(
                 [{ year_month: 202301, value: 100.8 }],
-                [{ year_month: "2023-01", key_rate: 7.5 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("rejects CPI items with missing fields", () => {
-            const result = russiaInflationSchema.safeParse([
+        it("rejects items with missing fields", () => {
+            const result = cpiSchema.safeParse(
                 [{ year_month: "2023-01" }],
-                [{ year_month: "2023-01", key_rate: 7.5 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("rejects key rate items with wrong years_month type", () => {
-            const result = russiaInflationSchema.safeParse([
-                [{ year_month: "2023-01", value: 100.8 }],
+        it("accepts empty array", () => {
+            const result = cpiSchema.safeParse([]);
+            expect(result.success).toBe(true);
+        });
+
+        it("accepts valid data", () => {
+            const result = cpiSchema.safeParse([
+                { year_month: "2023-01", value: 100.8 },
+            ]);
+            expect(result.success).toBe(true);
+        });
+    });
+
+    describe("Key Rate schema", () => {
+        it("rejects non-array data", () => {
+            const result = keyRateSchema.safeParse({});
+            expect(result.success).toBe(false);
+        });
+
+        it("rejects items with wrong year_month type", () => {
+            const result = keyRateSchema.safeParse(
                 [{ year_month: 202301, key_rate: 7.5 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("accepts key rate items with optional fields omitted", () => {
-            const result = russiaInflationSchema.safeParse([
-                [{ year_month: "2023-01", value: 100.8 }],
-                [{ year_month: "2023-01" }],
+        it("accepts optional fields omitted", () => {
+            const result = keyRateSchema.safeParse([
+                { year_month: "2023-01" },
             ]);
             expect(result.success).toBe(true);
         });
 
-        it("accepts key rate items with all optional fields present", () => {
-            const result = russiaInflationSchema.safeParse([
-                [{ year_month: "2023-01", value: 100.8 }],
-                [
-                    {
-                        year_month: "2023-01",
-                        key_rate: 7.5,
-                        inflation_yoy: 11.0,
-                    },
-                ],
+        it("accepts all optional fields present", () => {
+            const result = keyRateSchema.safeParse([
+                { year_month: "2023-01", key_rate: 7.5, inflation_yoy: 11.0 },
             ]);
             expect(result.success).toBe(true);
         });
 
-        it("accepts empty arrays in both tuple positions", () => {
-            const result = russiaInflationSchema.safeParse([[], []]);
+        it("accepts empty array", () => {
+            const result = keyRateSchema.safeParse([]);
             expect(result.success).toBe(true);
         });
     });

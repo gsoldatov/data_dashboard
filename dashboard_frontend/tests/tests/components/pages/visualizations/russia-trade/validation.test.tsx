@@ -2,103 +2,84 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../../../../test-utils";
 import { MockBackend } from "../../../../../mocks/backend/mock-backend";
-import { visualizationDataResponseValidatorMap } from "@/types/visualization-data/visualization-data";
+import { datasetValidatorMap } from "@/types/visualization-data/visualization-data";
 import { App } from "@/components/app";
 
 
-const russiaTradeSchema =
-    visualizationDataResponseValidatorMap["russia_trade"]!;
+const exportsByCountrySchema =
+    datasetValidatorMap["russia_trade_exports_by_country"]!;
+const exportsYearlySchema =
+    datasetValidatorMap["russia_trade_exports_yearly_totals"]!;
+const exportsByCategorySchema =
+    datasetValidatorMap["russia_trade_exports_by_category"]!;
 
 
 describe("Russia Trade data validation", () => {
-    describe("schema", () => {
+    describe("By-country schema", () => {
         it("rejects non-array data", () => {
-            const result = russiaTradeSchema.safeParse({});
+            const result = exportsByCountrySchema.safeParse({});
             expect(result.success).toBe(false);
         });
 
-        it("rejects wrong number of datasets", () => {
-            const result = russiaTradeSchema.safeParse([
-                [{ year: 2023, country: "China", value: 100 }],
-            ]);
-            expect(result.success).toBe(false);
-        });
-
-        it("rejects by-country items with wrong field types", () => {
-            const result = russiaTradeSchema.safeParse([
+        it("rejects items with wrong field types", () => {
+            const result = exportsByCountrySchema.safeParse(
                 [{ year: "2023", country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("rejects by-country items with missing fields", () => {
-            const result = russiaTradeSchema.safeParse([
+        it("rejects items with missing fields", () => {
+            const result = exportsByCountrySchema.safeParse(
                 [{ year: 2023, country: "China" }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("rejects yearly totals with wrong year type", () => {
-            const result = russiaTradeSchema.safeParse([
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: "2023", value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-            ]);
-            expect(result.success).toBe(false);
-        });
-
-        it("rejects by-category items with wrong field name", () => {
-            const result = russiaTradeSchema.safeParse([
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, category: "Fuels", value: 100 }],
-                [{ year: 2023, country: "China", value: 100 }],
-                [{ year: 2023, value: 100 }],
-                [{ year: 2023, product_category: "Fuels", value: 100 }],
-            ]);
-            expect(result.success).toBe(false);
-        });
-
-        it("accepts empty arrays in all tuple positions", () => {
-            const result = russiaTradeSchema.safeParse([
-                [], [], [], [], [], [],
-            ]);
+        it("accepts empty array", () => {
+            const result = exportsByCountrySchema.safeParse([]);
             expect(result.success).toBe(true);
         });
 
-        it("accepts valid data with all 6 datasets", () => {
-            const result = russiaTradeSchema.safeParse([
-                [{ year: 2023, country: "China", value: 114000000000 }],
-                [{ year: 2023, value: 588300000000 }],
-                [
-                    {
-                        year: 2023,
-                        product_category: "Fuels",
-                        value: 320000000000,
-                    },
-                ],
-                [{ year: 2023, country: "China", value: 87000000000 }],
-                [{ year: 2023, value: 280400000000 }],
-                [
-                    {
-                        year: 2023,
-                        product_category: "Machines and Electronics",
-                        value: 95000000000,
-                    },
-                ],
+        it("accepts valid data", () => {
+            const result = exportsByCountrySchema.safeParse([
+                { year: 2023, country: "China", value: 114000000000 },
+            ]);
+            expect(result.success).toBe(true);
+        });
+    });
+
+    describe("Yearly totals schema", () => {
+        it("rejects non-array data", () => {
+            const result = exportsYearlySchema.safeParse({});
+            expect(result.success).toBe(false);
+        });
+
+        it("rejects items with wrong field types", () => {
+            const result = exportsYearlySchema.safeParse(
+                [{ year: "2023", value: 100 }],
+            );
+            expect(result.success).toBe(false);
+        });
+
+        it("accepts valid data", () => {
+            const result = exportsYearlySchema.safeParse([
+                { year: 2023, value: 588300000000 },
+            ]);
+            expect(result.success).toBe(true);
+        });
+    });
+
+    describe("By-category schema", () => {
+        it("rejects items with wrong field name", () => {
+            const result = exportsByCategorySchema.safeParse(
+                [{ year: 2023, category: "Fuels", value: 100 }],
+            );
+            expect(result.success).toBe(false);
+        });
+
+        it("accepts valid data", () => {
+            const result = exportsByCategorySchema.safeParse([
+                { year: 2023, product_category: "Fuels", value: 320000000000 },
             ]);
             expect(result.success).toBe(true);
         });

@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     getHierarchy,
     getDepth,
@@ -29,8 +29,8 @@ export interface CategoryChartGroupProps {
 
 /** Generic chart group managing shared year/category selections for a data section. */
 export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGroupProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_state_budget");
+    const items = (data ?? []) as RussiaStateBudgetItem[];
 
     const excludedNumbers = new Set(["2.1*"]); // child of 2.1, which overlaps with it
 

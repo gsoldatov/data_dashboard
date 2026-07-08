@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     BarChart,
     Bar,
@@ -34,13 +34,14 @@ const BAR_HEIGHT = 25;
 const VISIBLE_BARS = 15;
 
 export const CountryBarChart = ({ flow, selectedYear }: CountryBarChartProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_trade");
-
     const isExports = flow === "exports";
     const label = isExports ? "Exports" : "Imports";
-    const countryIdx = isExports ? 0 : 3;
+    const countryDataset = isExports
+        ? "russia_trade_exports_by_country"
+        : "russia_trade_imports_by_country";
 
-    const countryItems = (data?.[countryIdx] ?? []) as TradeByCountryItem[];
+    const { data } = useGetVisualizationDatasetQuery(countryDataset);
+    const countryItems = (data ?? []) as TradeByCountryItem[];
 
     const chartData = useMemo(() => {
         const year = Number(selectedYear);

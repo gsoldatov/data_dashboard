@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { ChartTitle } from "@/components/common/visualizations/charts/chart-title";
 import { TradeYearSelector } from "./trade-year-selector";
 import { CountryBarChart } from "./country-bar-chart";
@@ -12,10 +12,15 @@ interface TradeChartGroupProps {
 }
 
 export const TradeChartGroup = ({ dataTestID }: TradeChartGroupProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_trade");
+    const { data: exportsByCountryData } = useGetVisualizationDatasetQuery(
+        "russia_trade_exports_by_country",
+    );
+    const { data: importsByCountryData } = useGetVisualizationDatasetQuery(
+        "russia_trade_imports_by_country",
+    );
 
-    const exportsByCountry = (data?.[0] ?? []) as TradeByCountryItem[];
-    const importsByCountry = (data?.[3] ?? []) as TradeByCountryItem[];
+    const exportsByCountry = (exportsByCountryData ?? []) as TradeByCountryItem[];
+    const importsByCountry = (importsByCountryData ?? []) as TradeByCountryItem[];
 
     const allYears = useMemo(() => {
         const years = new Set([

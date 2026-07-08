@@ -2,12 +2,12 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "../../../../../test-utils";
 import { MockBackend } from "../../../../../mocks/backend/mock-backend";
-import { visualizationDataResponseValidatorMap } from "@/types/visualization-data/visualization-data";
+import { datasetValidatorMap } from "@/types/visualization-data/visualization-data";
 import { App } from "@/components/app";
 
 
 const russiaStateBudgetSchema =
-    visualizationDataResponseValidatorMap["russia_state_budget"]!;
+    datasetValidatorMap["russia_state_budget"]!;
 
 
 describe("Russia State Budget data validation", () => {
@@ -18,37 +18,35 @@ describe("Russia State Budget data validation", () => {
         });
 
         it("rejects items with wrong field types", () => {
-            const result = russiaStateBudgetSchema.safeParse([
+            const result = russiaStateBudgetSchema.safeParse(
                 [{ year: "2022", number: "1", name: "Income", value: 100 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
         it("rejects items with missing fields", () => {
-            const result = russiaStateBudgetSchema.safeParse([
+            const result = russiaStateBudgetSchema.safeParse(
                 [{ year: 2022, number: "1" }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
         it("rejects items with wrong field names", () => {
-            const result = russiaStateBudgetSchema.safeParse([
+            const result = russiaStateBudgetSchema.safeParse(
                 [{ year: 2022, number: "1", name: "Income", amount: 100 }],
-            ]);
+            );
             expect(result.success).toBe(false);
         });
 
-        it("accepts empty inner arrays", () => {
-            const result = russiaStateBudgetSchema.safeParse([[]]);
+        it("accepts empty array", () => {
+            const result = russiaStateBudgetSchema.safeParse([]);
             expect(result.success).toBe(true);
         });
 
-        it("accepts valid single dataset", () => {
+        it("accepts valid data", () => {
             const result = russiaStateBudgetSchema.safeParse([
-                [
-                    { year: 2022, number: "1", name: "Income, total", value: 27824.4 },
-                    { year: 2023, number: "1", name: "Income, total", value: 29124.0 },
-                ],
+                { year: 2022, number: "1", name: "Income, total", value: 27824.4 },
+                { year: 2023, number: "1", name: "Income, total", value: 29124.0 },
             ]);
             expect(result.success).toBe(true);
         });

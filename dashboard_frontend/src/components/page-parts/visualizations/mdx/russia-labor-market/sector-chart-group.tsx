@@ -8,15 +8,15 @@ import {
     DropdownMenuCheckboxItem,
 } from "@/components/common/shadcn-ui/dropdown-menu";
 import { Badge } from "@/components/common/shadcn-ui/badge";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { SalaryBySectorLineChart } from "./salary-by-sector-line-chart";
 
 import type { RussiaLaborMarketSectorSalaryItem } from "@/types/visualization-data/russia-labor-market";
 
 /** Chart group wrapping the sector salary line chart with sector selection. */
 export const SectorChartGroup = () => {
-    const { data } = useGetVisualizationDataQuery("russia_labor_market");
-    const items = (data?.[1] ?? []) as RussiaLaborMarketSectorSalaryItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_salaries_by_sector");
+    const items = (data ?? []) as RussiaLaborMarketSectorSalaryItem[];
 
     const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
 

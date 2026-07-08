@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     LineChart,
     Line,
@@ -33,8 +33,8 @@ const ENGAGEMENT_FIELDS = [
 
 /** Line chart showing workforce engagement percentages over time, monthly, with a brush slider. */
 export const WorkforceEngagementLineChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_labor_market");
-    const items = (data?.[2] ?? []) as RussiaLaborMarketWorkforceItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_labor_workforce");
+    const items = (data ?? []) as RussiaLaborMarketWorkforceItem[];
 
     const chartData = [...items].sort((a, b) =>
         a.year_month.localeCompare(b.year_month),

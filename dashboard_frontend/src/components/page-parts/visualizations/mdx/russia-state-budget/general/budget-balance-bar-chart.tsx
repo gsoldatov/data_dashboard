@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     BarChart,
     Bar,
@@ -29,8 +29,8 @@ import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-st
 
 /** Bar chart showing yearly budget profit / deficit (section "3"). */
 export const BudgetBalanceBarChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_state_budget");
+    const items = (data ?? []) as RussiaStateBudgetItem[];
 
     const balanceItems = items
         .filter((d) => d.number === "3")

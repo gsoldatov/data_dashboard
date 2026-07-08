@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     LineChart,
     Line,
@@ -27,8 +27,8 @@ import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-st
 
 /** Line chart comparing total income (section "1") and total expenses (section "2") over years. */
 export const IncomeExpensesLineChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_state_budget");
-    const items = (data?.[0] ?? []) as RussiaStateBudgetItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_state_budget");
+    const items = (data ?? []) as RussiaStateBudgetItem[];
 
     const incomeByYear = mapByName(items, "1");
     const expensesByYear = mapByName(items, "2");

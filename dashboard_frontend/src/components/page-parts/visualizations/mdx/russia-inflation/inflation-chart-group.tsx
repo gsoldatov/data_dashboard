@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { SingleValueSelector } from "@/components/common/visualizations/selectors/single-value-selector";
 import { CumulativeInflationBarChart } from "./cumulative-inflation-bar-chart";
 
@@ -7,8 +7,8 @@ import type { RussiaCpiItem } from "@/types/visualization-data/russia-inflation"
 
 /** Chart group for cumulative inflation with start/end period selectors. */
 export const InflationChartGroup = () => {
-    const { data } = useGetVisualizationDataQuery("russia_inflation");
-    const items = (data?.[0] ?? []) as RussiaCpiItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_consumer_price_index");
+    const items = (data ?? []) as RussiaCpiItem[];
 
     const allPeriods = useMemo(() => {
         const periods = items.map((item) => item.year_month);

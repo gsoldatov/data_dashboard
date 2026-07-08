@@ -1,9 +1,15 @@
+import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { IncomeExpensesLineChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/general/income-expenses-line-chart";
 import { BudgetBalanceBarChart } from "@/components/page-parts/visualizations/mdx/russia-state-budget/general/budget-balance-bar-chart";
 import { IncomeChartGroup } from "@/components/page-parts/visualizations/mdx/russia-state-budget/income-chart-group";
 import { ExpensesChartGroup } from "@/components/page-parts/visualizations/mdx/russia-state-budget/expenses-chart-group";
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
 
+
+export const STATE_BUDGET_DATASETS = ["russia_state_budget"];
+
+
+<VisualizationDataLoader datasetNames={STATE_BUDGET_DATASETS}>
 
 # Russia State Budget
 Budget plan & execution data for Russian Federation.
@@ -24,3 +30,5 @@ Data sources:
 
 ## Expenses
 <ExpensesChartGroup />
+
+</VisualizationDataLoader>

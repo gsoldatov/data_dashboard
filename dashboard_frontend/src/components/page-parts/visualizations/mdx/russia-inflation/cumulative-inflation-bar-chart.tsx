@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     BarChart,
     Bar,
@@ -36,8 +36,8 @@ export const CumulativeInflationBarChart = ({
     startPeriod,
     endPeriod,
 }: CumulativeInflationBarChartProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_inflation");
-    const items = (data?.[0] ?? []) as RussiaCpiItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_consumer_price_index");
+    const items = (data ?? []) as RussiaCpiItem[];
 
     const sorted = useMemo(
         () => [...items].sort((a, b) => a.year_month.localeCompare(b.year_month)),

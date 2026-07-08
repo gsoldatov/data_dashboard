@@ -6,7 +6,7 @@ import { addNetworkErrorOverride } from "../../../../../mocks/backend/route-hand
 import { App } from "@/components/app";
 
 
-const DATA_URL = "/api/visualization-data/russia_labor_market";
+const DATA_URL = "/api/visualization-data/";
 
 
 describe("Russia Labor Market visualization", () => {

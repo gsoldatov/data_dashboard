@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     Treemap,
     Tooltip,
@@ -25,13 +25,14 @@ interface CategoryTreemapProps {
 const BLN = 1_000_000_000;
 
 export const CategoryTreemap = ({ flow, selectedYear }: CategoryTreemapProps) => {
-    const { data } = useGetVisualizationDataQuery("russia_trade");
-
     const isExports = flow === "exports";
     const label = isExports ? "Exports" : "Imports";
-    const categoryIdx = isExports ? 2 : 5;
+    const categoryDataset = isExports
+        ? "russia_trade_exports_by_category"
+        : "russia_trade_imports_by_category";
 
-    const categoryItems = (data?.[categoryIdx] ?? []) as TradeByCategoryItem[];
+    const { data } = useGetVisualizationDatasetQuery(categoryDataset);
+    const categoryItems = (data ?? []) as TradeByCategoryItem[];
 
     const { treemapData, treemapTotal } = useMemo(() => {
         const year = Number(selectedYear);

@@ -12,7 +12,6 @@ import { setRedirectOnRender } from "@/store/slices/ui";
 import { PageLayout } from "@/components/stateful/page-layout";
 import { useGetIsPublishedQuery } from "@/store/backend-api-slices/visualization-settings";
 import { useGetCurrentUserQuery } from "@/store/backend-api-slices/auth";
-import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { MDXErrorBoundary } from "@/components/page-parts/visualizations/wrappers/mdx-error-boundary";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error } from "@/components/common/messages";
@@ -104,9 +103,7 @@ export const Visualization = () => {
         <PageLayout>
             <MDXErrorBoundary>
                 <Suspense fallback={<LoadingPlaceholder />}>
-                    <VisualizationDataLoader slug={slug}>
-                        <MdxComponent components={mdxComponentMap} />
-                    </VisualizationDataLoader>
+                    <MdxComponent components={mdxComponentMap} />
                 </Suspense>
             </MDXErrorBoundary>
         </PageLayout>

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     LineChart,
     Line,
@@ -29,9 +29,14 @@ const BLN = 1_000_000_000;
 
 /** Combined line chart showing total exports and imports by year. */
 export const TradeLineChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_trade");
-    const exportsYearly = (data?.[1] ?? []) as TradeYearlyTotalItem[];
-    const importsYearly = (data?.[4] ?? []) as TradeYearlyTotalItem[];
+    const { data: exportsYearlyData } = useGetVisualizationDatasetQuery(
+        "russia_trade_exports_yearly_totals",
+    );
+    const { data: importsYearlyData } = useGetVisualizationDatasetQuery(
+        "russia_trade_imports_yearly_totals",
+    );
+    const exportsYearly = (exportsYearlyData ?? []) as TradeYearlyTotalItem[];
+    const importsYearly = (importsYearlyData ?? []) as TradeYearlyTotalItem[];
 
     const chartData = useMemo(() => {
         const exportsByYear = new Map<number, number>();

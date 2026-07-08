@@ -1,6 +1,6 @@
 import type { RouteHandler } from "../route-dispatcher";
 import type { MockBackend } from "../../mock-backend";
-import { slugToVisualizationData } from "../../../mock-data/visualizations";
+import { datasetNameToMockData } from "../../../mock-data/visualizations";
 
 /**
  * Default handler for `GET /api/visualization-settings/`.
@@ -45,17 +45,21 @@ export const upsertVisualizationSettingsHandler: RouteHandler = async (req: Requ
 
 
 /**
- * Default handler for `GET /api/visualization-data/{slug}`.
+ * Default handler for `GET /api/visualization-data/`.
  *
- * Returns mock data for known slugs, or an empty array as fallback.
+ * Parses ``datasets`` from the query string and returns
+ * ``{ [name]: data }`` for each dataset name.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const visualizationDataHandler: RouteHandler = async (req: Request, _backend: MockBackend) => {
     const url = new URL(req.url);
-    const slug = url.pathname.split("/").pop() ?? "";
-    const data = slugToVisualizationData[slug] ?? [];
+    const names = url.searchParams.get("datasets")?.split(",").filter(Boolean) ?? [];
+    const result: Record<string, unknown[]> = {};
+    for (const name of names) {
+        result[name] = datasetNameToMockData[name] ?? [];
+    }
 
-    return new Response(JSON.stringify(data), {
+    return new Response(JSON.stringify(result), {
         status: 200,
         headers: { "Content-Type": "application/json" },
     });

@@ -1,6 +1,19 @@
+import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { TradeLineChart } from "@/components/page-parts/visualizations/mdx/russia-trade/trade-line-chart";
 import { TradeChartGroup } from "@/components/page-parts/visualizations/mdx/russia-trade/trade-chart-group";
 
+
+export const TRADE_DATASETS = [
+    "russia_trade_exports_by_country",
+    "russia_trade_exports_yearly_totals",
+    "russia_trade_exports_by_category",
+    "russia_trade_imports_by_country",
+    "russia_trade_imports_yearly_totals",
+    "russia_trade_imports_by_category",
+];
+
+
+<VisualizationDataLoader datasetNames={TRADE_DATASETS}>
 
 # Russia Trade
 
@@ -10,3 +23,5 @@ Data source: World Bank, [World Integrated Trade Solution](https://wits.worldban
 <TradeLineChart />
 
 <TradeChartGroup dataTestID="trade-chart-group" />
+
+</VisualizationDataLoader>

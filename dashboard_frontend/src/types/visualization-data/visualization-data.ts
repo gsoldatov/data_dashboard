@@ -13,29 +13,22 @@ import {
     tradeByCategoryItem,
 } from "./russia-trade";
 
-/** Maps each visualization slug to the Zod schema used for validating
- *  its backend response data in RTK Query. */
-export const visualizationDataResponseValidatorMap: Record<
-    string,
-    z.ZodType
-> = {
-    russia_gdp: z.array(z.array(russiaGdpItem)),
-    russia_inflation: z.tuple([
-        z.array(russiaCpiItem),
-        z.array(russiaKeyRateItem),
-    ]),
-    russia_labor_market: z.tuple([
-        z.array(russiaLaborMarketAverageSalaryItem),
-        z.array(russiaLaborMarketSectorSalaryItem),
-        z.array(russiaLaborMarketWorkforceItem),
-    ]),
-    russia_state_budget: z.array(z.array(russiaStateBudgetItem)),
-    russia_trade: z.tuple([
-        z.array(tradeByCountryItem), // [0] exports by country
-        z.array(tradeYearlyTotalItem), // [1] exports yearly totals
-        z.array(tradeByCategoryItem), // [2] exports by category
-        z.array(tradeByCountryItem), // [3] imports by country
-        z.array(tradeYearlyTotalItem), // [4] imports yearly totals
-        z.array(tradeByCategoryItem), // [5] imports by category
-    ]),
+/** Maps each dataset name to the Zod schema used for validating
+ *  its data in the visualization-data RTK Query response. */
+export const datasetValidatorMap: Record<string, z.ZodType> = {
+    russia_gdp_constant_prices_rub: z.array(russiaGdpItem),
+    russia_gdp_constant_prices_usd: z.array(russiaGdpItem),
+    russia_gdp_ppp_constant_prices: z.array(russiaGdpItem),
+    russia_consumer_price_index: z.array(russiaCpiItem),
+    russia_key_rate: z.array(russiaKeyRateItem),
+    russia_state_budget: z.array(russiaStateBudgetItem),
+    russia_trade_exports_by_country: z.array(tradeByCountryItem),
+    russia_trade_exports_yearly_totals: z.array(tradeYearlyTotalItem),
+    russia_trade_exports_by_category: z.array(tradeByCategoryItem),
+    russia_trade_imports_by_country: z.array(tradeByCountryItem),
+    russia_trade_imports_yearly_totals: z.array(tradeYearlyTotalItem),
+    russia_trade_imports_by_category: z.array(tradeByCategoryItem),
+    russia_salaries_average: z.array(russiaLaborMarketAverageSalaryItem),
+    russia_salaries_by_sector: z.array(russiaLaborMarketSectorSalaryItem),
+    russia_labor_workforce: z.array(russiaLaborMarketWorkforceItem),
 };

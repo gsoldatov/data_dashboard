@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     LineChart,
     Line,
@@ -27,8 +27,8 @@ const BRUSH_VISIBLE = 25;
 
 /** Line chart showing the CBR key rate over time, with a brush slider. */
 export const KeyRateLineChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_inflation");
-    const items = (data?.[1] ?? []) as RussiaKeyRateItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_key_rate");
+    const items = (data ?? []) as RussiaKeyRateItem[];
 
     const chartData = useMemo(() => {
         const sorted = [...items].sort((a, b) =>

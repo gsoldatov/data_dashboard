@@ -1,6 +1,16 @@
+import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { GdpLineChart } from "@/components/page-parts/visualizations/mdx/russia-gdp/gdp-line-chart";
 import { CHART_COLORS } from "@/styles/charts";
 
+
+export const GDP_DATASETS = [
+    "russia_gdp_constant_prices_rub",
+    "russia_gdp_constant_prices_usd",
+    "russia_gdp_ppp_constant_prices",
+];
+
+
+<VisualizationDataLoader datasetNames={GDP_DATASETS}>
 
 # Russia GDP
 
@@ -11,24 +21,26 @@ Data sources:
 
 <div data-testid="gdp-chart-group">
     <GdpLineChart
-        datasetIndex={0}
+        datasetName="russia_gdp_constant_prices_rub"
         title="GDP, Constant Prices, Bln RUB"
         color={CHART_COLORS[0]}
         valueDivisor={1}
         unit="bln RUB"
     />
     <GdpLineChart
-        datasetIndex={1}
+        datasetName="russia_gdp_constant_prices_usd"
         title="GDP, Constant Prices, Bln USD"
         color={CHART_COLORS[1]}
         valueDivisor={1e9}
         unit="bln USD"
     />
     <GdpLineChart
-        datasetIndex={2}
+        datasetName="russia_gdp_ppp_constant_prices"
         title="GDP PPP, Constant Prices, Bln USD"
         color={CHART_COLORS[2]}
         valueDivisor={1e9}
         unit="bln USD"
     />
 </div>
+
+</VisualizationDataLoader>

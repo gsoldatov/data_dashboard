@@ -242,3 +242,22 @@ export const slugToVisualizationData: Record<string, unknown[]> = {
     russia_inflation: russiaInflationData,
     russia_trade: russiaTradeData,
 };
+
+/** Maps each dataset name to its mock data array. */
+export const datasetNameToMockData: Record<string, unknown[]> = {
+    russia_gdp_constant_prices_rub: russiaGdpData[0] as unknown[],
+    russia_gdp_constant_prices_usd: russiaGdpData[1] as unknown[],
+    russia_gdp_ppp_constant_prices: russiaGdpData[2] as unknown[],
+    russia_consumer_price_index: russiaInflationData[0] as unknown[],
+    russia_key_rate: russiaInflationData[1] as unknown[],
+    russia_state_budget: russiaStateBudgetData[0] as unknown[],
+    russia_salaries_average: russiaLaborMarketData[0] as unknown[],
+    russia_salaries_by_sector: russiaLaborMarketData[1] as unknown[],
+    russia_labor_workforce: russiaLaborMarketData[2] as unknown[],
+    russia_trade_exports_by_country: russiaTradeData[0] as unknown[],
+    russia_trade_exports_yearly_totals: russiaTradeData[1] as unknown[],
+    russia_trade_exports_by_category: russiaTradeData[2] as unknown[],
+    russia_trade_imports_by_country: russiaTradeData[3] as unknown[],
+    russia_trade_imports_yearly_totals: russiaTradeData[4] as unknown[],
+    russia_trade_imports_by_category: russiaTradeData[5] as unknown[],
+};

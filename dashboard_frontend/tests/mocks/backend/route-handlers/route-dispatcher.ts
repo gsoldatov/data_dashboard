@@ -43,7 +43,7 @@ export class RouteDispatcher {
         "/api/auth/me": { GET: meHandler },
         "/api/auth/logout": { POST: logoutHandler },
         "/api/users/{id}": { PATCH: updateUserHandler },
-        "/api/visualization-data/{slug}": { GET: visualizationDataHandler },
+        "/api/visualization-data/": { GET: visualizationDataHandler },
         "/api/visualization-settings/": { GET: batchVisualizationSettingsHandler },
         "/api/visualization-settings/{slug}": { PUT: upsertVisualizationSettingsHandler },
     };

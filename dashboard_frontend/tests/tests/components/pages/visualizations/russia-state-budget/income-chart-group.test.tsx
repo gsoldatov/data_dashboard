@@ -487,15 +487,15 @@ describe("Russia State Budget visualization", () => {
 
             it("shows placeholders when there are no income categories", async () => {
                 backend.dispatcher.addHandlerOverride(
-                    "/api/visualization-data/russia_state_budget",
+                    "/api/visualization-data/",
                     "GET",
                     async () =>
                         new Response(
-                            JSON.stringify([
-                                [
+                            JSON.stringify({
+                                russia_state_budget: [
                                     { year: 2022, number: "2", name: "Expenses, total", value: 31168.5 },
                                 ],
-                            ]),
+                            }),
                             {
                                 status: 200,
                                 headers: { "Content-Type": "application/json" },
@@ -515,13 +515,15 @@ describe("Russia State Budget visualization", () => {
 
             it("renders without crashing when no income items in data", async () => {
                 backend.dispatcher.addHandlerOverride(
-                    "/api/visualization-data/russia_state_budget",
+                    "/api/visualization-data/",
                     "GET",
                     async () =>
                         new Response(
-                            JSON.stringify([
-                                [{ year: 2022, number: "3", name: "Balance", value: 0 }],
-                            ]),
+                            JSON.stringify({
+                                russia_state_budget: [
+                                    { year: 2022, number: "3", name: "Balance", value: 0 },
+                                ],
+                            }),
                             {
                                 status: 200,
                                 headers: { "Content-Type": "application/json" },

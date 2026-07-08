@@ -1,24 +1,24 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetsQuery } from "@/store/backend-api-slices/visualization-data";
 import { LoadingPlaceholder } from "@/components/common/loading-placeholder";
 import { Error } from "@/components/common/messages";
 
 interface VisualizationDataLoaderProps {
-    slug: string;
+    datasetNames: string[];
     children: React.ReactNode;
 }
 
 /**
- * Fetches visualization data and renders children when data is available.
+ * Fetches visualization datasets and renders children when data is available.
  *
  * Displays loading and error placeholders while the RTK Query request
  * is in progress or has failed. On success the children (normally the
  * MDX content component) are rendered.
  */
 export const VisualizationDataLoader = ({
-    slug,
+    datasetNames,
     children,
 }: VisualizationDataLoaderProps) => {
-    const { isLoading, error } = useGetVisualizationDataQuery(slug);
+    const { isLoading, error } = useGetVisualizationDatasetsQuery(datasetNames);
 
     if (isLoading) {
         return <LoadingPlaceholder />;

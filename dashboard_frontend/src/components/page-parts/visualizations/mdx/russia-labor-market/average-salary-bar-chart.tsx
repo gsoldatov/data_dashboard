@@ -1,4 +1,4 @@
-import { useGetVisualizationDataQuery } from "@/store/backend-api-slices/visualization-data";
+import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import {
     BarChart,
     Bar,
@@ -25,8 +25,8 @@ import type { RussiaLaborMarketAverageSalaryItem } from "@/types/visualization-d
 
 /** Bar chart showing average yearly salary in RUB. */
 export const AverageSalaryBarChart = () => {
-    const { data } = useGetVisualizationDataQuery("russia_labor_market");
-    const items = (data?.[0] ?? []) as RussiaLaborMarketAverageSalaryItem[];
+    const { data } = useGetVisualizationDatasetQuery("russia_salaries_average");
+    const items = (data ?? []) as RussiaLaborMarketAverageSalaryItem[];
 
     const chartData = [...items].sort((a, b) => a.year - b.year);
 
