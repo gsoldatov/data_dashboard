@@ -69,7 +69,7 @@ export const IndicatorValueRow = ({
  * `table-cell` on desktop (restores normal table-cell behaviour).
  */
 export const HeaderCell = ({ children }: { children: React.ReactNode }) => (
-    <th className="block lg:table-cell font-bold px-2 py-1 text-left">
+    <th className="block lg:table-cell lg:min-w-[240px] font-bold px-2 py-1 text-left">
         {children}
     </th>
 );
@@ -96,7 +96,7 @@ export const ValueCell = ({ children, color }: ValueCellProps) => {
 
     return (
         <td
-            className="block lg:table-cell px-2 py-1"
+            className="block lg:table-cell lg:min-w-[240px] px-2 py-1"
             style={style}
         >
             {children}
