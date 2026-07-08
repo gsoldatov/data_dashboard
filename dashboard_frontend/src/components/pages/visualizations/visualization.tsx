@@ -98,7 +98,7 @@ export const Visualization = () => {
     const redirectToNotFound =
         isInvalidSlug ||
         // visualization is not published (admins can view unpublished)
-        (!isAdmin && publishedStatus != null && !publishedStatus[slug]?.is_published);
+        (!isAdmin && publishedStatus != null && publishedStatus[slug] != null && !publishedStatus[slug].is_published);
 
     // Redirect effect — dispatched after render to avoid React warning.
     useEffect(() => {
