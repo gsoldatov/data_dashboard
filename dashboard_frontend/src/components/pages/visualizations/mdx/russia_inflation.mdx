@@ -1,15 +1,12 @@
-import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { InflationChartGroup } from "@/components/page-parts/visualizations/mdx/russia-inflation/inflation-chart-group";
 import { KeyRateLineChart } from "@/components/page-parts/visualizations/mdx/russia-inflation/key-rate-line-chart";
 
 
-export const INFLATION_DATASETS = [
+export const DATASETS = [
     "russia_consumer_price_index",
     "russia_key_rate",
 ];
 
-
-<VisualizationDataLoader datasetNames={INFLATION_DATASETS}>
 
 # Russia Inflation
 
@@ -23,5 +20,3 @@ Data sources:
 
 ## Key Rate, %
 <KeyRateLineChart />
-
-</VisualizationDataLoader>

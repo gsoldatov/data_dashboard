@@ -1,4 +1,3 @@
-import { VisualizationDataLoader } from "@/components/page-parts/visualizations/wrappers/visualization-data-loader";
 import { AverageSalaryBarChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/average-salary-bar-chart";
 import { SectorChartGroup } from "@/components/page-parts/visualizations/mdx/russia-labor-market/sector-chart-group";
 import { TotalWorkforceBarChart } from "@/components/page-parts/visualizations/mdx/russia-labor-market/total-workforce-bar-chart";
@@ -7,14 +6,12 @@ import { WorkforceUnemploymentLineChart } from "@/components/page-parts/visualiz
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts-container";
 
 
-export const LABOR_MARKET_DATASETS = [
+export const DATASETS = [
     "russia_salaries_average",
     "russia_salaries_by_sector",
     "russia_labor_workforce",
 ];
 
-
-<VisualizationDataLoader datasetNames={LABOR_MARKET_DATASETS}>
 
 # Russia Labor Market
 
@@ -36,5 +33,3 @@ Data sources:
     <WorkforceEngagementLineChart />
     <WorkforceUnemploymentLineChart />
 </ChartsContainer>
-
-</VisualizationDataLoader>
