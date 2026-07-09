@@ -1,4 +1,5 @@
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 import pendulum
@@ -22,6 +23,7 @@ DAG_ID = "russia_trade_exports"
 @dag(
     dag_id=DAG_ID,
     schedule="@weekly",
+    default_args={"retries": 3, "retry_delay": timedelta(days=1)},
     start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     catchup=False,
     tags=["russia_trade_exports"],

@@ -291,7 +291,7 @@
 
     + common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
-- add DAG retries;
++ add DAG retries;
 - revisit styling; colors, fonts, etc;
 - backend -> get / update vis settings -> validate that slugs match existing whilelist;
 - merge small files (frontend types, etc?);
