@@ -33,6 +33,10 @@ class InvalidCredentialsException(Exception):
     """Raised when provided credentials are invalid."""
 
 
+class AirflowUnavailableException(Exception):
+    """Raised when Airflow's API server is unreachable (connection refused, timeout)."""
+
+
 class InternalValidationException(Exception):
     """
     Raised instead of Pydantic `ValidationError` for internal validation failures.

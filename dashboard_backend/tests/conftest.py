@@ -21,6 +21,7 @@ if str(_PROJECT_ROOT) not in sys.path:
 from fastapi import FastAPI
 
 from dashboard_backend.src.app import create_app
+from dashboard_backend.tests.mocks.airflow_service import MockAirflowService
 from dashboard_backend.tests.mocks.data_generator import DataGenerator
 from dashboard_backend.tests.mocks.db_operations import DBOperations
 from python_common.src.config import Config, get_config
@@ -88,8 +89,16 @@ async def test_db(test_config: Config) -> AsyncGenerator[AsyncConnection]:
 
 
 @pytest.fixture
+def mock_airflow_service() -> MockAirflowService:
+    """Mock Airflow service returning an empty DAG list by default."""
+    return MockAirflowService()
+
+
+@pytest.fixture
 async def test_app(
-    test_config: Config, test_db: AsyncConnection
+    test_config: Config,
+    test_db: AsyncConnection,
+    mock_airflow_service: MockAirflowService,
 ) -> AsyncGenerator[FastAPI]:
     """FastAPI app wired to the test config and migrated database.
 
@@ -97,7 +106,7 @@ async def test_app(
     up routes, CORS, and exception handlers.
     *test_db* ensures migrations have already been applied.
     """
-    app = create_app(test_config)
+    app = create_app(test_config, airflow_service=mock_airflow_service)
 
     yield app
 

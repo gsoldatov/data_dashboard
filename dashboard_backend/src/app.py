@@ -12,7 +12,12 @@ from dashboard_backend.src.middleware.auth import AuthMiddleware
 from dashboard_backend.src.middleware.db_repository import DBRepositoryMiddleware
 from dashboard_backend.src.routes import setup_routes
 from dashboard_backend.src.scheduled import setup_scheduler
+from dashboard_backend.src.services.airflow import (
+    AirflowService,
+    AirflowServiceProtocol,
+)
 from dashboard_backend.src.util.exceptions import (
+    AirflowUnavailableException,
     ApplicationException,
     DuplicateException,
     InvalidCredentialsException,
@@ -31,10 +36,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
         yield
     finally:
         scheduler.shutdown(wait=True)
+        await app.state.airflow_service.close()
         await close_engine(app)
 
 
-def create_app(config: Config | None = None) -> FastAPI:
+def create_app(
+    config: Config | None = None,
+    airflow_service: AirflowServiceProtocol | None = None,
+) -> FastAPI:
     """Build and return the configured FastAPI application."""
     config = config or get_config()
 
@@ -43,6 +52,11 @@ def create_app(config: Config | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     app.state.config = config
+
+    # Airflow service (real instance if not injected for testing)
+    if airflow_service is None:
+        airflow_service = AirflowService(config)
+    app.state.airflow_service = airflow_service
 
     # Database engine (with WAL + busy timeout for concurrent access)
     init_engine(app)
@@ -80,6 +94,12 @@ def create_app(config: Config | None = None) -> FastAPI:
         _request: Request, exc: InvalidCredentialsException
     ) -> JSONResponse:
         return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+    @app.exception_handler(AirflowUnavailableException)
+    async def airflow_unavailable_handler(
+        _request: Request, exc: AirflowUnavailableException
+    ) -> JSONResponse:
+        return JSONResponse(status_code=503, content={"detail": str(exc)})
     
     # Middleware (last added runs first)
     app.add_middleware(AuthMiddleware)

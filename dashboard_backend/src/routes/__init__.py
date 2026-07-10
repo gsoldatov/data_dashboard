@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from dashboard_backend.src.routes import (
+    airflow,
     auth,
     users,
     visualization_data,
@@ -18,3 +19,4 @@ def setup_routes(app: FastAPI) -> None:
     )
     app.include_router(auth.router, prefix="/api/auth")
     app.include_router(users.router, prefix="/api/users")
+    app.include_router(airflow.router, prefix="/api/airflow")
