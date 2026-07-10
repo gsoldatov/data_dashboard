@@ -9,8 +9,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { ChartPlaceholder, ChartTitle } from "@/components/common/visualizations/charts/charts";
-import { axisTooltipContent } from "@/components/common/visualizations/charts/chart-tooltip";
+import { ChartPlaceholder, ChartTitle, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,

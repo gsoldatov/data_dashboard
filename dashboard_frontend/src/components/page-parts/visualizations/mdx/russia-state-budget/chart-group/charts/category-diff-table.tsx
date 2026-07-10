@@ -14,7 +14,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy";
 
 /** Format a number with one decimal place, e.g. 1234.5 → "1234.5". */
 const fmt = (v: number) => v.toFixed(1);

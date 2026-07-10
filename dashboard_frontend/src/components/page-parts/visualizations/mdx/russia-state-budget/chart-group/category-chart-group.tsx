@@ -7,20 +7,15 @@ import {
     getDescendantNumbers,
     groupByDepth,
     compareNumbers,
-} from "@/components/common/visualizations/selectors/hierarchy/util";
+} from "@/components/common/visualizations/selectors/hierarchy";
 import { AttributeDropdown } from "@/components/common/visualizations/selectors/attribute/dropdown";
 import { AttributeSelections } from "@/components/common/visualizations/selectors/attribute/selection";
-import { HierarchyBreadcrumb } from "@/components/common/visualizations/selectors/hierarchy/breadcrumb";
-import { HierarchySelections } from "@/components/common/visualizations/selectors/hierarchy/selections";
-import { CategoryLineChart } from "./charts/category-line-chart";
-import { CategoryShareStackedBarChart } from "./charts/category-share-stacked-bar-chart";
-import { CategoryTreemap } from "./charts/category-treemap";
-import { CategoryDiffTable } from "./charts/category-diff-table";
+import { HierarchyBreadcrumb, HierarchySelections } from "@/components/common/visualizations/selectors/hierarchy";
+import { CategoryLineChart, CategoryShareStackedBarChart, CategoryTreemap, CategoryDiffTable } from "./charts";
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
-import type { BreadcrumbLevel } from "@/components/common/visualizations/selectors/hierarchy/breadcrumb";
+import type { HierarchyItem, BreadcrumbLevel } from "@/components/common/visualizations/selectors/hierarchy";
 
 export interface CategoryChartGroupProps {
     rootPrefix: string;

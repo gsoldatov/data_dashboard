@@ -1,7 +1,6 @@
 import { Treemap, Tooltip, ResponsiveContainer } from "recharts";
 
-import { ChartPlaceholder, ChartTitle } from "@/components/common/visualizations/charts/charts";
-import { ChartTooltip } from "@/components/common/visualizations/charts/chart-tooltip";
+import { ChartPlaceholder, ChartTitle, ChartTooltip } from "@/components/common/visualizations/charts/charts";
 import {
     CHART_HEIGHT,
     CHART_COLORS,
@@ -10,7 +9,7 @@ import {
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { TreemapNode } from "recharts/types/util/types";
-import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy";
 
 /** Node props Recharts passes to the Treemap content component. */
 interface TreemapContentProps extends TreemapNode {

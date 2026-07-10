@@ -8,8 +8,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { ChartPlaceholder, ChartTitle } from "@/components/common/visualizations/charts/charts";
-import { axisTooltipContent } from "@/components/common/visualizations/charts/chart-tooltip";
+import { ChartPlaceholder, ChartTitle, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -22,7 +21,7 @@ import {
 } from "@/styles/charts";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
-import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy/util";
+import type { HierarchyItem } from "@/components/common/visualizations/selectors/hierarchy";
 
 interface CategoryLineChartProps {
     items: RussiaStateBudgetItem[];

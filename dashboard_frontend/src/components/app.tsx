@@ -7,9 +7,7 @@ import { AdminEtl } from "@/components/pages/admin/etl";
 import { AdminVisualizations } from "@/components/pages/admin/visualizations";
 import { NotFound } from "@/components/pages/not-found";
 import { LocationManageWrapper } from "@/components/stateful/location-manager-wrapper";
-import { AdminRoute } from "@/components/stateful/protected/admin-route";
-import { AnonymousRoute } from "@/components/stateful/protected/anonymous-route";
-import { AuthRoute } from "@/components/stateful/protected/auth-route";
+import { AdminRoute, AnonymousRoute, AuthRoute } from "@/components/stateful/protected";
 
 
 /** Export Top-level route elements to allow introspection in tests. */
