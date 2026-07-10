@@ -1,4 +1,6 @@
-"""Dataset registry — maps dataset names to getters and consumer slugs."""
+"""Dataset constants — maps dataset names to getters and consumer slugs."""
+
+from typing import cast
 
 from dashboard_backend.src.services.visualization_data.read_json_file import (
     JSONFileReader,
@@ -6,7 +8,7 @@ from dashboard_backend.src.services.visualization_data.read_json_file import (
 
 # Each key is a dataset name mapping to its data-getter callable and the
 # visualization slugs that consume it (used for publish-status checks).
-DATASET_REGISTRY: dict[str, dict[str, object]] = {
+DATASETS: dict[str, dict[str, object]] = {
     "russia_gdp_constant_prices_rub": {
         "getter": JSONFileReader("russia_gdp_constant_prices_rub/gdp.json").read,
         "consumers": ["russia_gdp", "russia_economy"],
@@ -80,3 +82,9 @@ DATASET_REGISTRY: dict[str, dict[str, object]] = {
         "consumers": ["russia_labor_market", "russia_economy"],
     },
 }
+
+SLUGS: frozenset[str] = frozenset(
+    slug
+    for entry in DATASETS.values()
+    for slug in cast(list[str], entry["consumers"])
+)

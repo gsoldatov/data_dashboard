@@ -293,7 +293,6 @@
 
 + add DAG retries;
 - revisit styling; colors, fonts, etc;
-- backend -> get / update vis settings -> validate that slugs match existing whilelist;
 - merge small files (frontend types, etc?);
 
 - admin page:   // add corresponding backend routes

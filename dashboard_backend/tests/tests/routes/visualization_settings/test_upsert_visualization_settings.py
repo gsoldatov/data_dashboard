@@ -30,12 +30,12 @@ async def test_upsert_visualization_settings_validation(
     ]
     for payload, expected_status in invalid_cases:
         response = await test_client.put(
-            "/api/visualization-settings/test-page",
+            "/api/visualization-settings/russia_gdp",
             json=payload,
         )
         assert response.status_code == expected_status
 
-    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    stored = await db_operations.visualizations_settings.by_slug("russia_gdp")
     assert stored is None
 
 
@@ -48,12 +48,12 @@ async def test_upsert_visualization_settings_no_token(
 ) -> None:
     test_client.cookies.clear()
     response = await test_client.put(
-        "/api/visualization-settings/test-page",
+        "/api/visualization-settings/russia_gdp",
         json={"is_published": True},
     )
     assert response.status_code == 401
 
-    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    stored = await db_operations.visualizations_settings.by_slug("russia_gdp")
     assert stored is None
 
 
@@ -66,14 +66,29 @@ async def test_upsert_visualization_settings_viewer_token(
     test_client.cookies = cookies
 
     response = await test_client.put(
-        "/api/visualization-settings/test-page",
+        "/api/visualization-settings/russia_gdp",
         json={"is_published": True},
     )
 
     assert response.status_code == 403
 
-    stored = await db_operations.visualizations_settings.by_slug("test-page")
+    stored = await db_operations.visualizations_settings.by_slug("russia_gdp")
     assert stored is None
+
+
+# ── invalid slug ───────────────────────────────────────────────────────────
+
+
+async def test_invalid_slug_returns_404(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+) -> None:
+    test_client.cookies = admin_session
+    response = await test_client.put(
+        "/api/visualization-settings/nonexistent",
+        json={"is_published": True},
+    )
+    assert response.status_code == 404
 
 
 # ── success ───────────────────────────────────────────────────────────────
@@ -86,17 +101,17 @@ async def test_upsert_visualization_settings_insert(
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.put(
-        "/api/visualization-settings/new-page",
+        "/api/visualization-settings/russia_gdp",
         json={"is_published": False},
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body["slug"] == "new-page"
+    assert body["slug"] == "russia_gdp"
     assert body["is_published"] is False
     assert "id" in body
 
-    stored = await db_operations.visualizations_settings.by_slug("new-page")
+    stored = await db_operations.visualizations_settings.by_slug("russia_gdp")
     assert stored is not None
     assert stored.is_published is False
 
@@ -109,24 +124,24 @@ async def test_upsert_visualization_settings_update(
 ) -> None:
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="existing-page",
+            slug="russia_gdp",
             is_published=True,
         )
     )
 
     test_client.cookies = admin_session
     response = await test_client.put(
-        "/api/visualization-settings/existing-page",
+        "/api/visualization-settings/russia_gdp",
         json={"is_published": False},
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body["slug"] == "existing-page"
+    assert body["slug"] == "russia_gdp"
     assert body["is_published"] is False
 
     # Verify DB state
-    stored = await db_operations.visualizations_settings.by_slug("existing-page")
+    stored = await db_operations.visualizations_settings.by_slug("russia_gdp")
     assert stored is not None
     assert stored.is_published is False
 

@@ -64,9 +64,20 @@ async def test_unknown_setting_name(
     """422 when a setting name is not recognised."""
     test_client.cookies.clear()
     response = await test_client.get(
-        f"{_BATCH_URL}?settings=unknown&slugs=a"
+        f"{_BATCH_URL}?settings=unknown&slugs=russia_gdp"
     )
     assert response.status_code == 422
+
+
+async def test_unknown_slug(
+    test_client: AsyncClient,
+) -> None:
+    """404 when a slug is not a known visualization."""
+    test_client.cookies.clear()
+    response = await test_client.get(
+        f"{_BATCH_URL}?settings=is-published&slugs=nonexistent"
+    )
+    assert response.status_code == 404
 
 
 # ── unauthenticated ─────────────────────────────────────────────────────────
@@ -83,25 +94,25 @@ async def test_batch_unauthenticated(
     # Slug with no stored settings → default is_published=True
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="pub-unauthed", is_published=True
+            slug="russia_economy", is_published=True
         )
     )
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="unpub-unauthed", is_published=False
+            slug="russia_inflation", is_published=False
         )
     )
 
     response = await test_client.get(
         f"{_BATCH_URL}"
         "?settings=is-published"
-        "&slugs=default-unauthed,pub-unauthed,unpub-unauthed"
+        "&slugs=russia_gdp,russia_economy,russia_inflation"
     )
     assert response.status_code == 200
     data = response.json()
-    assert data["default-unauthed"] == {"is_published": True}
-    assert data["pub-unauthed"] == {"is_published": True}
-    assert data["unpub-unauthed"] == {"is_published": False}
+    assert data["russia_gdp"] == {"is_published": True}
+    assert data["russia_economy"] == {"is_published": True}
+    assert data["russia_inflation"] == {"is_published": False}
 
 
 # ── viewer ──────────────────────────────────────────────────────────────────
@@ -119,25 +130,25 @@ async def test_batch_viewer(
 
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="pub-viewer", is_published=True
+            slug="russia_economy", is_published=True
         )
     )
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="unpub-viewer", is_published=False
+            slug="russia_inflation", is_published=False
         )
     )
 
     response = await test_client.get(
         f"{_BATCH_URL}"
         "?settings=is-published"
-        "&slugs=default-viewer,pub-viewer,unpub-viewer"
+        "&slugs=russia_gdp,russia_economy,russia_inflation"
     )
     assert response.status_code == 200
     data = response.json()
-    assert data["default-viewer"] == {"is_published": True}
-    assert data["pub-viewer"] == {"is_published": True}
-    assert data["unpub-viewer"] == {"is_published": False}
+    assert data["russia_gdp"] == {"is_published": True}
+    assert data["russia_economy"] == {"is_published": True}
+    assert data["russia_inflation"] == {"is_published": False}
 
 
 # ── admin ───────────────────────────────────────────────────────────────────
@@ -154,26 +165,26 @@ async def test_batch_admin(
 
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="pub-admin", is_published=True
+            slug="russia_economy", is_published=True
         )
     )
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="unpub-admin", is_published=False
+            slug="russia_inflation", is_published=False
         )
     )
 
     response = await test_client.get(
         f"{_BATCH_URL}"
         "?settings=is-published"
-        "&slugs=default-admin,pub-admin,unpub-admin"
+        "&slugs=russia_gdp,russia_economy,russia_inflation"
     )
     assert response.status_code == 200
     data = response.json()
-    assert data["default-admin"] == {"is_published": True}
-    assert data["pub-admin"] == {"is_published": True}
+    assert data["russia_gdp"] == {"is_published": True}
+    assert data["russia_economy"] == {"is_published": True}
     # Admin sees actual stored value
-    assert data["unpub-admin"] == {"is_published": False}
+    assert data["russia_inflation"] == {"is_published": False}
 
 
 if __name__ == "__main__":

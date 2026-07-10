@@ -6,11 +6,11 @@ from pathlib import Path
 
 from fastapi import Request
 
+from dashboard_backend.src.services.visualization_data.constants import (
+    DATASETS,
+)
 from dashboard_backend.src.services.visualization_data.read_json_file import (
     VisualizationDataset,
-)
-from dashboard_backend.src.services.visualization_data.registry import (
-    DATASET_REGISTRY,
 )
 from dashboard_backend.src.util.exceptions import NotFoundException
 
@@ -26,7 +26,7 @@ class VisualizationDataService:
 
     def __init__(self, data_directory: Path) -> None:
         self._data_directory = data_directory
-        self._registry = DATASET_REGISTRY
+        self._registry = DATASETS
 
     def get_consumer_slugs(self, dataset_names: list[str]) -> set[str]:
         """Return the union of consumer slugs for the given dataset names."""

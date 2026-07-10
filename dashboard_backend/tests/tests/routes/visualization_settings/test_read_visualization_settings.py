@@ -20,7 +20,7 @@ from dashboard_backend.tests.mocks.db_operations import DBOperations
 async def test_read_visualization_settings_no_token(test_client: AsyncClient) -> None:
     test_client.cookies.clear()
     response = await test_client.get(
-        "/api/visualization-settings/some-page",
+        "/api/visualization-settings/russia_gdp",
     )
     assert response.status_code == 401
 
@@ -33,7 +33,7 @@ async def test_read_visualization_settings_viewer_token(
     test_client.cookies = cookies
 
     response = await test_client.get(
-        "/api/visualization-settings/some-page",
+        "/api/visualization-settings/russia_gdp",
     )
 
     assert response.status_code == 403
@@ -48,12 +48,12 @@ async def test_read_visualization_settings_defaults(
 ) -> None:
     test_client.cookies = admin_session
     response = await test_client.get(
-        "/api/visualization-settings/nonexistent",
+        "/api/visualization-settings/russia_gdp",
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body == {"slug": "nonexistent", "is_published": True}
+    assert body == {"slug": "russia_gdp", "is_published": True}
 
 
 async def test_read_visualization_settings_stored(
@@ -64,19 +64,33 @@ async def test_read_visualization_settings_stored(
 ) -> None:
     await db_operations.visualizations_settings.insert(
         data_generator.visualization_settings.visualization_settings(
-            slug="my-page",
+            slug="russia_gdp",
             is_published=False,
         )
     )
 
     test_client.cookies = admin_session
     response = await test_client.get(
-        "/api/visualization-settings/my-page",
+        "/api/visualization-settings/russia_gdp",
     )
 
     assert response.status_code == 200
     body = response.json()
-    assert body == {"slug": "my-page", "is_published": False}
+    assert body == {"slug": "russia_gdp", "is_published": False}
+
+
+# ── invalid slug ───────────────────────────────────────────────────────────
+
+
+async def test_invalid_slug_returns_404(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+) -> None:
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/visualization-settings/nonexistent",
+    )
+    assert response.status_code == 404
 
 
 if __name__ == "__main__":

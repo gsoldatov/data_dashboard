@@ -32,6 +32,30 @@ describe("Visualization", () => {
         });
     });
 
+    it("shows error when the published status check returns 404", async () => {
+        backend.dispatcher.addHandlerOverride(
+            SETTINGS_URL,
+            "GET",
+            async () =>
+                new Response(
+                    JSON.stringify({
+                        detail: "Unknown visualization slug: russia_gdp",
+                    }),
+                    { status: 404, headers: { "Content-Type": "application/json" } },
+                ),
+        );
+
+        renderWithProviders(<App />, {
+            initialEntries: ["/visualizations/russia_gdp"],
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText("Failed to load the page."),
+            ).toBeInTheDocument();
+        });
+    });
+
     it("shows not-found page when slug is missing", async () => {
         // `/visualizations/` does not match `:slug` so React Router
         // falls through to the catch-all route; no redirect is dispatched.
