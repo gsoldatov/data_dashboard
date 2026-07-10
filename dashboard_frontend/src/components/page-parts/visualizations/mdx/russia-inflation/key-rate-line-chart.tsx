@@ -10,7 +10,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import { ChartPlaceholder } from "@/components/common/visualizations/charts/chart-placeholder";
+import { ChartPlaceholder } from "@/components/common/visualizations/charts/charts";
 import { axisTooltipContent } from "@/components/common/visualizations/charts/chart-tooltip";
 import {
     CHART_HEIGHT,

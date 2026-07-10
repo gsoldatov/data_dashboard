@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
-import { ChartTitle } from "@/components/common/visualizations/charts/chart-title";
+import { ChartTitle } from "@/components/common/visualizations/charts/charts";
 import { TradeYearSelector } from "./trade-year-selector";
 import { CountryBarChart } from "./country-bar-chart";
 import { CategoryTreemap } from "./category-treemap";

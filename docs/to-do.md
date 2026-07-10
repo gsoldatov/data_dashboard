@@ -291,9 +291,7 @@
 
     + common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
-+ add DAG retries;
 - revisit styling; colors, fonts, etc;
-- merge small files (frontend types, etc?);
 
 - admin page:   // add corresponding backend routes
     - view ETL jobs statuses & logs;
