@@ -137,6 +137,8 @@ Reference: `dashboard_frontend/tests/tests/components/pages/visualizations/russi
 - **`<ChartTooltip>`** / `axisTooltipContent(dataKey, label)` — shared tooltip. For charts
   with an X-axis, use `axisTooltipContent("year", "Year")`. For charts without an X-axis
   (Treemap), use `content={ChartTooltip}` directly and omit `xAxisKey`.
+- **`<IndicatorTable>`** - responsive table, which should be used for displaying one or several groupped indicators as text.
+- **`<VisualizationPageNavigation>`** - navigation component used for displaying links to related pages on an MDX page.
 - **`formatScaledValue`** — for tooltips that need dynamic unit scaling on raw values
   (see `country-bar-chart.tsx`: raw value stored in `_raw` field, formatter accesses
   `entry.payload._raw`).
