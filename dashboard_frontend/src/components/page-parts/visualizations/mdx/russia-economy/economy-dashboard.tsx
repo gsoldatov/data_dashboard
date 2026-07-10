@@ -7,7 +7,7 @@ import {
     IndicatorValueRow,
     HeaderCell,
     ValueCell,
-} from "@/components/common/visualizations/table";
+} from "@/components/common/visualizations/indicator-table";
 
 import type { RussiaGdpItem } from "@/types/visualization-data/russia-gdp";
 import type { RussiaCpiItem } from "@/types/visualization-data/russia-inflation";
