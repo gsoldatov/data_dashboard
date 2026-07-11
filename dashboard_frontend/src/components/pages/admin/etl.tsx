@@ -45,7 +45,7 @@ export const AdminEtl = () => {
             <PageLayout>
                 <AdminNavbar />
                 <RefreshButton isRefetching={isFetching} onRefresh={handleRefresh} />
-                <Error message="Failed to load the page." />
+                <Error message="Failed to fetch DAGs information." />
             </PageLayout>
         );
     }

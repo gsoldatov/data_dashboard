@@ -30,7 +30,7 @@ describe("AdminEtl", () => {
 
         await waitFor(() => {
             expect(
-                screen.getByText("Failed to load the page."),
+                screen.getByText("Failed to fetch DAGs information."),
             ).toBeInTheDocument();
         });
     });
@@ -146,7 +146,7 @@ describe("AdminEtl", () => {
 
         await waitFor(() => {
             expect(
-                screen.getByText("Failed to load the page."),
+                screen.getByText("Failed to fetch DAGs information."),
             ).toBeInTheDocument();
         });
 
