@@ -30,7 +30,9 @@ class AirflowServiceProtocol(ABC):
     """Contract for the Airflow API service (enables test mocking)."""
 
     @abstractmethod
-    async def get_dags(self, limit: int, offset: int) -> tuple[list[DagStatus], int]:
+    async def get_dags(
+        self, limit: int, offset: int, dag_id_pattern: str | None = None
+    ) -> tuple[list[DagStatus], int]:
         """Return *(dags, total_entries)* for the given page."""
 
     @abstractmethod
@@ -155,13 +157,15 @@ class AirflowService(AirflowServiceProtocol):
     # ── public methods ─────────────────────────────────────────────────
 
     async def get_dags(
-        self, limit: int, offset: int
+        self, limit: int, offset: int, dag_id_pattern: str | None = None
     ) -> tuple[list[DagStatus], int]:
         """Return paginated DAGs with their latest-run status merged in."""
         # 1. Fetch DAGs from Airflow
         dag_path = (
             f"/api/v2/dags?limit={limit}&offset={offset}&order_by=dag_id"
         )
+        if dag_id_pattern:
+            dag_path += f"&dag_id_pattern={dag_id_pattern}"
         dag_collection = await self._request_parsed(
             "GET", dag_path, AirflowDagCollectionResponse
         )

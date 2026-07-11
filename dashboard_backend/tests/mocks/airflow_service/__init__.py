@@ -23,7 +23,7 @@ class MockAirflowService(AirflowServiceProtocol):
         self._total = total
 
     async def get_dags(
-        self, limit: int, offset: int
+        self, limit: int, offset: int, dag_id_pattern: str | None = None
     ) -> tuple[list[DagStatus], int]:
         return self._dags, self._total
 

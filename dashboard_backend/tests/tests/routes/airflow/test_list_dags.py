@@ -106,5 +106,112 @@ async def test_list_dags_custom_limit_offset(
     assert body["offset"] == 5
 
 
+# ── pattern filtering ──────────────────────────────────────────────────────
+
+
+async def test_list_dags_filter_by_pattern(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+    mock_airflow_service: MockAirflowService,
+) -> None:
+    mock_airflow_service.set_dags(
+        dags=[
+            DagStatus(
+                dag_id="target_dag",
+                description="Match",
+                is_paused=False,
+                timetable_summary="Daily",
+                next_dagrun="2026-07-10T12:00:00",
+                last_run_state="success",
+                last_run_start_date="2026-07-10T11:55:00",
+            )
+        ],
+        total=1,
+    )
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/airflow/dags", params={"dag_id_pattern": "target"}
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["total"] == 1
+    assert len(body["dags"]) == 1
+    assert body["dags"][0]["dag_id"] == "target_dag"
+
+
+async def test_list_dags_pattern_no_match(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+    mock_airflow_service: MockAirflowService,
+) -> None:
+    mock_airflow_service.set_dags(dags=[], total=0)
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/airflow/dags", params={"dag_id_pattern": "nonexistent"}
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body == {"dags": [], "total": 0, "limit": 20, "offset": 0}
+
+
+async def test_list_dags_pattern_with_pagination(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+    mock_airflow_service: MockAirflowService,
+) -> None:
+    mock_airflow_service.set_dags(
+        dags=[
+            DagStatus(
+                dag_id="dag_c",
+                description=None,
+                is_paused=False,
+                timetable_summary=None,
+                next_dagrun=None,
+                last_run_state=None,
+                last_run_start_date=None,
+            )
+        ],
+        total=1,
+    )
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/airflow/dags",
+        params={"dag_id_pattern": "dag", "limit": 5, "offset": 2},
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["limit"] == 5
+    assert body["offset"] == 2
+    assert body["total"] == 1
+
+
+async def test_list_dags_pattern_empty_string(
+    test_client: AsyncClient,
+    admin_session: dict[str, str],
+    mock_airflow_service: MockAirflowService,
+) -> None:
+    mock_airflow_service.set_dags(
+        dags=[
+            DagStatus(
+                dag_id="some_dag",
+                description=None,
+                is_paused=False,
+                timetable_summary=None,
+                next_dagrun=None,
+                last_run_state=None,
+                last_run_start_date=None,
+            )
+        ],
+        total=1,
+    )
+    test_client.cookies = admin_session
+    response = await test_client.get(
+        "/api/airflow/dags", params={"dag_id_pattern": ""}
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body["dags"]) == 1
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
