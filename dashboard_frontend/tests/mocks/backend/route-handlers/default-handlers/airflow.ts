@@ -17,3 +17,9 @@ export const listDagsHandler: RouteHandler = async (req, _backend: MockBackend) 
         headers: { "Content-Type": "application/json" },
     });
 };
+
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const updateDagHandler: RouteHandler = async (_req, _backend: MockBackend) => {
+    return new Response(null, { status: 204 });
+};

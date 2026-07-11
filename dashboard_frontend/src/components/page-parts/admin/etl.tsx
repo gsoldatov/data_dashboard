@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { RefreshCw, ExternalLink, ChevronFirst, ChevronLast } from "lucide-react";
 import {
     Table,
@@ -17,6 +18,8 @@ import {
 } from "@/components/common/shadcn-ui/pagination";
 import { Badge } from "@/components/common/shadcn-ui/badge";
 import { Button } from "@/components/common/shadcn-ui/button";
+import { Switch } from "@/components/common/shadcn-ui/switch";
+import { useUpdateDagMutation } from "@/store/backend-api-slices/airflow";
 import { getDocumentApp } from "@/util/document-app";
 import { ADMIN_ETL_DAG_PAGE_SIZE } from "@/util/constants";
 import type { DagStatus } from "@/types/backend/responses/airflow";
@@ -34,6 +37,39 @@ const formatTimestamp = (iso: string | null): string => {
 
 
 // ── Subcomponents ──────────────────────────────────────────────────────
+
+interface ActiveToggleProps {
+    dagId: string;
+    isPaused: boolean;
+}
+
+const ActiveToggle = ({ dagId, isPaused }: ActiveToggleProps) => {
+    const [updateDag, { isLoading }] = useUpdateDagMutation();
+    const [checked, setChecked] = useState(!isPaused);
+
+    const handleToggle = async () => {
+        if (isLoading) return;
+        const next = !checked;
+        setChecked(next);
+        try {
+            await updateDag({
+                dag_id: dagId,
+                body: { is_paused: !next },
+            }).unwrap();
+        } catch {
+            setChecked(!next);
+        }
+    };
+
+    return (
+        <Switch
+            checked={checked}
+            onCheckedChange={handleToggle}
+            disabled={isLoading}
+        />
+    );
+};
+
 
 export const RefreshButton = ({
     isRefetching,
@@ -111,7 +147,7 @@ const DagsTable = ({ dags }: { dags: DagStatus[] }) => {
                 <TableRow>
                     <TableHead title="DAG identifier">DAG ID</TableHead>
                     <TableHead title="DAG description">Description</TableHead>
-                    <TableHead className="w-20">Paused</TableHead>
+                    <TableHead className="w-20">Active</TableHead>
                     <TableHead className="w-32">Last Run State</TableHead>
                     <TableHead className="min-w-24">Schedule</TableHead>
                     <TableHead className="min-w-24">Next Run</TableHead>
@@ -142,10 +178,8 @@ const DagsTable = ({ dags }: { dags: DagStatus[] }) => {
                             <span title={dag.description ?? undefined}>{dag.description}</span>
                         </TableCell>
                         <TableCell className={CELL_NOWRAP}>
-                            <span className={MOBILE_LABEL}>Paused</span>
-                            <Badge variant={dag.is_paused ? "secondary" : "outline"}>
-                                {dag.is_paused ? "Paused" : "Active"}
-                            </Badge>
+                            <span className={MOBILE_LABEL}>Active</span>
+                            <ActiveToggle dagId={dag.dag_id} isPaused={dag.is_paused} />
                         </TableCell>
                         <TableCell className={CELL_NOWRAP}>
                             <span className={MOBILE_LABEL}>Last Run State</span>

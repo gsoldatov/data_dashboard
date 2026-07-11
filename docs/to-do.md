@@ -291,18 +291,25 @@
 
     + common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
-- revisit styling; colors, fonts, etc;
-
 - admin page:
     - view DAGs status:
         + table;
-        - pause / unpause DAGs;
+        + pause / unpause DAGs;
         - trigger manual DAG run;
     - single DAG page:
         - DAG run history;
         - task runs history;
         - task logs;
         - trigger task run;
+
+- revisit styling; colors, fonts, etc;
+  - move all colors and common rules (fonts, sizes, etc.) into globals.css
+  - merge similar rules
+  ? add new rules
+
+  ? refactor styles:
+    - increase navbar size
+    ???
 
 - Russia Economy by Sectors:
     - Finance

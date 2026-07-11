@@ -167,4 +167,70 @@ describe("AdminEtl", () => {
 
         expect(screen.getByText("Refresh")).toBeInTheDocument();
     });
+
+    it("renders switches reflecting DAG active state", async () => {
+        renderWithProviders(<AdminEtl />, {
+            preloadedState: preloadedAdminState(),
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText("dag_001")).toBeInTheDocument();
+        });
+
+        const switches = screen.getAllByRole("switch");
+        expect(switches).toHaveLength(10);
+
+        // dag_001: is_paused=true → switch OFF
+        expect(switches[0]).toHaveAttribute("data-state", "unchecked");
+        // dag_002: is_paused=false → switch ON
+        expect(switches[1]).toHaveAttribute("data-state", "checked");
+        // dag_004: is_paused=true → switch OFF
+        expect(switches[3]).toHaveAttribute("data-state", "unchecked");
+    });
+
+    it("toggles switch optimistically on click", async () => {
+        renderWithProviders(<AdminEtl />, {
+            preloadedState: preloadedAdminState(),
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText("dag_001")).toBeInTheDocument();
+        });
+
+        // dag_001 is paused → switch is OFF (unchecked)
+        const switchEl = screen.getAllByRole("switch")[0];
+        expect(switchEl).toHaveAttribute("data-state", "unchecked");
+
+        fireEvent.click(switchEl);
+
+        await waitFor(() => {
+            expect(switchEl).toHaveAttribute("data-state", "checked");
+        });
+    });
+
+    it("reverts toggle on update failure", async () => {
+        renderWithProviders(<AdminEtl />, {
+            preloadedState: preloadedAdminState(),
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText("dag_002")).toBeInTheDocument();
+        });
+
+        // dag_002 is active → switch is ON (checked)
+        const switchEl = screen.getAllByRole("switch")[1];
+        expect(switchEl).toHaveAttribute("data-state", "checked");
+
+        addNetworkErrorOverride(
+            backend.dispatcher,
+            "/api/airflow/dags/dag_002",
+            "PATCH",
+        );
+
+        fireEvent.click(switchEl);
+
+        await waitFor(() => {
+            expect(switchEl).toHaveAttribute("data-state", "checked");
+        });
+    });
 });
