@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { screen, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../../test-utils";
 import { MockBackend } from "../../../../mocks/backend/mock-backend";
@@ -7,6 +7,7 @@ import {
 } from "../../../../mocks/backend/route-handlers/overrides";
 import { preloadedAdminState } from "../../../../mocks/mock-data/store";
 import { createMockDagListResponse } from "../../../../mocks/mock-data/airflow";
+import type { DagStatus } from "@/types/backend/responses/airflow";
 import { AdminEtl } from "@/components/pages/admin/etl";
 
 
@@ -399,5 +400,66 @@ describe("AdminEtl", () => {
                 ),
             ).toBe(true);
         });
+    });
+
+    it("highlights last run start in orange when more than 2 weeks old", async () => {
+        vi.setSystemTime(new Date("2026-07-11T12:00:00Z"));
+
+        const staleDate = "2026-06-20T00:00:00Z"; // 21 days ago
+        const freshDate = "2026-07-08T10:00:00Z"; // 3 days ago
+
+        backend.dispatcher.addHandlerOverride(
+            DAGS_URL,
+            "GET",
+            async (req) => {
+                const url = new URL(req.url);
+                const limit = parseInt(url.searchParams.get("limit") ?? "20", 10);
+                const offset = parseInt(url.searchParams.get("offset") ?? "0", 10);
+
+                const dags: DagStatus[] = [
+                    {
+                        dag_id: "dag_stale",
+                        description: "Stale DAG",
+                        is_paused: false,
+                        timetable_summary: "Daily",
+                        next_dagrun: null,
+                        last_run_state: "success",
+                        last_run_start_date: staleDate,
+                    },
+                    {
+                        dag_id: "dag_fresh",
+                        description: "Fresh DAG",
+                        is_paused: false,
+                        timetable_summary: "Daily",
+                        next_dagrun: null,
+                        last_run_state: "success",
+                        last_run_start_date: freshDate,
+                    },
+                ];
+
+                return new Response(
+                    JSON.stringify({ dags, total: 2, limit, offset }),
+                    { status: 200, headers: { "Content-Type": "application/json" } },
+                );
+            },
+        );
+
+        renderWithProviders(<AdminEtl />, {
+            preloadedState: preloadedAdminState(),
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText("dag_stale")).toBeInTheDocument();
+        });
+
+        const staleRow = screen.getByText("dag_stale").closest("tr");
+        expect(staleRow).not.toBeNull();
+        expect(staleRow!.querySelector(".text-orange-600")).toBeInTheDocument();
+
+        const freshRow = screen.getByText("dag_fresh").closest("tr");
+        expect(freshRow).not.toBeNull();
+        expect(freshRow!.querySelector(".text-orange-600")).toBeNull();
+
+        vi.useRealTimers();
     });
 });

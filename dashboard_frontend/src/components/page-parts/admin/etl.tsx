@@ -36,6 +36,13 @@ const formatTimestamp = (iso: string | null): string => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
+const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
+
+const isStale = (iso: string | null): boolean => {
+    if (!iso) return false;
+    return Date.now() - new Date(iso).getTime() > TWO_WEEKS_MS;
+};
+
 
 // ── Subcomponents ──────────────────────────────────────────────────────
 
@@ -222,7 +229,9 @@ const DagsTable = ({ dags }: { dags: DagStatus[] }) => {
                         </TableCell>
                         <TableCell className={CELL}>
                             <span className={MOBILE_LABEL}>Last Run Start</span>
-                            <span>{formatTimestamp(dag.last_run_start_date)}</span>
+                            <span className={cn(isStale(dag.last_run_start_date) && "text-orange-600 dark:text-orange-400")}>
+                                {formatTimestamp(dag.last_run_start_date)}
+                            </span>
                         </TableCell>
                     </TableRow>
                 ))}
