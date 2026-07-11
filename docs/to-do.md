@@ -3,25 +3,26 @@
     + run data fetching jobs on schedule;
     + log job execution results;
 
-- dashboard backend;
++ dashboard backend;
     + user;  // view & edit user properties
     + sessions; // login & logout
     + page settings:    // additional page metadata stored in db (is published)
         + upsert;
         + view;     // default or saved settings
     + page data; // fetch page data, if permitted
-    - view etl jobs' statuses (execution time);
-    - view etl jobs' logs;
+    + view etl jobs' statuses (execution time);
+    x view etl jobs' logs;
 
-- dashboard frontend:
++ dashboard frontend:
     + login page & logout funcitonality;
     + list available visualizations;
     + display a visualization;
     + user page (view / edit);
-    - admin page:
+    + admin page:
         + edit visualization settings;
-        - view ETL jobs statuses & logs;
-        ? run ETL jobs;
+        + view ETL jobs statuses & logs;
+        x view ETL run history & logs;
+        x run ETL jobs;
 
 - data sources / visualizations to implement:
     + Russia State budget (plan / fact, with drilldown by categories);
@@ -291,16 +292,11 @@
 
     + common navigation component across Russia's Economy pages;    // also reorganize URL order on the index page;
 
-- admin page:
-    - view DAGs status:
++ admin page:
+    + view DAGs statuses:
         + table;
         + pause / unpause DAGs;
-        - trigger manual DAG run;
-    - single DAG page:
-        - DAG run history;
-        - task runs history;
-        - task logs;
-        - trigger task run;
+        x trigger manual DAG run;
 
 - revisit styling; colors, fonts, etc;
   - move all colors and common rules (fonts, sizes, etc.) into globals.css

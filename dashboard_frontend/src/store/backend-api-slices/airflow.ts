@@ -6,13 +6,15 @@ import { validateResponseData } from "@/store/util";
 
 const airflowApi = backendAPI.injectEndpoints({
     endpoints: (builder) => ({
-        getDags: builder.query<DagListResponse, { limit: number; offset: number }>({
+        getDags: builder.query<DagListResponse, { limit: number; offset: number; dag_id_pattern?: string }>({
             serializeQueryArgs: () => "dags",
-            queryFn: async ({ limit, offset }, _api, _extraOptions, baseQuery) => {
+            queryFn: async ({ limit, offset, dag_id_pattern }, _api, _extraOptions, baseQuery) => {
                 const url = "/api/airflow/dags";
+                const params: Record<string, string | number> = { limit, offset };
+                if (dag_id_pattern) params.dag_id_pattern = dag_id_pattern;
                 const result = await baseQuery({
                     url,
-                    params: { limit, offset },
+                    params,
                 });
                 if (result.error) {
                     return { error: result.error };

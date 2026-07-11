@@ -18,6 +18,7 @@ import {
 } from "@/components/common/shadcn-ui/pagination";
 import { Badge } from "@/components/common/shadcn-ui/badge";
 import { Button } from "@/components/common/shadcn-ui/button";
+import { Input } from "@/components/common/shadcn-ui/input";
 import { Switch } from "@/components/common/shadcn-ui/switch";
 import { useUpdateDagMutation } from "@/store/backend-api-slices/airflow";
 import { getDocumentApp } from "@/util/document-app";
@@ -80,16 +81,42 @@ export const RefreshButton = ({
 }) => (
     <Button
         variant="outline"
-        size="sm"
         onClick={onRefresh}
         disabled={isRefetching}
-        className="mb-4"
     >
         <RefreshCw
             className={cn("h-4 w-4 mr-1", isRefetching && "animate-spin")}
         />
         Refresh
     </Button>
+);
+
+
+export const Toolbar = ({
+    isRefetching,
+    onRefresh,
+    filterText,
+    onFilterChange,
+    inputRef,
+}: {
+    isRefetching: boolean;
+    onRefresh: () => void;
+    filterText: string;
+    onFilterChange: (value: string) => void;
+    inputRef: React.RefObject<HTMLInputElement>;
+}) => (
+    <div className="flex items-center gap-3 mb-4">
+        <RefreshButton isRefetching={isRefetching} onRefresh={onRefresh} />
+        <Input
+            ref={inputRef}
+            type="search"
+            placeholder="Filter DAGs by id..."
+            value={filterText}
+            onChange={(e) => onFilterChange(e.target.value)}
+            disabled={isRefetching}
+            className="max-w-64"
+        />
+    </div>
 );
 
 
@@ -332,8 +359,6 @@ interface AdminEtlContentProps {
     total: number;
     page: number;
     onPageChange: (page: number) => void;
-    isRefetching: boolean;
-    onRefresh: () => void;
 }
 
 export const AdminEtlContent = ({
@@ -341,11 +366,8 @@ export const AdminEtlContent = ({
     total,
     page,
     onPageChange,
-    isRefetching,
-    onRefresh,
 }: AdminEtlContentProps) => (
     <>
-        <RefreshButton isRefetching={isRefetching} onRefresh={onRefresh} />
         <DagsTable dags={dags} />
         <DagsPagination total={total} page={page} onPageChange={onPageChange} />
     </>
