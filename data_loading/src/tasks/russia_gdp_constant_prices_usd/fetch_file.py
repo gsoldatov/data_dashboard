@@ -1,12 +1,12 @@
 import logging
 import tempfile
+from pathlib import Path
 from zipfile import ZipFile
 
 from airflow.sdk import task
 
 if __name__ == "__main__":
     import sys
-    from pathlib import Path
 
     PROJECT_ROOT = Path(__file__).parents[4]
     sys.path.insert(0, str(PROJECT_ROOT))
