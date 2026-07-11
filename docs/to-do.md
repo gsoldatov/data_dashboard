@@ -293,9 +293,16 @@
 
 - revisit styling; colors, fonts, etc;
 
-- admin page:   // add corresponding backend routes
-    - view ETL jobs statuses & logs;
-    ? run ETL jobs;
+- admin page:
+    - view DAGs status:
+        + table;
+        - pause / unpause DAGs;
+        - trigger manual DAG run;
+    - single DAG page:
+        - DAG run history;
+        - task runs history;
+        - task logs;
+        - trigger task run;
 
 - Russia Economy by Sectors:
     - Finance

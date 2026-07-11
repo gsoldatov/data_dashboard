@@ -8,6 +8,7 @@ import {
     visualizationDataHandler,
     upsertVisualizationSettingsHandler,
 } from "./default-handlers/visualizations";
+import { listDagsHandler } from "./default-handlers/airflow";
 
 
 /** Handler for a single API route. */
@@ -46,6 +47,7 @@ export class RouteDispatcher {
         "/api/visualization-data/": { GET: visualizationDataHandler },
         "/api/visualization-settings/": { GET: batchVisualizationSettingsHandler },
         "/api/visualization-settings/{slug}": { PUT: upsertVisualizationSettingsHandler },
+        "/api/airflow/dags": { GET: listDagsHandler },
     };
 
     /** Per-instance overrides (checked before defaults). */

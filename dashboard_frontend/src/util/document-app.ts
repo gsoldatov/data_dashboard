@@ -2,6 +2,8 @@
 export interface AppConfig {
     /** Base URL of the dashboard backend API. */
     backendUrl: string;
+    /** Base URL of the Airflow web UI, reachable from the browser. */
+    airflowUrl: string;
 }
 
 interface DocumentApp {

@@ -3,6 +3,7 @@ import type { AppConfig } from "./document-app";
 
 const envMappings: Array<[string, keyof AppConfig]> = [
     ["VITE_BACKEND_URL", "backendUrl"],
+    ["VITE_AIRFLOW_URL", "airflowUrl"],
 ];
 
 const config: Record<string, string> = {};
