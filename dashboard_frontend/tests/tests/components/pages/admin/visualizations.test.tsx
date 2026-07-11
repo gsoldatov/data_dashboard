@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { screen, waitFor, fireEvent } from "@testing-library/react";
+import { screen, within, waitFor, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../../test-utils";
 import { MockBackend } from "../../../../mocks/backend/mock-backend";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../../mocks/backend/route-handlers/overrides";
 import { preloadedAdminState } from "../../../../mocks/mock-data/store";
 import { AdminVisualizations } from "@/components/pages/admin/visualizations";
+import { VISUALIZATIONS } from "@/util/constants";
 
 
 const SETTINGS_URL = "/api/visualization-settings/";
@@ -55,13 +56,16 @@ describe("AdminVisualizations", () => {
             preloadedState: preloadedAdminState(),
         });
 
+        const title = "Russia Inflation";
+
         await waitFor(() => {
             expect(
                 screen.getByText("Russia State Budget"),
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getAllByRole("switch")[2];
+        const row = screen.getByText(title).closest("tr")!;
+        const switchEl = within(row).getByRole("switch");
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
         fireEvent.click(switchEl);
@@ -76,19 +80,23 @@ describe("AdminVisualizations", () => {
             preloadedState: preloadedAdminState(),
         });
 
+        const title = "Russia Inflation";
+        const slug = VISUALIZATIONS.find((v) => v.title === title)!.slug;
+
         await waitFor(() => {
             expect(
                 screen.getByText("Russia State Budget"),
             ).toBeInTheDocument();
         });
 
-        const switchEl = screen.getAllByRole("switch")[2];
+        const row = screen.getByText(title).closest("tr")!;
+        const switchEl = within(row).getByRole("switch");
         expect(switchEl).toHaveAttribute("data-state", "checked");
 
-        // Override the PUT to fail for russia_state_budget
+        // Override the PUT to fail for this visualization
         addNetworkErrorOverride(
             backend.dispatcher,
-            `${UPSERT_URL_PREFIX}russia_state_budget`,
+            `${UPSERT_URL_PREFIX}${slug}`,
             "PUT",
         );
 
