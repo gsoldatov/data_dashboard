@@ -15,6 +15,7 @@ from dashboard_backend.src.models.airflow import (
     AirflowDagRunCollectionResponse,
     AirflowDagRunResponse,
     DagStatus,
+    DagUpdate,
 )
 from dashboard_backend.src.util.exceptions import (
     AirflowUnavailableException,
@@ -31,6 +32,10 @@ class AirflowServiceProtocol(ABC):
     @abstractmethod
     async def get_dags(self, limit: int, offset: int) -> tuple[list[DagStatus], int]:
         """Return *(dags, total_entries)* for the given page."""
+
+    @abstractmethod
+    async def update_dag(self, dag_id: str, update: DagUpdate) -> None:
+        """Patch a DAG with the given *update* fields."""
 
     @abstractmethod
     async def close(self) -> None:
@@ -219,6 +224,14 @@ class AirflowService(AirflowServiceProtocol):
             )
 
         return results, total
+
+    async def update_dag(self, dag_id: str, update: DagUpdate) -> None:
+        mask = ",".join(sorted(update.model_fields_set))
+        await self._request(
+            "PATCH",
+            f"/api/v2/dags/{dag_id}?update_mask={mask}",
+            json=update.model_dump(exclude_unset=True),
+        )
 
 
 def get_airflow_service(request: Request) -> AirflowServiceProtocol:

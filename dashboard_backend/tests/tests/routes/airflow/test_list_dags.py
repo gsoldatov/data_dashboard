@@ -12,8 +12,8 @@ if __name__ == "__main__":
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from dashboard_backend.src.models.airflow import DagStatus
-from dashboard_backend.src.util.exceptions import AirflowUnavailableException
 from dashboard_backend.tests.mocks.airflow_service import MockAirflowService
+from dashboard_backend.tests.mocks.airflow_service.overrides import network_error
 
 # ── auth failures ─────────────────────────────────────────────────────────
 
@@ -41,10 +41,9 @@ async def test_list_dags_airflow_unavailable(
     test_client: AsyncClient,
     admin_session: dict[str, str],
     mock_airflow_service: MockAirflowService,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    mock_airflow_service.set_error(
-        AirflowUnavailableException("Connection refused")
-    )
+    monkeypatch.setattr(mock_airflow_service, "get_dags", network_error)
     test_client.cookies = admin_session
     response = await test_client.get("/api/airflow/dags")
     assert response.status_code == 503

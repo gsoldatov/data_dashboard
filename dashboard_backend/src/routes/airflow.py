@@ -2,9 +2,9 @@
 
 from typing import Any
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Query, Request, Response
 
-from dashboard_backend.src.models.airflow import DagStatus
+from dashboard_backend.src.models.airflow import DagStatus, DagUpdate
 from dashboard_backend.src.models.user import User
 from dashboard_backend.src.services.airflow import (
     AirflowServiceProtocol,
@@ -26,3 +26,15 @@ async def list_dags(
     """Return paginated DAGs with latest-run status."""
     dags, total = await airflow.get_dags(limit, offset)
     return {"dags": dags, "total": total, "limit": limit, "offset": offset}
+
+
+@router.patch("/dags/{dag_id}")
+async def update_dag(
+    dag_id: str,
+    update: DagUpdate,
+    _admin: User = Depends(admin_user),
+    airflow: AirflowServiceProtocol = Depends(get_airflow_service),
+) -> Response:
+    """Patch a DAG (e.g. pause / unpause)."""
+    await airflow.update_dag(dag_id, update)
+    return Response(status_code=204)

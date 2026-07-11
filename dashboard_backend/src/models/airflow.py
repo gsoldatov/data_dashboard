@@ -6,6 +6,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
+from dashboard_backend.src.models.common import AnyOf
+
 # ── Airflow API response models (internal, for parsing Airflow JSON) ──────
 
 
@@ -74,3 +76,9 @@ class DagStatus(BaseModel):
     next_dagrun: str | None
     last_run_state: str | None
     last_run_start_date: str | None
+
+
+class DagUpdate(AnyOf, BaseModel):
+    """Request body for ``PATCH /api/airflow/dags/{dag_id}``."""
+
+    is_paused: bool | None = None
