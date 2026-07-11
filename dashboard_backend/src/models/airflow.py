@@ -74,5 +74,3 @@ class DagStatus(BaseModel):
     next_dagrun: str | None
     last_run_state: str | None
     last_run_start_date: str | None
-    has_import_errors: bool
-    dashboard_url: str

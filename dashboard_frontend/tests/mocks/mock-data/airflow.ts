@@ -16,8 +16,6 @@ export function generateMockDags(count: number): DagStatus[] {
             next_dagrun: i % 4 === 0 ? null : "2026-07-11T00:00:00Z",
             last_run_state: SAMPLE_STATES[i % SAMPLE_STATES.length],
             last_run_start_date: i % 5 === 0 ? null : "2026-07-10T12:00:00Z",
-            has_import_errors: i === 1,
-            dashboard_url: `http://localhost:14001/dags/dag_${String(dagCounter).padStart(3, "0")}`,
         });
     }
     return dags;

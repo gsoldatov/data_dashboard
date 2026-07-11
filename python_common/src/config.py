@@ -15,6 +15,7 @@ class Config(BaseSettings):
     airflow_host: str
     airflow_port: int
     airflow_admin_username: str
+    backend_airflow_url: str
     airflow_admin_password: str
     airflow_jwt_secret: str
     airflow_logging_number_of_dag_runs_kept: int = Field(ge=1)

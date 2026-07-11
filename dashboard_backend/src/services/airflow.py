@@ -49,7 +49,7 @@ class AirflowService(AirflowServiceProtocol):
 
     @property
     def _base_url(self) -> str:
-        return f"http://{self._config.airflow_host}:{self._config.airflow_port}"
+        return self._config.backend_airflow_url
 
     @property
     def client(self) -> httpx.AsyncClient:
@@ -215,8 +215,6 @@ class AirflowService(AirflowServiceProtocol):
                         if latest_run and latest_run.start_date
                         else None
                     ),
-                    has_import_errors=dag.has_import_errors,
-                    dashboard_url=f"{self._base_url}/dags/{dag_id}",
                 )
             )
 

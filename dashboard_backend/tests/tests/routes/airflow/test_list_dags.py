@@ -79,8 +79,6 @@ async def test_list_dags_populated(
                 next_dagrun="2026-07-10T12:00:00",
                 last_run_state="success",
                 last_run_start_date="2026-07-10T11:55:00",
-                has_import_errors=False,
-                dashboard_url="http://localhost:8080/dags/test_dag",
             )
         ],
         total=1,

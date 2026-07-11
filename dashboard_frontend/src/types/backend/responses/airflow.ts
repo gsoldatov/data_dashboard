@@ -8,8 +8,6 @@ export const dagStatusSchema = z.object({
     next_dagrun: z.string().nullable(),
     last_run_state: z.string().nullable(),
     last_run_start_date: z.string().nullable(),
-    has_import_errors: z.boolean(),
-    dashboard_url: z.string(),
 });
 
 export type DagStatus = z.infer<typeof dagStatusSchema>;
