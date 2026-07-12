@@ -20,6 +20,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --radius: 0.5rem;
@@ -52,10 +53,11 @@
   --warning: #c2410c;
 
   /* ── Borders, inputs, controls ── */
-  --border: #e5e5e5;
+  --border: #d4d4d4;
   --input: #e5e5e5;
   --ring: #0a0a0a;
   --link: #2563eb;
+  --link-hover: #1d4ed8;
 
   /* ── Popover / overlay ── */
   --popover: #ffffff;
@@ -95,10 +97,11 @@
     --warning: #fbbf24;
 
     /* ── Borders, inputs, controls ── */
-    --border: #262626;
+    --border: #404040;
     --input: #262626;
     --ring: #d4d4d4;
     --link: #60a5fa;
+    --link-hover: #3b82f6;
 
     /* ── Popover / overlay ── */
     --popover: #171717;
@@ -117,6 +120,15 @@ body {
 }
 
 @layer base {
+  /* Links */
+  a {
+    color: var(--link);
+  }
+
+  a:hover {
+    color: var(--link-hover);
+  }
+
   /* default cursor for clickable items */
   button,
   a,

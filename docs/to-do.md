@@ -310,14 +310,16 @@
 
 - refactor styles:
     + colors;
-    - hover styles:
+    + hover styles:
         + cursor: pointer;
-        - hover colors;
+        + hover colors;
     - fonts & font sizes;
     - margins;
 
     - check pages & refactor:
-        - increase navbar size
+        - navbar:
+            - increase size;
+            - colors, hover colors (including logo);
         - index;
         - visualizations;
         - login;

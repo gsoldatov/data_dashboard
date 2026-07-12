@@ -31,7 +31,7 @@ const NavbarBrand = () => (
             // Layout
             "flex items-center gap-2",
             // Typography
-            "font-semibold text-lg",
+            "font-semibold text-lg text-muted-foreground",
         )}
     >
         <LayoutDashboard className="h-5 w-5" />

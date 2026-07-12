@@ -12,7 +12,7 @@ interface VisualizationLinkProps {
 export const VisualizationLink = ({ slug, title, icon: Icon }: VisualizationLinkProps) => (
     <Link
         to={`/visualizations/${slug}`}
-        className="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent transition-colors"
+        className="flex items-center gap-3 rounded-lg border-2 border-border p-4 text-foreground hover:bg-accent transition-colors"
     >
         <Icon className="size-5 shrink-0 text-muted-foreground" />
         <span className="font-medium">{title}</span>

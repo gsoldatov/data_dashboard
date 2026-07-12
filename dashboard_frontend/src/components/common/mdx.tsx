@@ -18,7 +18,7 @@ const MdxP: FC<ComponentPropsWithoutRef<"p">> = ({ className, ...props }) => (
 
 const MdxA: FC<ComponentPropsWithoutRef<"a">> = ({ className, ...props }) => (
     <a
-        className={`text-link underline underline-offset-4 decoration-link/50 hover:decoration-link${className ? ` ${className}` : ""}`}
+        className={`underline underline-offset-4 decoration-link/50 hover:decoration-link${className ? ` ${className}` : ""}`}
         {...props}
     />
 );
