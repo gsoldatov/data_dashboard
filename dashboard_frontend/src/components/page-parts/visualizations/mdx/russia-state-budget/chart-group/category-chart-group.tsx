@@ -13,6 +13,7 @@ import { AttributeSelections } from "@/components/common/visualizations/selector
 import { HierarchyBreadcrumb, HierarchySelections } from "@/components/common/visualizations/selectors/hierarchy";
 import { CategoryLineChart, CategoryShareStackedBarChart, CategoryTreemap, CategoryDiffTable } from "./charts";
 import { ChartsContainer } from "@/components/common/visualizations/charts/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 
 import type { RussiaStateBudgetItem } from "@/types/visualization-data/russia-state-budget";
 import type { HierarchyItem, BreadcrumbLevel } from "@/components/common/visualizations/selectors/hierarchy";
@@ -236,7 +237,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
     const section = rootPrefix === "1" ? "Income" : "Expenses";
 
     return (
-        <div className="space-y-4" data-testid={dataTestID}>
+        <div className={FLOW_SPACING} data-testid={dataTestID}>
             <div className="flex items-center gap-2">
                 <AttributeDropdown
                     allValues={allYears}

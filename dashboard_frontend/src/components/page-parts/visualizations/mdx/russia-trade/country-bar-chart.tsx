@@ -50,17 +50,17 @@ export const CountryBarChart = ({ label, datasetName, selectedYear }: CountryBar
 
     if (chartData.length === 0) {
         return (
-            <div>
+            <>
                 <ChartTitle>{label} by Country</ChartTitle>
                 <ChartPlaceholder height={CHART_HEIGHT} />
-            </div>
+            </>
         );
     }
 
     const chartHeight = Math.max(CHART_HEIGHT, chartData.length * BAR_HEIGHT);
 
     return (
-        <div>
+        <>
             <ChartTitle>{label} by Country</ChartTitle>
             <div
                 style={{
@@ -114,6 +114,6 @@ export const CountryBarChart = ({ label, datasetName, selectedYear }: CountryBar
                     </BarChart>
                 </ResponsiveContainer>
             </div>
-        </div>
+        </>
     );
 };

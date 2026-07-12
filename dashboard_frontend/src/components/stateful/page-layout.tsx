@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/stateful/navbar";
 import { cn } from "@/styles/utils";
+import { FLOW_SPACING } from "@/styles/constants";
 
 /**
  * App shell: renders the top navbar and a centered content area.
@@ -16,9 +17,9 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
                     // 100 % stacked, 80 % fullscreen, capped at 1536 (1920 * 0.8)px
                     "w-full lg:w-4/5 lg:max-w-[1536px]",
                     // Inner padding
-                    "px-4 py-8",
+                    "px-4",
                     // Separate direct children
-                    "[&>:not(:last-child)]:mb-4",
+                    FLOW_SPACING,
                 )}
             >
                 {children}

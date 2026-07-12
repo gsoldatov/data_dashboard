@@ -1,17 +1,12 @@
 import { useState, useMemo } from "react";
 import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
-import { ChartTitle } from "@/components/common/visualizations/charts/charts";
 import { TradeYearSelector } from "./trade-year-selector";
 import { CountryBarChart } from "./country-bar-chart";
 import { CategoryTreemap } from "./category-treemap";
 
 import type { TradeByCountryItem } from "@/types/visualization-data/russia-trade";
 
-interface TradeChartGroupProps {
-    dataTestID: string;
-}
-
-export const TradeChartGroup = ({ dataTestID }: TradeChartGroupProps) => {
+export const TradeChartGroup = () => {
     const { data: exportsByCountryData } = useGetVisualizationDatasetQuery(
         "russia_trade_exports_by_country",
     );
@@ -35,8 +30,8 @@ export const TradeChartGroup = ({ dataTestID }: TradeChartGroupProps) => {
     );
 
     return (
-        <div data-testid={dataTestID}>
-            <ChartTitle>Trade Analysis</ChartTitle>
+        <>
+            <h2 className="font-bold text-2xl">Trade Analysis</h2>
 
             <TradeYearSelector
                 allYears={allYears}
@@ -49,27 +44,21 @@ export const TradeChartGroup = ({ dataTestID }: TradeChartGroupProps) => {
                 datasetName="russia_trade_exports_by_country"
                 selectedYear={selectedYear}
             />
-            <div className="mt-6">
-                <CategoryTreemap
-                    label="Exports"
-                    datasetName="russia_trade_exports_by_category"
-                    selectedYear={selectedYear}
-                />
-            </div>
-            <div className="mt-6">
-                <CountryBarChart
-                    label="Imports"
-                    datasetName="russia_trade_imports_by_country"
-                    selectedYear={selectedYear}
-                />
-            </div>
-            <div className="mt-6">
-                <CategoryTreemap
-                    label="Imports"
-                    datasetName="russia_trade_imports_by_category"
-                    selectedYear={selectedYear}
-                />
-            </div>
-        </div>
+            <CategoryTreemap
+                label="Exports"
+                datasetName="russia_trade_exports_by_category"
+                selectedYear={selectedYear}
+            />
+            <CountryBarChart
+                label="Imports"
+                datasetName="russia_trade_imports_by_country"
+                selectedYear={selectedYear}
+            />
+            <CategoryTreemap
+                label="Imports"
+                datasetName="russia_trade_imports_by_category"
+                selectedYear={selectedYear}
+            />
+        </>
     );
 };

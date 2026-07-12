@@ -7,6 +7,7 @@ import {
     TableCell,
 } from "@/components/common/shadcn-ui/table";
 import { ChartPlaceholder, ChartTitle } from "@/components/common/visualizations/charts/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 import {
     CHART_HEIGHT,
     POSITIVE_COLOR,
@@ -41,7 +42,7 @@ export const CategoryDiffTable = ({
 }: CategoryDiffTableProps) => {
     if (displayedYears.length !== 1 || displayedCategories.length === 0) {
         return (
-            <div>
+            <div className={FLOW_SPACING}>
                 <ChartTitle>{title}</ChartTitle>
                 <ChartPlaceholder
                     height={CHART_HEIGHT}
@@ -77,7 +78,7 @@ export const CategoryDiffTable = ({
     const showChange = !isFirstYear && hasPrevData;
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <ChartTitle>{title}</ChartTitle>
             <div
                 className="overflow-y-auto border rounded-md"

@@ -1,6 +1,7 @@
 import { Treemap, Tooltip, ResponsiveContainer } from "recharts";
 
 import { ChartPlaceholder, ChartTitle, ChartTooltip } from "@/components/common/visualizations/charts/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 import {
     CHART_HEIGHT,
     CHART_COLORS,
@@ -38,7 +39,7 @@ export const CategoryTreemap = ({
 }: CategoryTreemapProps) => {
     if (displayedYears.length !== 1 || displayedCategories.length === 0) {
         return (
-            <div>
+            <div className={FLOW_SPACING}>
                 <ChartTitle>{title}</ChartTitle>
                 <ChartPlaceholder
                     height={CHART_HEIGHT}
@@ -68,7 +69,7 @@ export const CategoryTreemap = ({
     });
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <ChartTitle>{title}</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <Treemap

@@ -9,6 +9,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { ChartPlaceholder, ChartTitle, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -82,7 +83,7 @@ export const CategoryShareStackedBarChart = ({
     });
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <ChartTitle>{title}</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={STACKED_CHART_MARGINS}>

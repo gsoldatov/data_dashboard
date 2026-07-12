@@ -34,7 +34,7 @@ export const AverageSalaryBarChart = () => {
     }
 
     return (
-        <div className="mb-4">
+        <>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
@@ -52,6 +52,6 @@ export const AverageSalaryBarChart = () => {
                     <Bar dataKey="value" fill={CHART_COLORS[0]} />
                 </BarChart>
             </ResponsiveContainer>
-        </div>
+        </>
     );
 };

@@ -314,7 +314,7 @@
         + cursor: pointer;
         + hover colors;
     + fonts & font sizes;
-    - margins;
+    + margins;
 
     - check pages & refactor:
         - navbar:

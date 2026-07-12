@@ -8,6 +8,7 @@ import {
     HeaderCell,
     ValueCell,
 } from "@/components/common/visualizations/indicator-table";
+import { FLOW_SPACING } from "@/styles/constants";
 
 import type { RussiaGdpItem } from "@/types/visualization-data/russia-gdp";
 import type { RussiaCpiItem } from "@/types/visualization-data/russia-inflation";
@@ -312,7 +313,7 @@ export const EconomyDashboard = () => {
     // ── Rendering ──────────────────────────────────────────────────────
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <div className="mb-6">
                 <SingleValueSelector
                     title="Year"
@@ -323,7 +324,7 @@ export const EconomyDashboard = () => {
             </div>
 
             {/* GDP */}
-            <h2 className="font-bold text-xl mb-2 mt-6">GDP</h2>
+            <h2 className="font-bold text-xl mt-6">GDP</h2>
             <IndicatorTable data-testid="gdp-table">
                 <IndicatorHeaderRow>
                     <HeaderCell>GDP (RUB bln)</HeaderCell>
@@ -364,7 +365,7 @@ export const EconomyDashboard = () => {
             </IndicatorTable>
 
             {/* Inflation & Unemployment */}
-            <h2 className="font-bold text-xl mb-2 mt-6">
+            <h2 className="font-bold text-xl mt-6">
                 Inflation &amp; Unemployment
             </h2>
             <IndicatorTable data-testid="inflation-table">
@@ -423,7 +424,7 @@ export const EconomyDashboard = () => {
             </IndicatorTable>
 
             {/* Trade */}
-            <h2 className="font-bold text-xl mb-2 mt-6">Trade</h2>
+            <h2 className="font-bold text-xl mt-6">Trade</h2>
             <IndicatorTable data-testid="trade-table">
                 <IndicatorHeaderRow>
                     <HeaderCell>Exports</HeaderCell>
@@ -464,7 +465,7 @@ export const EconomyDashboard = () => {
             </IndicatorTable>
 
             {/* Budget */}
-            <h2 className="font-bold text-xl mb-2 mt-6">Budget</h2>
+            <h2 className="font-bold text-xl mt-6">Budget</h2>
             <IndicatorTable data-testid="budget-table">
                 <IndicatorHeaderRow>
                     <HeaderCell>Income</HeaderCell>

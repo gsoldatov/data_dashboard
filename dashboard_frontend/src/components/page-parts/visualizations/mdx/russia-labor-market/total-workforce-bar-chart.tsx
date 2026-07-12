@@ -39,7 +39,7 @@ export const TotalWorkforceBarChart = () => {
     }
 
     return (
-        <div>
+        <>
             <ChartTitle>Total Workforce, thousands</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
@@ -57,6 +57,6 @@ export const TotalWorkforceBarChart = () => {
                     />
                 </BarChart>
             </ResponsiveContainer>
-        </div>
+        </>
     );
 };

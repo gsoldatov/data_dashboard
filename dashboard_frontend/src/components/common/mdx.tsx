@@ -5,15 +5,15 @@ const MdxH1: FC<ComponentPropsWithoutRef<"h1">> = ({ className, ...props }) => (
 );
 
 const MdxH2: FC<ComponentPropsWithoutRef<"h2">> = ({ className, ...props }) => (
-    <h2 className={`font-bold text-2xl mb-4${className ? ` ${className}` : ""}`} {...props} />
+    <h2 className={`font-bold text-2xl${className ? ` ${className}` : ""}`} {...props} />
 );
 
 const MdxH3: FC<ComponentPropsWithoutRef<"h3">> = ({ className, ...props }) => (
-    <h3 className={`font-bold text-xl mb-2${className ? ` ${className}` : ""}`} {...props} />
+    <h3 className={`font-bold text-xl${className ? ` ${className}` : ""}`} {...props} />
 );
 
 const MdxP: FC<ComponentPropsWithoutRef<"p">> = ({ className, ...props }) => (
-    <p className={`text-base mb-4${className ? ` ${className}` : ""}`} {...props} />
+    <p className={`text-base${className ? ` ${className}` : ""}`} {...props} />
 );
 
 const MdxA: FC<ComponentPropsWithoutRef<"a">> = ({ className, ...props }) => (

@@ -161,6 +161,8 @@ export const Navbar = () => {
                 "border-b",
                 // Background
                 "bg-background",
+                // Separate from content below
+                "mb-4",
             )}
         >
             <div

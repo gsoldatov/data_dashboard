@@ -10,7 +10,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from "recharts";
-import { ChartPlaceholder, ChartTitle, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
+import { ChartPlaceholder, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -64,8 +64,8 @@ export const TradeLineChart = () => {
     }
 
     return (
-        <div>
-            <ChartTitle>Total Exports &amp; Imports by Year</ChartTitle>
+        <>
+            <h2 className="font-bold text-2xl">Total Exports &amp; Imports by Year</h2>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid
@@ -103,6 +103,6 @@ export const TradeLineChart = () => {
                     />
                 </LineChart>
             </ResponsiveContainer>
-        </div>
+        </>
     );
 };

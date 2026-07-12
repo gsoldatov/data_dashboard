@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/common/shadcn-ui/badge";
 import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { SalaryBySectorLineChart } from "./salary-by-sector-line-chart";
+import { FLOW_SPACING } from "@/styles/constants";
 
 import type { RussiaLaborMarketSectorSalaryItem } from "@/types/visualization-data/russia-labor-market";
 
@@ -50,7 +51,7 @@ export const SectorChartGroup = () => {
     }, []);
 
     return (
-        <div className="space-y-4">
+        <div className={FLOW_SPACING}>
             <div className="flex items-center gap-2">
                 <DropdownMenu>
                     <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">

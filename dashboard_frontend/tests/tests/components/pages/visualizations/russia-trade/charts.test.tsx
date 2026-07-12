@@ -48,8 +48,7 @@ describe("Russia Trade charts", () => {
                 ).toBeInTheDocument();
             });
 
-            const group = screen.getByTestId("trade-chart-group");
-            const trigger = within(group).getByRole("combobox");
+            const trigger = screen.getByRole("combobox", { name: "Year" });
             expect(trigger).toHaveTextContent("2024");
         });
 
@@ -94,10 +93,9 @@ describe("Russia Trade charts", () => {
                 ).toBeInTheDocument();
             });
 
-            const group = within(
-                screen.getByTestId("trade-chart-group"),
-            );
-            const rects = group.getAllByText("Fuels");
+            const header = screen.getByText("Exports by Category");
+            const container = header.nextElementSibling as HTMLElement;
+            const rects = within(container).getAllByText("Fuels");
             expect(rects.length).toBeGreaterThanOrEqual(1);
         });
 
@@ -112,10 +110,11 @@ describe("Russia Trade charts", () => {
                 ).toBeInTheDocument();
             });
 
-            const group = within(
-                screen.getByTestId("trade-chart-group"),
+            const header = screen.getByText("Imports by Category");
+            const container = header.nextElementSibling as HTMLElement;
+            const rects = within(container).getAllByText(
+                "Machines and Electronics",
             );
-            const rects = group.getAllByText("Machines and Electronics");
             expect(rects.length).toBeGreaterThanOrEqual(1);
         });
     });

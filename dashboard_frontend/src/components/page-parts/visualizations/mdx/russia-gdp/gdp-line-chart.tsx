@@ -50,7 +50,7 @@ export const GdpLineChart = ({
     }
 
     return (
-        <div className="mb-4">
+        <>
             <ChartTitle>{title}</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
@@ -69,6 +69,6 @@ export const GdpLineChart = ({
                     />
                 </LineChart>
             </ResponsiveContainer>
-        </div>
+        </>
     );
 };

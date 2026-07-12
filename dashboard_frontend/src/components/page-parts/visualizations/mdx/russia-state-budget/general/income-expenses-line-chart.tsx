@@ -10,6 +10,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { ChartPlaceholder, ChartTitle, axisTooltipContent } from "@/components/common/visualizations/charts/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 import {
     CHART_HEIGHT,
     CHART_MARGINS,
@@ -43,7 +44,7 @@ export const IncomeExpensesLineChart = () => {
     }
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <ChartTitle>Income &amp; Expenses</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>

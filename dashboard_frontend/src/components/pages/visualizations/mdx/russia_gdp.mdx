@@ -1,6 +1,7 @@
 import { GdpLineChart } from "@/components/page-parts/visualizations/mdx/russia-gdp/gdp-line-chart";
 import { RussiaEconomyNavigation } from "@/components/page-parts/visualizations/mdx/russia-economy/navigation";
 import { CHART_COLORS } from "@/styles/charts";
+import { FLOW_SPACING } from "@/styles/constants";
 
 
 export const DATASETS = [
@@ -19,7 +20,7 @@ Data sources:
 - [Worldbank](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD?end=2024&locations=RU&start=1988&view=chart), GDP in constant prices (USD);
 - [Worldbank](https://data.worldbank.org/indicator/NY.GDP.MKTP.PP.KD?end=2024&locations=RU&start=1988&view=chart), GDP PPP in constant prices (USD).
 
-<div data-testid="gdp-chart-group">
+<div data-testid="gdp-chart-group" className={FLOW_SPACING}>
     <GdpLineChart
         datasetName="russia_gdp_constant_prices_rub"
         title="GDP, Constant Prices, Bln RUB"

@@ -44,15 +44,15 @@ export const CategoryTreemap = ({ label, datasetName, selectedYear }: CategoryTr
 
     if (treemapData.length === 0) {
         return (
-            <div>
+            <>
                 <ChartTitle>{label} by Category</ChartTitle>
                 <ChartPlaceholder height={CHART_HEIGHT} />
-            </div>
+            </>
         );
     }
 
     return (
-        <div>
+        <>
             <ChartTitle>{label} by Category</ChartTitle>
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <Treemap
@@ -76,7 +76,7 @@ export const CategoryTreemap = ({ label, datasetName, selectedYear }: CategoryTr
                     />
                 </Treemap>
             </ResponsiveContainer>
-        </div>
+        </>
     );
 };
 

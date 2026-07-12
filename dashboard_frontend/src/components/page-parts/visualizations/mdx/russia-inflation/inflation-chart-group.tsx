@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { SingleValueSelector } from "@/components/common/visualizations/selectors/single-value-selector";
 import { CumulativeInflationBarChart } from "./cumulative-inflation-bar-chart";
+import { FLOW_SPACING } from "@/styles/constants";
 
 import type { RussiaCpiItem } from "@/types/visualization-data/russia-inflation";
 
@@ -47,7 +48,7 @@ export const InflationChartGroup = () => {
     const validEndValues = allPeriods.filter((p) => p >= startPeriod);
 
     return (
-        <div>
+        <div className={FLOW_SPACING}>
             <div className="flex flex-col lg:flex-row gap-2 mb-4">
                 <SingleValueSelector
                     title="Start period"
