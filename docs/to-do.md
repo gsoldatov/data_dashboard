@@ -308,18 +308,23 @@
     - explore, which margin / padding rules are currently in place and generalize them, if possible
     - add default rules (cursor: pointer for buttons and links, hover text colors for inputs and links, hover background text colors)
 
-- refactor styles:
+- add/refactor default styles:
     + colors;
     + hover styles:
         + cursor: pointer;
         + hover colors;
-    - fonts & font sizes;
+    + fonts & font sizes;
     - margins;
 
     - check pages & refactor:
         - navbar:
             - increase size;
-            - colors, hover colors (including logo);
+            - colors, hover colors (including brand);
+        ? merge MDX markdown components & tailwind styles:
+            - headers
+            - links
+            ???
+
         - index;
         - visualizations;
         - login;

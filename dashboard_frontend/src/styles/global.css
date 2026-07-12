@@ -97,7 +97,7 @@
     --warning: #fbbf24;
 
     /* ── Borders, inputs, controls ── */
-    --border: #404040;
+    --border: #525252;
     --input: #262626;
     --ring: #d4d4d4;
     --link: #60a5fa;
@@ -135,4 +135,26 @@ body {
   [role="button"] {
     cursor: pointer;
   }
+}
+
+
+
+/* Default input styles */
+input:hover,
+input:hover::placeholder {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Override browser autofill styling in both themes */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--background) inset;
+  -webkit-text-fill-color: var(--foreground);
+}
+
+input:autofill {
+  background-color: var(--background);
+  color: var(--foreground);
 }
