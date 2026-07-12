@@ -205,28 +205,17 @@ export const EconomyDashboard = () => {
         [cpi, prevYear],
     );
 
-    const krLast = useMemo(
-        () =>
-            lastMonth(
-                keyRate.filter(
-                    (d) =>
-                        yearFromMonth(d.year_month) === year &&
-                        d.key_rate != null,
-                ),
-            ),
-        [keyRate, year],
-    );
-    const krPrevMonth = useMemo(
-        () =>
-            lastMonth(
-                keyRate.filter(
-                    (d) =>
-                        yearFromMonth(d.year_month) === prevYear &&
-                        d.key_rate != null,
-                ),
-            ),
-        [keyRate, prevYear],
-    );
+    const krPrevVal = useMemo(() => {
+        const sorted = [...keyRate]
+            .filter((d) => d.key_rate != null)
+            .sort((a, b) => a.year_month.localeCompare(b.year_month));
+        for (let i = sorted.length - 1; i >= 0; i--) {
+            if (yearFromMonth(sorted[i].year_month) <= prevYear) {
+                return sorted[i].key_rate;
+            }
+        }
+        return undefined;
+    }, [keyRate, prevYear]);
 
     const wfLast = useMemo(
         () =>
@@ -275,9 +264,19 @@ export const EconomyDashboard = () => {
             ? inflationCurr - inflationPrev
             : undefined;
 
-    // Key rate
-    const krCurr = keyRate.find((d) => d.year_month === krLast)?.key_rate;
-    const krPrevVal = keyRate.find((d) => d.year_month === krPrevMonth)?.key_rate;
+    // Key rate — if no entry exists for the selected year (rate was constant),
+    // fall back to the most recent value at or before the selected year.
+    const krCurr = useMemo(() => {
+        const sorted = [...keyRate]
+            .filter((d) => d.key_rate != null)
+            .sort((a, b) => a.year_month.localeCompare(b.year_month));
+        for (let i = sorted.length - 1; i >= 0; i--) {
+            if (yearFromMonth(sorted[i].year_month) <= year) {
+                return sorted[i].key_rate;
+            }
+        }
+        return undefined;
+    }, [keyRate, year]);
     const krDiff =
         krCurr != null && krPrevVal != null ? yoyAbs(krCurr, krPrevVal) : undefined;
 
