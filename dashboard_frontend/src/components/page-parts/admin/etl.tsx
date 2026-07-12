@@ -36,11 +36,11 @@ const formatTimestamp = (iso: string | null): string => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000;
+const STALE_THRESHOLD_MS = 14 * 24 * 60 * 60 * 1000;
 
 const isStale = (iso: string | null): boolean => {
     if (!iso) return false;
-    return Date.now() - new Date(iso).getTime() > TWO_WEEKS_MS;
+    return Date.now() - new Date(iso).getTime() > STALE_THRESHOLD_MS;
 };
 
 
@@ -132,7 +132,7 @@ const statusBadge = (state: string | null) => {
         return (
             <Badge
                 variant="secondary"
-                className="bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-100 dark:border-yellow-800"
+                className="bg-warning/15 text-warning border-warning/30"
             >
                 N/A
             </Badge>
@@ -145,7 +145,7 @@ const statusBadge = (state: string | null) => {
             return (
                 <Badge
                     variant="secondary"
-                    className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-100 dark:border-green-800"
+                    className="bg-success/15 text-success border-success/30"
                 >
                     {state}
                 </Badge>
@@ -229,7 +229,7 @@ const DagsTable = ({ dags }: { dags: DagStatus[] }) => {
                         </TableCell>
                         <TableCell className={CELL}>
                             <span className={MOBILE_LABEL}>Last Run Start</span>
-                            <span className={cn(isStale(dag.last_run_start_date) && "text-orange-600 dark:text-orange-400")}>
+                            <span className={cn(isStale(dag.last_run_start_date) && "text-warning")}>
                                 {formatTimestamp(dag.last_run_start_date)}
                             </span>
                         </TableCell>

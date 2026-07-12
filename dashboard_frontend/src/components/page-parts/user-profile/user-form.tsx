@@ -77,7 +77,7 @@ export const UserForm = () => {
                 className="flex flex-col gap-4"
             >
                 {isSuccess ? (
-                    <p className="text-sm text-green-600">
+                    <p className="text-sm text-success">
                         Profile updated.
                     </p>
                 ) : null}

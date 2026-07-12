@@ -402,7 +402,7 @@ describe("AdminEtl", () => {
         });
     });
 
-    it("highlights last run start in orange when more than 2 weeks old", async () => {
+    it("highlights last run start in warning color when more than 2 weeks old", async () => {
         vi.setSystemTime(new Date("2026-07-11T12:00:00Z"));
 
         const staleDate = "2026-06-20T00:00:00Z"; // 21 days ago
@@ -454,11 +454,11 @@ describe("AdminEtl", () => {
 
         const staleRow = screen.getByText("dag_stale").closest("tr");
         expect(staleRow).not.toBeNull();
-        expect(staleRow!.querySelector(".text-orange-600")).toBeInTheDocument();
+        expect(staleRow!.querySelector(".text-warning")).toBeInTheDocument();
 
         const freshRow = screen.getByText("dag_fresh").closest("tr");
         expect(freshRow).not.toBeNull();
-        expect(freshRow!.querySelector(".text-orange-600")).toBeNull();
+        expect(freshRow!.querySelector(".text-warning")).toBeNull();
 
         vi.useRealTimers();
     });

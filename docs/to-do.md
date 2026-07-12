@@ -299,13 +299,28 @@
         x trigger manual DAG run;
 
 - revisit styling; colors, fonts, etc;
-  - move all colors and common rules (fonts, sizes, etc.) into globals.css
-  - merge similar rules
-  ? add new rules
+    - define all colors (except chart constants) in globals.css, rather than in components
+    - merge color variables with similar of exact values and purpose (specifically, we want to reduce number of background and text color variables, hover 
+    colors, border colors)
+    - define font families in globals.css (suggest one or several fonts, that are suitable for a visualization dashboard)
+    - define font default sizes (normal, small, etc.) in globals.css
+    - define default margin / padding rules in globals.css
+    - explore, which margin / padding rules are currently in place and generalize them, if possible
+    - add default rules (cursor: pointer for buttons and links, hover text colors for inputs and links, hover background text colors)
 
-  ? refactor styles:
-    - increase navbar size
-    ???
+- refactor styles:
+    + colors;
+    - fonts & font sizes;
+    - margins;
+
+    - check pages & refactor:
+        - increase navbar size
+        - index;
+        - visualizations;
+        - login;
+        - user;
+        - admin etl;
+        - admin visualizations;
 
 - Russia Economy by Sectors:
     - Finance
