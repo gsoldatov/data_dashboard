@@ -310,6 +310,9 @@
 
 - refactor styles:
     + colors;
+    - hover styles:
+        + cursor: pointer;
+        - hover colors;
     - fonts & font sizes;
     - margins;
 

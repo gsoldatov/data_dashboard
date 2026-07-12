@@ -280,7 +280,7 @@ const DagsPagination = ({ total, page, onPageChange }: DagsPaginationProps) => {
                 </PaginationItem>
                 <PaginationItem>
                     <PaginationPrevious
-                        className={page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        className={page <= 1 ? "pointer-events-none opacity-50" : ""}
                         onClick={() => onPageChange(page - 1)}
                     />
                 </PaginationItem>
@@ -292,7 +292,6 @@ const DagsPagination = ({ total, page, onPageChange }: DagsPaginationProps) => {
                         <PaginationLink
                             isActive={p === page}
                             onClick={() => onPageChange(p)}
-                            className="cursor-pointer"
                         >
                             {p}
                         </PaginationLink>
@@ -300,7 +299,7 @@ const DagsPagination = ({ total, page, onPageChange }: DagsPaginationProps) => {
                 ))}
                 <PaginationItem>
                     <PaginationNext
-                        className={page >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        className={page >= totalPages ? "pointer-events-none opacity-50" : ""}
                         onClick={() => onPageChange(page + 1)}
                     />
                 </PaginationItem>
@@ -329,7 +328,7 @@ const PaginationFirst = ({
         aria-label="Go to first page"
         size="default"
         className={cn(
-            "gap-1 pl-2.5 cursor-pointer",
+            "gap-1 pl-2.5",
             disabled && "pointer-events-none opacity-50",
         )}
         onClick={disabled ? undefined : onClick}
@@ -350,7 +349,7 @@ const PaginationLast = ({
         aria-label="Go to last page"
         size="default"
         className={cn(
-            "gap-1 pr-2.5 cursor-pointer",
+            "gap-1 pr-2.5",
             disabled && "pointer-events-none opacity-50",
         )}
         onClick={disabled ? undefined : onClick}

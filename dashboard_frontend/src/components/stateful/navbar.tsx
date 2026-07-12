@@ -100,7 +100,7 @@ const NavbarSecondaryMenuLoggedIn = () => {
                     // Typography
                     "text-sm text-muted-foreground",
                     // Interaction
-                    "hover:text-destructive transition-colors cursor-pointer",
+                    "hover:text-destructive transition-colors",
                 )}
                 title={
                     isLoading
@@ -188,8 +188,6 @@ export const Navbar = () => {
                         className={cn(
                             // Visibility
                             "md:hidden",
-                            // Interaction
-                            "cursor-pointer",
                         )}
                         onClick={() => setExpanded(!expanded)}
                         aria-label="Toggle navigation"

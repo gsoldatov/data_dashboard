@@ -41,7 +41,7 @@ export const VisualizationPageNavigationItem = ({
     return (
         <Link
             to={link}
-            className="text-link underline cursor-pointer truncate"
+            className="text-link underline truncate"
         >
             {linkText}
         </Link>

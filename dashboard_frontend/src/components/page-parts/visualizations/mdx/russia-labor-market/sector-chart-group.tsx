@@ -53,7 +53,7 @@ export const SectorChartGroup = () => {
         <div className="space-y-4">
             <div className="flex items-center gap-2">
                 <DropdownMenu>
-                    <DropdownMenuTrigger className="cursor-pointer inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
+                    <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
                         Select sectors
                     </DropdownMenuTrigger>
                     <DropdownMenuContent side="bottom" align="start" className="max-h-56">
@@ -74,7 +74,7 @@ export const SectorChartGroup = () => {
                         <button
                             type="button"
                             onClick={clearSectors}
-                            className="cursor-pointer text-muted-foreground hover:text-foreground"
+                            className="text-muted-foreground hover:text-foreground"
                             aria-label="Clear all sectors"
                         >
                             <Eraser className="h-4 w-4" />
