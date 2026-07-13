@@ -87,22 +87,22 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* ── Base surface & text ── */
-    --background: #0a0a0a;
+    --background: #2e2f36;
     --foreground: #fafafa;
 
-    /* ── Primary ── */
-    --primary: #fafafa;
-    --primary-foreground: #171717;
-    --primary-hover: #3b82f6;
-    --primary-hover-foreground: #171717;
+    /* ── Primary (light-theme symmetry) ── */
+    --primary: #2563eb;
+    --primary-foreground: #fbfbfb;
+    --primary-hover: #2d5ad5;
+    --primary-hover-foreground: #fbfbfb;
 
     /* ── Secondary / muted / accent surfaces ── */
-    --secondary: #262626;
+    --secondary: #3a3b44;
     --secondary-foreground: #fafafa;
-    --muted: #262626;
+    --muted: #3a3b44;
     --muted-foreground: #a3a3a3;
-    --accent: #262626;
-    --accent-foreground: #fafafa;
+    --accent: #f97316;
+    --accent-foreground: #fbfbfb;
 
     /* ── Semantic: destructive ── */
     --destructive: #ef4444;
@@ -119,19 +119,19 @@
     --error-foreground: #fbfbfb;
 
     /* ── Borders, inputs, controls ── */
-    --border: #525252;
-    --input: #262626;
+    --border: #43444d;
+    --input: #43444d;
     --ring: #d4d4d4;
     --link: #60a5fa;
     --link-hover: #3b82f6;
 
     /* ── Popover / overlay ── */
-    --popover: #171717;
+    --popover: #383940;
     --popover-foreground: #fafafa;
 
     /* ── Chart-specific ── */
-    --chart-grid: #737373;
-    --chart-brush-fill: #0a0a0a;
+    --chart-grid: #6a6b74;
+    --chart-brush-fill: #2e2f36;
     --chart-brush-stroke: #2563eb;
     --chart-hover: #f97316;
   }
