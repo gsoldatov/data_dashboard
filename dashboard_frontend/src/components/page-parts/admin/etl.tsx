@@ -87,7 +87,6 @@ export const RefreshButton = ({
     onRefresh: () => void;
 }) => (
     <Button
-        variant="outline"
         onClick={onRefresh}
         disabled={isRefetching}
     >

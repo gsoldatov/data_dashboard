@@ -9,7 +9,7 @@ export const UserInfo = () => {
     const { data: currentUser } = useGetCurrentUserQuery();
 
     return (
-        <Card className="mb-6">
+        <Card className="mb-6 shadow-none border-border">
             <CardContent className="pt-6 text-sm">
                 <p>
                     <span className="text-muted-foreground">Role: </span>
