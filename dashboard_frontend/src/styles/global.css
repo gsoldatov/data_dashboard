@@ -148,13 +148,6 @@ body {
   }
 }
 
-/* Default input styles */
-input:hover,
-input:hover::placeholder {
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
 /* Override browser autofill styling in both themes */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
