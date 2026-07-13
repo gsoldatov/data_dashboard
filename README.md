@@ -1,9 +1,19 @@
 # Data Dashboard
 A set of packages for fetching, processing, and visualizing data from various sources.
 
-<div align="center">
-    <img src="./docs/screenshot.png" alt="Dashboard screenshot" width="400" height="300">
-</div>
+<details>
+    <summary>Screenshots</summary>
+    <br>
+    <p align="center">
+        <img src="./docs/screenshot_01.png" alt="Dashboard screenshot 01" width="400" height="300">
+        <br>
+        <img src="./docs/screenshot_02.png" alt="Dashboard screenshot 02" width="400" height="300">
+        <br>
+        <img src="./docs/screenshot_03.png" alt="Dashboard screenshot 03" width="400" height="300">
+        <br>
+        <img src="./docs/screenshot_04.png" alt="Dashboard screenshot 04" width="400" height="300">
+    </div>
+</details>
 
 
 ## Subprojects
