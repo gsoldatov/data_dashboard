@@ -238,7 +238,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
 
     return (
         <div className={FLOW_SPACING} data-testid={dataTestID}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-2">
                 <AttributeDropdown
                     allValues={allYears}
                     selectedValues={selectedYears}
@@ -253,7 +253,7 @@ export const CategoryChartGroup = ({ rootPrefix, dataTestID }: CategoryChartGrou
                 />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-2">
                 <span className="text-sm font-medium">Select categories</span>
                 <HierarchyBreadcrumb
                     levels={breadcrumbLevels}

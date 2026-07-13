@@ -46,7 +46,7 @@ export const SectorChartGroup = () => {
 
     return (
         <div className={FLOW_SPACING}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-2">
                 <AttributeDropdown
                     allValues={allSectors}
                     selectedValues={selectedSectors}

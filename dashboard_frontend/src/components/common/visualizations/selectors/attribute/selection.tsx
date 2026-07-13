@@ -22,12 +22,12 @@ export const AttributeSelections = <T extends string | number = number>({
             <button
                 type="button"
                 onClick={onClear}
-                className="text-foreground hover:text-accent"
+                className="text-foreground hover:text-accent mt-1.5"
                 aria-label="Clear all values"
             >
                 <Eraser className="h-4 w-4" />
             </button>
-            <div className="flex flex-wrap gap-1.5" data-testid="attribute-badges">
+            <div className="flex flex-wrap gap-1.5 mt-1" data-testid="attribute-badges">
                 {displayedValues.map((value) => (
                     <Badge
                         key={value}
