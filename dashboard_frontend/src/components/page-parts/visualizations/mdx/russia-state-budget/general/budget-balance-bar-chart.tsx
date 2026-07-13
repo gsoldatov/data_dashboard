@@ -60,7 +60,7 @@ export const BudgetBalanceBarChart = () => {
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} cursor={{ fill: 'var(--chart-hover)', fillOpacity: 0.35 }} />
                     <Legend />
                     <Bar
                         dataKey="balance"

@@ -110,6 +110,7 @@ export const CategoryShareStackedBarChart = ({
                         content={axisTooltipContent("year", "Year")}
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         formatter={makeCustomFormatter(absoluteByYear, displayedCategories) as any}
+                        cursor={{ fill: 'var(--chart-hover)', fillOpacity: 0.35 }}
                     />
                     <Legend
                         height={50}

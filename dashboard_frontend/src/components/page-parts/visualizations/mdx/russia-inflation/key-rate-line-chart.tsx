@@ -62,6 +62,7 @@ export const KeyRateLineChart = () => {
                     <Tooltip
                         content={axisTooltipContent("year_month", "Month")}
                         formatter={(v: number) => `${v}%`}
+                        cursor={{ stroke: 'var(--chart-hover)' }}
                     />
                     <Line
                         type="monotone"

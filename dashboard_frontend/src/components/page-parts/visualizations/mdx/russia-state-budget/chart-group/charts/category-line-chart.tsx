@@ -70,7 +70,7 @@ export const CategoryLineChart = ({
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "bln RUB")} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Legend
                         height={50}
                         wrapperStyle={{

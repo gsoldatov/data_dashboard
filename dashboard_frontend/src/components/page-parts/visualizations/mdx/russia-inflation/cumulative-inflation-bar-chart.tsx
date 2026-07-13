@@ -94,11 +94,13 @@ export const CumulativeInflationBarChart = ({
                         formatter={(v: number) =>
                             `${v.toFixed(2)}%`
                         }
+                        cursor={false}
                     />
                     <Bar
                         dataKey="cumulative_inflation"
                         fill={CHART_COLORS[0]}
                         name="Cumulative inflation"
+                        activeBar={{ fill: 'var(--chart-hover)' }}
                     />
                     {showBrush && (
                         <Brush

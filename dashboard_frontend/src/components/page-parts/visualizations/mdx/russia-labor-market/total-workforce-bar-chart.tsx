@@ -46,8 +46,8 @@ export const TotalWorkforceBarChart = () => {
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
                     <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
                     <YAxis domain={["auto", "auto"]} tickFormatter={numericTickFormatter} />
-                    <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => formatValue(v, "thousands")} />
-                    <Bar dataKey="workforce" fill={CHART_COLORS[0]} />
+                    <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => formatValue(v, "thousands")} cursor={false} />
+                    <Bar dataKey="workforce" fill={CHART_COLORS[0]} activeBar={{ fill: 'var(--chart-hover)' }} />
                     <Brush
                         dataKey="year_month"
                         startIndex={Math.max(0, chartData.length - BRUSH_VISIBLE)}

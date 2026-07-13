@@ -60,7 +60,7 @@ export const GdpLineChart = ({
                         domain={["auto", "auto"]}
                         tickFormatter={(value: number) => value.toLocaleString()}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, unit)} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, unit)} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Line
                         type="monotone"
                         dataKey="value"

@@ -85,6 +85,7 @@ export const TradeLineChart = () => {
                     <Tooltip
                         content={axisTooltipContent("year", "Year")}
                         formatter={(v: number) => formatValue(v, "bln USD")}
+                        cursor={{ stroke: 'var(--chart-hover)' }}
                     />
                     <Legend />
                     <Line

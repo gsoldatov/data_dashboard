@@ -65,7 +65,7 @@ export const SalaryBySectorLineChart = ({
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "RUB")} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "RUB")} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Legend wrapperStyle={{ maxHeight: "2.8em", overflowY: "auto" }} />
                     {displayedSectors.map((sector, i) => (
                         <Line

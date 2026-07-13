@@ -79,6 +79,7 @@
   --chart-grid: #525252;
   --chart-brush-fill: #fbfbfb;
   --chart-brush-stroke: #2563eb;
+  --chart-hover: #f97316;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -129,6 +130,7 @@
     --chart-grid: #737373;
     --chart-brush-fill: #0a0a0a;
     --chart-brush-stroke: #2563eb;
+    --chart-hover: #f97316;
   }
 }
 

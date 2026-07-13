@@ -98,6 +98,7 @@ export const CountryBarChart = ({ label, datasetName, selectedYear }: CountryBar
                                     "USD",
                                 )
                             }
+                            cursor={{ fill: 'var(--chart-hover)', fillOpacity: 0.35 }}
                         />
                         <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                             {chartData.map((_, i) => (

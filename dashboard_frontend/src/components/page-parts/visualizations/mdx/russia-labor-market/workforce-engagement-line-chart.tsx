@@ -51,7 +51,7 @@ export const WorkforceEngagementLineChart = () => {
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
                     <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
                     <YAxis domain={["auto", "auto"]} />
-                    <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => `${v.toFixed(1)}%`} />
+                    <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => `${v.toFixed(1)}%`} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Legend />
                     {ENGAGEMENT_FIELDS.map(({ key, label, color }) => (
                         <Line

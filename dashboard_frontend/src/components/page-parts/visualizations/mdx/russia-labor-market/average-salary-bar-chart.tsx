@@ -48,8 +48,8 @@ export const AverageSalaryBarChart = () => {
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
                     />
-                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "RUB")} />
-                    <Bar dataKey="value" fill={CHART_COLORS[0]} />
+                    <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, "RUB")} cursor={false} />
+                    <Bar dataKey="value" fill={CHART_COLORS[0]} activeBar={{ fill: 'var(--chart-hover)' }} />
                 </BarChart>
             </ResponsiveContainer>
         </>
