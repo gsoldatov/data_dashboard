@@ -125,6 +125,12 @@ Reference: `dashboard_frontend/tests/tests/components/pages/visualizations/russi
 
 
 # Implementation Patterns and Examples
+## Patterns
+- There should be a margin-bottom of 1rem (16px) between elements by default (with a few exceptions); it can be achieved by:
+  - keeping flow structure flat, whenever possible;
+  - adding `FLOW_SPACING` rule to nested container elements, so that their children have margin.
+
+
 ## Common components and utilities
 - **Chart styling constants:** `CHART_HEIGHT`, `CHART_MARGINS`, `GRID_STROKE_DASHARRAY`,
   `GRID_STROKE`, `CHART_COLORS`, `CHART_BRUSH_HEIGHT`, `Y_AXIS_LABEL_OFFSET` — import from
