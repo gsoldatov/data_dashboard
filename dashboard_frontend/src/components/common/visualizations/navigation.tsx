@@ -11,7 +11,7 @@ export const VisualizationPageNavigation = ({
 }: VisualizationPageNavigationProps) => (
     <nav
         aria-label="Visualization pages"
-        className="flex flex-wrap gap-x-4 gap-y-1 mb-6"
+        className="flex flex-wrap gap-x-4 gap-y-1 mb-4"
     >
         {children}
     </nav>

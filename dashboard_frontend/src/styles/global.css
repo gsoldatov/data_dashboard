@@ -119,6 +119,17 @@ body {
   color: var(--foreground);
 }
 
+@layer components {
+  /*
+   * Default vertical rhythm for block-flow containers.
+   * :where() zeroes the specificity (0,0,0) so children can always
+   * override with explicit Tailwind mb-* utilities.
+   */
+  :where(.flow-spacing) > :where(:not(:last-child)) {
+    margin-bottom: 1rem;
+  }
+}
+
 @layer base {
   /* Links */
   a {
@@ -136,8 +147,6 @@ body {
     cursor: pointer;
   }
 }
-
-
 
 /* Default input styles */
 input:hover,
