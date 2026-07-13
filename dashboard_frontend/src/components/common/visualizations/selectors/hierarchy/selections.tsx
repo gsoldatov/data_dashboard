@@ -21,7 +21,7 @@ export const HierarchySelections = ({
                 <button
                     type="button"
                     onClick={() => onClearLevel(depth)}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-foreground hover:text-accent"
                     aria-label={`Clear level ${depth} items`}
                 >
                     <Eraser className="h-4 w-4" />

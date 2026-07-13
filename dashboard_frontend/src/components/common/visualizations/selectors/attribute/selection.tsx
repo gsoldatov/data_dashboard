@@ -22,7 +22,7 @@ export const AttributeSelections = ({
             <button
                 type="button"
                 onClick={onClear}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-foreground hover:text-accent"
                 aria-label="Clear all values"
             >
                 <Eraser className="h-4 w-4" />
