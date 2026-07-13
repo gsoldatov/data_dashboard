@@ -130,10 +130,7 @@ export const Toolbar = ({
 const statusBadge = (state: string | null) => {
     if (!state) {
         return (
-            <Badge
-                variant="secondary"
-                className="bg-warning/15 text-warning border-warning/30"
-            >
+            <Badge className="bg-warning text-warning-foreground hover:bg-warning">
                 N/A
             </Badge>
         );
@@ -143,15 +140,16 @@ const statusBadge = (state: string | null) => {
         case "running":
         case "queued":
             return (
-                <Badge
-                    variant="secondary"
-                    className="bg-success/15 text-success border-success/30"
-                >
+                <Badge className="bg-success text-success-foreground hover:bg-success">
                     {state}
                 </Badge>
             );
         case "failed":
-            return <Badge variant="destructive">{state}</Badge>;
+            return (
+                <Badge className="bg-error text-error-foreground hover:bg-error">
+                    {state}
+                </Badge>
+            );
         default:
             return <Badge variant="secondary">{state}</Badge>;
     }

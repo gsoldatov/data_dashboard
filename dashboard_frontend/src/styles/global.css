@@ -17,7 +17,11 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-active: var(--active);
   --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -35,9 +39,9 @@
 
   /* ── Primary ── */
   --primary: #2563eb;
-  --primary-foreground: #fdf8f6;
+  --primary-foreground: #fbfbfb;
   --primary-hover: #2d5ad5;
-  --primary-hover-foreground: #fdf8f6;
+  --primary-hover-foreground: #fbfbfb;
 
   /* ── Secondary / muted / accent surfaces ── */
   --secondary: #d6d3d1;
@@ -45,16 +49,20 @@
   --muted: #f5f5f4;
   --muted-foreground: #78716c;
   --accent: #f97316;
-  --accent-foreground: #ffffff;
+  --accent-foreground: #fbfbfb;
 
   /* ── Semantic: destructive ── */
-  --destructive: #ea580c;
-  --destructive-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #fbfbfb;
 
   /* ── Semantic: active / success / warning ── */
-  --active: #16a34a;
-  --success: #16a34a;
-  --warning: #c2410c;
+  --active: #15803d;
+  --success: #15803d;
+  --success-foreground: #fbfbfb;
+  --warning: #ca8a04;
+  --warning-foreground: #fbfbfb;
+  --error: #ef4444;
+  --error-foreground: #fbfbfb;
 
   /* ── Borders, inputs, controls ── */
   --border: #d6d3d1;
@@ -95,12 +103,16 @@
 
     /* ── Semantic: destructive ── */
     --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
+    --destructive-foreground: #fbfbfb;
 
     /* ── Semantic: active / success / warning ── */
-    --active: #22c55e;
-    --success: #22c55e;
-    --warning: #fbbf24;
+    --active: #15803d;
+    --success: #15803d;
+    --success-foreground: #fbfbfb;
+    --warning: #ca8a04;
+    --warning-foreground: #fbfbfb;
+    --error: #ef4444;
+    --error-foreground: #fbfbfb;
 
     /* ── Borders, inputs, controls ── */
     --border: #525252;
