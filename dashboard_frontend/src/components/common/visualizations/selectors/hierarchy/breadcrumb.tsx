@@ -39,7 +39,7 @@ export const HierarchyBreadcrumb = ({
                     {i > 0 && <BreadcrumbSeparator />}
                     <BreadcrumbItem>
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="text-sm hover:text-foreground transition-colors">
+                            <DropdownMenuTrigger className="text-sm text-foreground hover:text-accent transition-colors">
                                 {level.label}
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="bottom" align="start" className="max-h-56">
