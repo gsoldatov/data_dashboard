@@ -1,20 +1,20 @@
 import { Eraser } from "lucide-react";
 import { Badge } from "@/components/common/shadcn-ui/badge";
 
-export interface AttributeSelectionsProps {
-    selectedValues: number[];
-    displayedValues: number[];
-    onToggle: (value: number) => void;
+export interface AttributeSelectionsProps<T extends string | number = number> {
+    selectedValues: T[];
+    displayedValues: T[];
+    onToggle: (value: T) => void;
     onClear: () => void;
 }
 
 /** Badge row of selected values with a clear-all eraser button. Hidden when no explicit selection. */
-export const AttributeSelections = ({
+export const AttributeSelections = <T extends string | number = number>({
     selectedValues,
     displayedValues,
     onToggle,
     onClear,
-}: AttributeSelectionsProps) => {
+}: AttributeSelectionsProps<T>) => {
     if (selectedValues.length === 0) return null;
 
     return (

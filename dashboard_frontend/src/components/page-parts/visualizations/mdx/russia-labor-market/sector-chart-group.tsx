@@ -1,13 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
-import { Eraser } from "lucide-react";
 
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuCheckboxItem,
-} from "@/components/common/shadcn-ui/dropdown-menu";
-import { Badge } from "@/components/common/shadcn-ui/badge";
+import { AttributeDropdown } from "@/components/common/visualizations/selectors/attribute/dropdown";
+import { AttributeSelections } from "@/components/common/visualizations/selectors/attribute/selection";
 import { useGetVisualizationDatasetQuery } from "@/store/backend-api-slices/visualization-data";
 import { SalaryBySectorLineChart } from "./salary-by-sector-line-chart";
 import { FLOW_SPACING } from "@/styles/constants";
@@ -53,47 +47,18 @@ export const SectorChartGroup = () => {
     return (
         <div className={FLOW_SPACING}>
             <div className="flex items-center gap-2">
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
-                        Select sectors
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="bottom" align="start" className="max-h-56">
-                        {allSectors.map((sector) => (
-                            <DropdownMenuCheckboxItem
-                                key={sector}
-                                checked={selectedSectors.includes(sector)}
-                                onCheckedChange={() => toggleSector(sector)}
-                                onSelect={(e) => e.preventDefault()}
-                            >
-                                {sector}
-                            </DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                {selectedSectors.length > 0 && (
-                    <>
-                        <button
-                            type="button"
-                            onClick={clearSectors}
-                            className="text-muted-foreground hover:text-foreground"
-                            aria-label="Clear all sectors"
-                        >
-                            <Eraser className="h-4 w-4" />
-                        </button>
-                        <div className="flex flex-wrap gap-1.5">
-                            {displayedSectors.map((sector) => (
-                                <Badge
-                                    key={sector}
-                                    variant="secondary"
-                                    className="cursor-pointer"
-                                    onClick={() => toggleSector(sector)}
-                                >
-                                    {sector}
-                                </Badge>
-                            ))}
-                        </div>
-                    </>
-                )}
+                <AttributeDropdown
+                    allValues={allSectors}
+                    selectedValues={selectedSectors}
+                    onToggle={toggleSector}
+                    prompt="Select sectors"
+                />
+                <AttributeSelections
+                    selectedValues={selectedSectors}
+                    displayedValues={displayedSectors}
+                    onToggle={toggleSector}
+                    onClear={clearSectors}
+                />
             </div>
 
             <SalaryBySectorLineChart
