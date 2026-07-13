@@ -48,7 +48,10 @@ describe("Russia Trade charts", () => {
                 ).toBeInTheDocument();
             });
 
-            const trigger = screen.getByRole("combobox", { name: "Year" });
+            const yearLabel = screen.getByText("Year");
+            const trigger = within(
+                yearLabel.parentElement!,
+            ).getByRole("combobox");
             expect(trigger).toHaveTextContent("2024");
         });
 
