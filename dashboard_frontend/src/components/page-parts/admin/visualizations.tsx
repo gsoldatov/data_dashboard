@@ -10,13 +10,9 @@ import {
     TableRow,
 } from "@/components/common/shadcn-ui/table";
 import { Input } from "@/components/common/shadcn-ui/input";
-import { Paginator } from "@/components/common/pagination/paginator";
+import { Paginator } from "@/components/common/paginator";
 import type { VisualizationInfo } from "@/types/visualization-settings";
 import type { BatchVisualizationSettingsResponse } from "@/types/backend/responses/visualization-settings";
-
-
-const PAGE_SIZE = 10;
-
 
 interface PublishedToggleProps {
     slug: string;
@@ -94,9 +90,9 @@ export const AdminVisualizationsContent = ({ settings, visualizations = VISUALIZ
         viz.title.toLowerCase().includes(lowerFilter),
     );
 
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_VISUALIZATIONS_PAGE_SIZE));
     const safePage = Math.min(page, totalPages);
-    const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+    const pageItems = filtered.slice((safePage - 1) * ADMIN_VISUALIZATIONS_PAGE_SIZE, safePage * ADMIN_VISUALIZATIONS_PAGE_SIZE);
 
     const handleFilterChange = (value: string) => {
         setFilter(value);
@@ -128,4 +124,4 @@ export const AdminVisualizationsContent = ({ settings, visualizations = VISUALIZ
 
 // Re-exported here so the page component can import from a single place;
 // the constant originates from @/util/constants.
-import { VISUALIZATIONS } from "@/util/constants";
+import { VISUALIZATIONS, ADMIN_VISUALIZATIONS_PAGE_SIZE } from "@/util/constants";

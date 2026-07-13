@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RefreshCw, ExternalLink, ChevronFirst, ChevronLast } from "lucide-react";
+import { RefreshCw, ExternalLink } from "lucide-react";
 import {
     Table,
     TableBody,
@@ -8,14 +8,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/common/shadcn-ui/table";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/common/shadcn-ui/pagination";
 import { Badge } from "@/components/common/shadcn-ui/badge";
 import { Button } from "@/components/common/shadcn-ui/button";
 import { Input } from "@/components/common/shadcn-ui/input";
@@ -25,6 +17,7 @@ import { getDocumentApp } from "@/util/document-app";
 import { ADMIN_ETL_DAG_PAGE_SIZE } from "@/util/constants";
 import type { DagStatus } from "@/types/backend/responses/airflow";
 import { cn } from "@/styles/utils";
+import { Paginator } from "@/components/common/paginator";
 
 
 // ── Helpers ────────────────────────────────────────────────────────────
@@ -238,125 +231,6 @@ const DagsTable = ({ dags }: { dags: DagStatus[] }) => {
 };
 
 
-// ── Pagination ─────────────────────────────────────────────────────────
-
-interface DagsPaginationProps {
-    total: number;
-    page: number;
-    onPageChange: (page: number) => void;
-}
-
-const computeWindow = (page: number, totalPages: number, maxButtons: number): number[] => {
-    let start = Math.max(1, page - Math.floor(maxButtons / 2));
-    const end = Math.min(totalPages, start + maxButtons - 1);
-    start = Math.max(1, end - maxButtons + 1);
-
-    const pages: number[] = [];
-    for (let i = start; i <= end; i++) {
-        pages.push(i);
-    }
-    return pages;
-};
-
-const DagsPagination = ({ total, page, onPageChange }: DagsPaginationProps) => {
-    const totalPages = Math.max(1, Math.ceil(total / ADMIN_ETL_DAG_PAGE_SIZE));
-
-    if (totalPages <= 1) return null;
-
-    const desktopPages = computeWindow(page, totalPages, 5);
-    const mobilePages = new Set(computeWindow(page, totalPages, 3));
-
-    return (
-        <Pagination className="mt-4">
-            <PaginationContent>
-                <PaginationItem>
-                    <PaginationFirst
-                        disabled={page <= 1}
-                        onClick={() => onPageChange(1)}
-                    />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationPrevious
-                        className={page <= 1 ? "pointer-events-none opacity-50" : ""}
-                        onClick={() => onPageChange(page - 1)}
-                    />
-                </PaginationItem>
-                {desktopPages.map((p) => (
-                    <PaginationItem
-                        key={p}
-                        className={mobilePages.has(p) ? "" : "hidden md:block"}
-                    >
-                        <PaginationLink
-                            isActive={p === page}
-                            onClick={() => onPageChange(p)}
-                        >
-                            {p}
-                        </PaginationLink>
-                    </PaginationItem>
-                ))}
-                <PaginationItem>
-                    <PaginationNext
-                        className={page >= totalPages ? "pointer-events-none opacity-50" : ""}
-                        onClick={() => onPageChange(page + 1)}
-                    />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLast
-                        disabled={page >= totalPages}
-                        onClick={() => onPageChange(totalPages)}
-                    />
-                </PaginationItem>
-            </PaginationContent>
-        </Pagination>
-    );
-};
-
-
-// ── First / Last pagination helpers ────────────────────────────────────
-
-const PaginationFirst = ({
-    disabled,
-    onClick,
-}: {
-    disabled: boolean;
-    onClick: () => void;
-}) => (
-    <PaginationLink
-        aria-label="Go to first page"
-        size="default"
-        className={cn(
-            "gap-1 pl-2.5",
-            disabled && "pointer-events-none opacity-50",
-        )}
-        onClick={disabled ? undefined : onClick}
-    >
-        <ChevronFirst className="h-4 w-4" />
-        <span>First</span>
-    </PaginationLink>
-);
-
-const PaginationLast = ({
-    disabled,
-    onClick,
-}: {
-    disabled: boolean;
-    onClick: () => void;
-}) => (
-    <PaginationLink
-        aria-label="Go to last page"
-        size="default"
-        className={cn(
-            "gap-1 pr-2.5",
-            disabled && "pointer-events-none opacity-50",
-        )}
-        onClick={disabled ? undefined : onClick}
-    >
-        <span>Last</span>
-        <ChevronLast className="h-4 w-4" />
-    </PaginationLink>
-);
-
-
 // ── Exported content component ─────────────────────────────────────────
 
 interface AdminEtlContentProps {
@@ -371,9 +245,18 @@ export const AdminEtlContent = ({
     total,
     page,
     onPageChange,
-}: AdminEtlContentProps) => (
-    <>
-        <DagsTable dags={dags} />
-        <DagsPagination total={total} page={page} onPageChange={onPageChange} />
-    </>
-);
+}: AdminEtlContentProps) => {
+    const totalPages = Math.max(1, Math.ceil(total / ADMIN_ETL_DAG_PAGE_SIZE));
+
+    return (
+        <>
+            <DagsTable dags={dags} />
+            <Paginator
+                page={page}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+                variant="link"
+            />
+        </>
+    );
+};
