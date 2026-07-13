@@ -30,8 +30,8 @@ export const HierarchySelections = ({
                     {items.map((item) => (
                         <Badge
                             key={item.number}
-                            variant="secondary"
-                            className="cursor-pointer"
+                            variant="outline"
+                            className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
                             onClick={() => onDeselect(item.number)}
                         >
                             {item.number} {item.name}

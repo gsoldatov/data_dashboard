@@ -31,8 +31,8 @@ export const AttributeSelections = ({
                 {displayedValues.map((value) => (
                     <Badge
                         key={value}
-                        variant="secondary"
-                        className="cursor-pointer"
+                        variant="outline"
+                        className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
                         onClick={() => onToggle(value)}
                     >
                         {value}
