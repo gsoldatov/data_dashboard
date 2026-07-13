@@ -7,16 +7,17 @@ import { LogIn, LogOut, LayoutDashboard, User, Menu, X, Loader2, AlertTriangle }
 import { cn } from "@/styles/utils";
 
 
-const NavbarLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
+const NavbarLink = ({ to, className, children }: { to: string; className?: string; children: React.ReactNode }) => (
     <Link
         to={to}
         className={cn(
             // Layout
             "flex items-center gap-1",
             // Typography
-            "text-sm text-muted-foreground",
+            "text-lg text-foreground",
             // Interaction
-            "hover:text-foreground transition-colors",
+            "hover:text-muted-foreground transition-colors",
+            className,
         )}
     >
         {children}
@@ -31,7 +32,9 @@ const NavbarBrand = () => (
             // Layout
             "flex items-center gap-2",
             // Typography
-            "font-semibold text-lg text-muted-foreground",
+            "font-semibold text-2xl text-foreground",
+            // Interaction
+            "hover:text-muted-foreground transition-colors",
         )}
     >
         <LayoutDashboard className="h-5 w-5" />
@@ -61,7 +64,7 @@ const NavbarMenuLinks = () => {
 
 
 const NavbarSecondaryMenuLoggedOut = () => (
-    <NavbarLink to="/login">
+    <NavbarLink to="/login" className="text-base">
         <LogIn className="h-4 w-4" />
         Login
     </NavbarLink>
@@ -87,7 +90,7 @@ const NavbarSecondaryMenuLoggedIn = () => {
 
     return (
         <>
-            <NavbarLink to="/user-profile">
+            <NavbarLink to="/user-profile" className="text-base">
                 <User className="h-4 w-4" />
                 {currentUser?.username}
             </NavbarLink>
@@ -98,9 +101,9 @@ const NavbarSecondaryMenuLoggedIn = () => {
                     // Layout
                     "flex items-center gap-1",
                     // Typography
-                    "text-sm text-muted-foreground",
+                    "text-base text-foreground",
                     // Interaction
-                    "hover:text-destructive transition-colors",
+                    "hover:text-muted-foreground transition-colors",
                 )}
                 title={
                     isLoading
@@ -172,7 +175,7 @@ export const Navbar = () => {
                     // Width constraints
                     "w-full lg:w-4/5 lg:max-w-[1536px]",
                     // Flex layout
-                    "flex flex-col items-center gap-3 md:flex-row md:justify-between",
+                    "flex flex-col items-center gap-3 md:flex-row md:justify-between md:gap-6",
                     // Inner spacing
                     "px-4 py-3",
                 )}
