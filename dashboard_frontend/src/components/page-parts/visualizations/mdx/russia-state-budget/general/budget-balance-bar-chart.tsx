@@ -17,6 +17,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     Y_AXIS_LABEL_OFFSET,
     POSITIVE_COLOR,
     NEGATIVE_COLOR,
@@ -50,8 +51,9 @@ export const BudgetBalanceBarChart = () => {
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year" />
+                    <XAxis dataKey="year" stroke={AXIS_STROKE} />
                     <YAxis
+                        stroke={AXIS_STROKE}
                         tickFormatter={numericTickFormatter}
                         label={{
                             value: "bln RUB",

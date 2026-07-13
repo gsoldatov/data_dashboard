@@ -14,6 +14,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     formatValue,
 } from "@/styles/charts";
 
@@ -55,10 +56,11 @@ export const GdpLineChart = ({
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year" />
+                    <XAxis dataKey="year" stroke={AXIS_STROKE} />
                     <YAxis
                         domain={["auto", "auto"]}
                         tickFormatter={(value: number) => value.toLocaleString()}
+                        stroke={AXIS_STROKE}
                     />
                     <Tooltip content={axisTooltipContent("year", "Year")} formatter={(v: number) => formatValue(v, unit)} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Line

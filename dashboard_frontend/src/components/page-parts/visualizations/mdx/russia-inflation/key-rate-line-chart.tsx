@@ -16,6 +16,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     CHART_COLORS,
     CHART_BRUSH_HEIGHT,
 } from "@/styles/charts";
@@ -54,10 +55,12 @@ export const KeyRateLineChart = () => {
                         angle={-45}
                         textAnchor="end"
                         height={60}
+                        stroke={AXIS_STROKE}
                     />
                     <YAxis
                         domain={["auto", "auto"]}
                         tickFormatter={(v: number) => `${v}%`}
+                        stroke={AXIS_STROKE}
                     />
                     <Tooltip
                         content={axisTooltipContent("year_month", "Month")}

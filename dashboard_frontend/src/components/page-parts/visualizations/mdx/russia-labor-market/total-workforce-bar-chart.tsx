@@ -15,6 +15,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     CHART_COLORS,
     numericTickFormatter,
     formatValue,
@@ -44,8 +45,8 @@ export const TotalWorkforceBarChart = () => {
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
-                    <YAxis domain={["auto", "auto"]} tickFormatter={numericTickFormatter} />
+                    <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} stroke={AXIS_STROKE} />
+                    <YAxis domain={["auto", "auto"]} tickFormatter={numericTickFormatter} stroke={AXIS_STROKE} />
                     <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => formatValue(v, "thousands")} cursor={false} />
                     <Bar dataKey="workforce" fill={CHART_COLORS[0]} activeBar={{ fill: 'var(--chart-hover)' }} />
                     <Brush

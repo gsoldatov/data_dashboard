@@ -14,6 +14,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
     numericTickFormatter,
@@ -55,8 +56,9 @@ export const SalaryBySectorLineChart = ({
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year" />
+                    <XAxis dataKey="year" stroke={AXIS_STROKE} />
                     <YAxis
+                        stroke={AXIS_STROKE}
                         tickFormatter={numericTickFormatter}
                         label={{
                             value: "RUB",

@@ -5,6 +5,7 @@ export const Y_AXIS_LABEL_OFFSET = -10;
 export const GRID_STROKE_DASHARRAY = "3 9";
 export const GRID_STROKE = "var(--chart-grid)";
 export const CHART_BRUSH_HEIGHT = 16;
+export const AXIS_STROKE = "var(--chart-axis-color)";
 
 /** 24 distinct colours for chart series, ordered to minimise overlap. */
 export const CHART_COLORS = [

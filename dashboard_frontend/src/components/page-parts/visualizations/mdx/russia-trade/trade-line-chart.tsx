@@ -16,6 +16,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     Y_AXIS_LABEL_OFFSET,
     CHART_COLORS,
     formatValue,
@@ -72,7 +73,7 @@ export const TradeLineChart = () => {
                         stroke={GRID_STROKE}
                         strokeDasharray={GRID_STROKE_DASHARRAY}
                     />
-                    <XAxis dataKey="year" />
+                    <XAxis dataKey="year" stroke={AXIS_STROKE} />
                     <YAxis
                         tickFormatter={(v: number) => v.toFixed(0)}
                         label={{
@@ -81,6 +82,7 @@ export const TradeLineChart = () => {
                             position: "insideLeft",
                             offset: Y_AXIS_LABEL_OFFSET,
                         }}
+                        stroke={AXIS_STROKE}
                     />
                     <Tooltip
                         content={axisTooltipContent("year", "Year")}

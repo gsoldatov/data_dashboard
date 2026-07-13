@@ -16,6 +16,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     CHART_COLORS,
     formatScaledValue,
 } from "@/styles/charts";
@@ -82,12 +83,14 @@ export const CountryBarChart = ({ label, datasetName, selectedYear }: CountryBar
                         <XAxis
                             type="number"
                             tickFormatter={(v: number) => v.toFixed(0)}
+                            stroke={AXIS_STROKE}
                         />
                         <YAxis
                             type="category"
                             dataKey="country"
                             width={120}
                             tick={{ fontSize: 12 }}
+                            stroke={AXIS_STROKE}
                         />
                         <Tooltip
                             content={axisTooltipContent("country", "Country")}

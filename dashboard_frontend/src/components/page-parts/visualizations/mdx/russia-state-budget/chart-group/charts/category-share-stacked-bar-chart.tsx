@@ -15,6 +15,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     CHART_COLORS,
     Y_AXIS_LABEL_OFFSET,
     numericTickFormatter,
@@ -88,14 +89,16 @@ export const CategoryShareStackedBarChart = ({
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <BarChart data={chartData} margin={STACKED_CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year" />
+                    <XAxis dataKey="year" stroke={AXIS_STROKE} />
                     <YAxis
                         yAxisId="pct"
+                        stroke={AXIS_STROKE}
                         domain={[0, "auto"]}
                         tickFormatter={(v: number) => `${v.toFixed(0)}%`}
                     />
                     <YAxis
                         yAxisId="abs"
+                        stroke={AXIS_STROKE}
                         orientation="right"
                         domain={[0, maxTotal]}
                         tickFormatter={numericTickFormatter}

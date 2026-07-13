@@ -17,6 +17,7 @@ import {
     CHART_MARGINS,
     GRID_STROKE_DASHARRAY,
     GRID_STROKE,
+    AXIS_STROKE,
     CHART_COLORS,
     CHART_BRUSH_HEIGHT,
 } from "@/styles/charts";
@@ -44,8 +45,8 @@ export const WorkforceUnemploymentLineChart = () => {
             <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
                 <LineChart data={chartData} margin={CHART_MARGINS}>
                     <CartesianGrid stroke={GRID_STROKE} strokeDasharray={GRID_STROKE_DASHARRAY} />
-                    <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} />
-                    <YAxis domain={["auto", "auto"]} />
+                    <XAxis dataKey="year_month" tick={{ fontSize: 10 }} angle={-45} textAnchor="end" height={60} stroke={AXIS_STROKE} />
+                    <YAxis domain={["auto", "auto"]} stroke={AXIS_STROKE} />
                     <Tooltip content={axisTooltipContent("year_month", "Month")} formatter={(v: number) => `${v.toFixed(1)}%`} cursor={{ stroke: 'var(--chart-hover)' }} />
                     <Legend />
                     <Line
