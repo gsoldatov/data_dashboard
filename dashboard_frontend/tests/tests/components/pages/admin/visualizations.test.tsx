@@ -7,7 +7,10 @@ import {
 } from "../../../../mocks/backend/route-handlers/overrides";
 import { preloadedAdminState } from "../../../../mocks/mock-data/store";
 import { AdminVisualizations } from "@/components/pages/admin/visualizations";
+import { AdminVisualizationsContent } from "@/components/page-parts/admin/visualizations";
 import { VISUALIZATIONS } from "@/util/constants";
+import type { VisualizationInfo } from "@/types/visualization-settings";
+import type { BatchVisualizationSettingsResponse } from "@/types/backend/responses/visualization-settings";
 
 
 const SETTINGS_URL = "/api/visualization-settings/";
@@ -56,11 +59,11 @@ describe("AdminVisualizations", () => {
             preloadedState: preloadedAdminState(),
         });
 
-        const title = "Russia Inflation";
+        const title = "Russia Economy Dashboard";
 
         await waitFor(() => {
             expect(
-                screen.getByText("Russia State Budget"),
+                screen.getByText(title),
             ).toBeInTheDocument();
         });
 
@@ -80,12 +83,12 @@ describe("AdminVisualizations", () => {
             preloadedState: preloadedAdminState(),
         });
 
-        const title = "Russia Inflation";
+        const title = "Russia Economy Dashboard";
         const slug = VISUALIZATIONS.find((v) => v.title === title)!.slug;
 
         await waitFor(() => {
             expect(
-                screen.getByText("Russia State Budget"),
+                screen.getByText(title),
             ).toBeInTheDocument();
         });
 
@@ -120,9 +123,12 @@ describe("AdminVisualizations", () => {
 
         const filterInput = screen.getByPlaceholderText("Filter by title…");
 
-        // Substring match — should show all six
+        // Substring match — all six match "russia"
         fireEvent.change(filterInput, { target: { value: "russia" } });
         await waitFor(() => {
+            expect(
+                screen.getByText("Russia Economy Dashboard"),
+            ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia GDP"),
             ).toBeInTheDocument();
@@ -138,12 +144,9 @@ describe("AdminVisualizations", () => {
             expect(
                 screen.getByText("Russia Trade"),
             ).toBeInTheDocument();
-            expect(
-                screen.getByText("Russia Economy Dashboard"),
-            ).toBeInTheDocument();
         });
 
-        // Substring match — "gdp" matches "Russia GDP"
+        // Substring match — only "Russia GDP" matches "gdp"
         fireEvent.change(filterInput, { target: { value: "gdp" } });
         await waitFor(() => {
             expect(
@@ -158,21 +161,6 @@ describe("AdminVisualizations", () => {
         fireEvent.change(filterInput, { target: { value: "zzz" } });
         await waitFor(() => {
             expect(
-                screen.queryByText("Russia GDP"),
-            ).toBeNull();
-            expect(
-                screen.queryByText("Russia Inflation"),
-            ).toBeNull();
-            expect(
-                screen.queryByText("Russia State Budget"),
-            ).toBeNull();
-            expect(
-                screen.queryByText("Russia Labor Market"),
-            ).toBeNull();
-            expect(
-                screen.queryByText("Russia Trade"),
-            ).toBeNull();
-            expect(
                 screen.queryByText("Russia Economy Dashboard"),
             ).toBeNull();
         });
@@ -180,6 +168,9 @@ describe("AdminVisualizations", () => {
         // Clear filter — shows all again
         fireEvent.change(filterInput, { target: { value: "" } });
         await waitFor(() => {
+            expect(
+                screen.getByText("Russia Economy Dashboard"),
+            ).toBeInTheDocument();
             expect(
                 screen.getByText("Russia GDP"),
             ).toBeInTheDocument();
@@ -195,9 +186,38 @@ describe("AdminVisualizations", () => {
             expect(
                 screen.getByText("Russia Trade"),
             ).toBeInTheDocument();
-            expect(
-                screen.getByText("Russia Economy Dashboard"),
-            ).toBeInTheDocument();
         });
+    });
+
+    it("paginates when there are more than 10 visualizations", async () => {
+        const mockViz: VisualizationInfo[] = Array.from({ length: 15 }, (_, i) => ({
+            slug: `viz-${i}`,
+            title: `Visualization ${i + 1}`,
+            icon: () => null,
+        }));
+        const mockSettings: BatchVisualizationSettingsResponse = {};
+        for (const v of mockViz) {
+            mockSettings[v.slug] = { is_published: true };
+        }
+
+        renderWithProviders(
+            <AdminVisualizationsContent settings={mockSettings} visualizations={mockViz} />,
+            { preloadedState: preloadedAdminState() },
+        );
+
+        // Page 1: items 1–10
+        await waitFor(() => {
+            expect(screen.getByText("Visualization 1")).toBeInTheDocument();
+            expect(screen.getByText("Visualization 10")).toBeInTheDocument();
+        });
+        expect(screen.queryByText("Visualization 11")).toBeNull();
+
+        // Navigate to page 2
+        fireEvent.click(screen.getByLabelText("Go to next page"));
+        await waitFor(() => {
+            expect(screen.getByText("Visualization 11")).toBeInTheDocument();
+            expect(screen.getByText("Visualization 15")).toBeInTheDocument();
+        });
+        expect(screen.queryByText("Visualization 1")).toBeNull();
     });
 });

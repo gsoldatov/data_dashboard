@@ -10,8 +10,12 @@ import {
     TableRow,
 } from "@/components/common/shadcn-ui/table";
 import { Input } from "@/components/common/shadcn-ui/input";
+import { Paginator } from "@/components/common/pagination/paginator";
 import type { VisualizationInfo } from "@/types/visualization-settings";
 import type { BatchVisualizationSettingsResponse } from "@/types/backend/responses/visualization-settings";
+
+
+const PAGE_SIZE = 10;
 
 
 interface PublishedToggleProps {
@@ -78,15 +82,26 @@ const VisualizationsTable = ({ visualizations, settings }: VisualizationsTablePr
 
 interface AdminVisualizationsContentProps {
     settings: BatchVisualizationSettingsResponse;
+    visualizations?: VisualizationInfo[];
 }
 
-export const AdminVisualizationsContent = ({ settings }: AdminVisualizationsContentProps) => {
+export const AdminVisualizationsContent = ({ settings, visualizations = VISUALIZATIONS }: AdminVisualizationsContentProps) => {
     const [filter, setFilter] = useState("");
+    const [page, setPage] = useState(1);
 
     const lowerFilter = filter.toLowerCase();
-    const filtered = VISUALIZATIONS.filter((viz) =>
+    const filtered = visualizations.filter((viz) =>
         viz.title.toLowerCase().includes(lowerFilter),
     );
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    const safePage = Math.min(page, totalPages);
+    const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+    const handleFilterChange = (value: string) => {
+        setFilter(value);
+        setPage(1);
+    };
 
     return (
         <>
@@ -94,12 +109,17 @@ export const AdminVisualizationsContent = ({ settings }: AdminVisualizationsCont
                 type="text"
                 placeholder="Filter by title…"
                 value={filter}
-                onChange={(e) => setFilter(e.target.value)}
+                onChange={(e) => handleFilterChange(e.target.value)}
                 className="mb-4 max-w-sm"
             />
             <VisualizationsTable
-                visualizations={filtered}
+                visualizations={pageItems}
                 settings={settings}
+            />
+            <Paginator
+                page={safePage}
+                totalPages={totalPages}
+                onPageChange={setPage}
             />
         </>
     );
