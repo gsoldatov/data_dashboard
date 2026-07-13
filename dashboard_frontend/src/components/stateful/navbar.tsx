@@ -16,7 +16,7 @@ const NavbarLink = ({ to, className, children }: { to: string; className?: strin
             // Typography
             "text-lg text-foreground",
             // Interaction
-            "hover:text-muted-foreground transition-colors",
+            "hover:text-accent transition-colors",
             className,
         )}
     >
@@ -34,7 +34,7 @@ const NavbarBrand = () => (
             // Typography
             "font-semibold text-2xl text-foreground",
             // Interaction
-            "hover:text-muted-foreground transition-colors",
+            "hover:text-accent transition-colors",
         )}
     >
         <LayoutDashboard className="h-5 w-5" />
@@ -103,7 +103,7 @@ const NavbarSecondaryMenuLoggedIn = () => {
                     // Typography
                     "text-base text-foreground",
                     // Interaction
-                    "hover:text-muted-foreground transition-colors",
+                    "hover:text-accent transition-colors",
                 )}
                 title={
                     isLoading
