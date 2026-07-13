@@ -107,7 +107,7 @@ describe("AdminVisualizations", () => {
         });
     });
 
-    it("filters visualizations by title prefix (case-insensitive)", async () => {
+    it("filters visualizations by title substring (case-insensitive)", async () => {
         renderWithProviders(<AdminVisualizations />, {
             preloadedState: preloadedAdminState(),
         });
@@ -120,7 +120,7 @@ describe("AdminVisualizations", () => {
 
         const filterInput = screen.getByPlaceholderText("Filter by title…");
 
-        // Prefix match — should show all six
+        // Substring match — should show all six
         fireEvent.change(filterInput, { target: { value: "russia" } });
         await waitFor(() => {
             expect(
@@ -141,6 +141,17 @@ describe("AdminVisualizations", () => {
             expect(
                 screen.getByText("Russia Economy Dashboard"),
             ).toBeInTheDocument();
+        });
+
+        // Substring match — "gdp" matches "Russia GDP"
+        fireEvent.change(filterInput, { target: { value: "gdp" } });
+        await waitFor(() => {
+            expect(
+                screen.getByText("Russia GDP"),
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText("Russia Inflation"),
+            ).toBeNull();
         });
 
         // No match

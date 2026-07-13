@@ -85,7 +85,7 @@ export const AdminVisualizationsContent = ({ settings }: AdminVisualizationsCont
 
     const lowerFilter = filter.toLowerCase();
     const filtered = VISUALIZATIONS.filter((viz) =>
-        viz.title.toLowerCase().startsWith(lowerFilter),
+        viz.title.toLowerCase().includes(lowerFilter),
     );
 
     return (
