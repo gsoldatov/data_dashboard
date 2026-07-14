@@ -20,6 +20,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
                     "px-4",
                     // Separate direct children
                     FLOW_SPACING,
+                    "mb-8",
                 )}
             >
                 {children}
