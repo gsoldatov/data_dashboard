@@ -30,6 +30,9 @@ services:
       - assets_data:/assets
     networks:
       - data-dashboard-network
+    dns:  # Some URLs are not resolved from the container, if manual DNS servers are not set
+      - 8.8.8.8 # Google
+      - 77.88.8.8 # Yandex
     depends_on:
       airflow-init:
         condition: service_completed_successfully
