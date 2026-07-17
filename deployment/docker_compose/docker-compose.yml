@@ -14,6 +14,7 @@ services:
 
   # ── Airflow (API server + scheduler + DAG processor) ────────────
   airflow:
+    restart: unless-stopped
     build:
       context: ../..
       dockerfile: deployment/docker_compose/Dockerfile.airflow
@@ -44,6 +45,7 @@ services:
 
   # ── Backend (FastAPI) ───────────────────────────────────────────
   backend:
+    restart: unless-stopped
     build:
       context: ../..
       dockerfile: deployment/docker_compose/Dockerfile.backend
@@ -61,6 +63,7 @@ services:
 
   # ── Frontend (Nginx serving SPA) ────────────────────────────────
   frontend:
+    restart: unless-stopped
     build:
       context: ../..
       dockerfile: deployment/docker_compose/Dockerfile.frontend
