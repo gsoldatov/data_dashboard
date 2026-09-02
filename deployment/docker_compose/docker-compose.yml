@@ -1,3 +1,4 @@
+name: data_dashboard
 services:
   # ── Airflow init (one-shot: DB migration + admin user) ──────────
   airflow-init:
