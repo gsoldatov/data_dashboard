@@ -17,11 +17,15 @@ from python_common.src import Config, get_config
 def fetch_file_task(config: Config | None = None) -> None:
     """
     Fetches an Excel file with Russia's average salary data.
+
+    Source: https://rosstat.gov.ru/labor_market_employment_salaries
+    (Среднемесячная номинальная начисленная заработная плата работников в
+    целом по экономике Российской Федерации в ...-... гг.)
     """
     logger = logging.getLogger("airflow.task")
     config = config or get_config()
 
-    url = "https://rosstat.gov.ru/storage/mediabank/tab1-zpl_03-2026.xlsx"
+    url = "https://rosstat.gov.ru/storage/mediabank/tab1-zpl_06-2026.xlsx"
 
     logger.info("Fetching Russia average salaries xlsx from %s", url)
 
