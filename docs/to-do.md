@@ -325,11 +325,13 @@
 
 
 # Additional
+- add deployment data backup;
+- differentiate running DAGs from DAGs with a task scheduled for a retry;   // or change a color of "Running" DAG status in admin page
+- allow adding new DAG versions into Airflow container without rebuilding it;
 - fix session cookie not being added on login, when frontend address is 127.0.0.1 and backend is localhost:
     // due to SameSite being string or lax
     ? replace backend URL to current frontend's URL for 127.0.0.1 / localhost;
     ? SameSite=None + HttpOnly + Secure;
-- add deployment data backup;
 ? split main AGENTS.md into skills / sub-files;
 - add backend access & event logging to files:
     - add maintentance tasks for clearing log files;    // apscheduler
